@@ -1,17 +1,18 @@
 "use client";
 
-import { IngredientType, INGREDIENT_TYPES } from "../types";
+import { IngredientType } from "../types";
 import { Check } from "lucide-react";
 
 type Props = {
   value: IngredientType;
   onChange: (type: IngredientType) => void;
+  types: readonly IngredientType[];
 };
 
-export default function TypeSelector({ value, onChange }: Props) {
+export default function TypeSelector({ value, onChange, types }: Props) {
   return (
     <div className="flex flex-wrap gap-2 justify-between lg:w-[calc(100%-150px)]">
-      {INGREDIENT_TYPES.map((t) => {
+      {types.map((t) => {
         const selected = value === t;
 
         return (

@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { useAppContext } from "../../context/AppContext";
 import { useState, useRef } from "react";
-import { IngredientType } from "../../types";
+import { IngredientType, INGREDIENT_TYPES } from "../../types";
 import TypeSelector from "../../components/TypeSelector";
 import CodeEdit from "../../components/CodeEdit";
 import Sidebar from "../../components/Sidebar";
@@ -78,7 +78,11 @@ export default function IngredientDetailPage() {
           <div className="pt-2 flex flex-col lg:flex-row gap-2 lg:gap-4 max-w-[493px]">
             <label className="lg:p-2 lg:pr-1 lg:w-[50px]">Type:</label>
 
-            <TypeSelector value={type} onChange={setType} />
+            <TypeSelector
+              value={type}
+              onChange={setType}
+              types={INGREDIENT_TYPES}
+            />
           </div>
 
           <div className="pt-4 px-2 flex flex-col h-full">
