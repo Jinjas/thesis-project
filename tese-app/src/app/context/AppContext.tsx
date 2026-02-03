@@ -1,28 +1,89 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
+import { Cocktail, Ingredient, IngredientType } from "../types";
 
 type AppContextType = {
-  selectedPage: string;
-  setSelectedPage: (value: string) => void;
+  cocktails: Cocktail[];
+  ingredients: Ingredient[];
 
-  search: string;
-  setSearch: (value: string) => void;
+  addCocktail: (name: string) => void;
+  addIngredient: (name: string) => void;
+
+  updateIngredient: (
+    id: string,
+    newName: string,
+    newType: IngredientType,
+  ) => void;
+
+  addIngredientToCocktail: (cocktailId: string, ingredientId: string) => void;
 };
 
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [selectedPage, setSelectedPage] = useState("cocktails");
-  const [search, setSearch] = useState("");
+  const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+
+  function addCocktail(name: string) {
+    setCocktails((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        name,
+        activeIngredients: [],
+        inactiveIngredients: [],
+      },
+    ]);
+  }
+
+  function addIngredient(name: string) {
+    setIngredients((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        name,
+        type: "Language",
+      },
+    ]);
+  }
+
+  function updateIngredient(
+    id: string,
+    newName: string,
+    newType: IngredientType,
+  ) {
+    setIngredients((prev) =>
+      prev.map((ing) =>
+        ing.id === id ? { ...ing, name: newName, type: newType } : ing,
+      ),
+    );
+  }
+
+  function addIngredientToCocktail(cocktailId: string, ingredientId: string) {
+    setCocktails((prev) =>
+      prev.map((cocktail) => {
+        if (cocktail.id !== cocktailId) return cocktail;
+
+        if (cocktail.activeIngredients.includes(ingredientId)) return cocktail;
+
+        return {
+          ...cocktail,
+          activeIngredients: [...cocktail.activeIngredients, ingredientId],
+        };
+      }),
+    );
+  }
 
   return (
     <AppContext.Provider
       value={{
-        selectedPage,
-        setSelectedPage,
-        search,
-        setSearch,
+        cocktails,
+        ingredients,
+        addCocktail,
+        addIngredient,
+        updateIngredient,
+        addIngredientToCocktail,
       }}
     >
       {children}
@@ -31,11 +92,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useAppContext() {
-  const context = useContext(AppContext);
-
-  if (!context) {
-    throw new Error("useAppContext must be used inside AppProvider");
-  }
-
-  return context;
+  const ctx = useContext(AppContext);
+  if (!ctx) throw new Error("useAppContext must be used inside AppProvider");
+  return ctx;
 }
