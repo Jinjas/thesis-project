@@ -10,7 +10,7 @@ type Props = {
 
 export default function TypeSelector({ value, onChange }: Props) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2 justify-between lg:w-[calc(100%-150px)]">
       {INGREDIENT_TYPES.map((t) => {
         const selected = value === t;
 
@@ -18,7 +18,7 @@ export default function TypeSelector({ value, onChange }: Props) {
           <button
             key={t}
             onClick={() => onChange(t)}
-            className={`flex items-center gap-2 px-3 py-2 rounded border transition
+            className={`flex items-center gap-1 px-2 py-1 rounded border transition text-sm
               ${
                 selected
                   ? "bg-black text-white"
