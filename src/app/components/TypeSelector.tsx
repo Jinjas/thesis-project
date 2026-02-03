@@ -21,8 +21,8 @@ export default function TypeSelector({ value, onChange }: Props) {
             className={`flex items-center gap-1 px-2 py-1 rounded border transition text-sm
               ${
                 selected
-                  ? "bg-black text-white"
-                  : "bg-white text-black hover:bg-gray-100"
+                  ? "bg-gray-800 text-white"
+                  : "text-black hover:bg-gray-200"
               }
             `}
           >

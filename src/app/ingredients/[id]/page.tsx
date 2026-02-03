@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useAppContext } from "../../context/AppContext";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { IngredientType } from "../../types";
 import TypeSelector from "../../components/TypeSelector";
 import CodeEdit from "../../components/CodeEdit";
@@ -18,6 +18,46 @@ export default function IngredientDetailPage() {
   const [type, setType] = useState<IngredientType>(ingredient.type);
   const [code, setCode] = useState(ingredient.code);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function handleImportClick() {
+    fileInputRef.current?.click();
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const text = reader.result as string;
+      setCode(text);
+    };
+
+    reader.readAsText(file);
+
+    // permite importar o mesmo ficheiro outra vez
+    e.target.value = "";
+  }
+
+  function handleExport() {
+    const blob = new Blob([code], {
+      type: "text/plain;charset=utf-8",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${name || "ingredient"}.txt`; // nome do ficheiro
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="flex h-screen w-full">
       <Sidebar />
@@ -25,34 +65,59 @@ export default function IngredientDetailPage() {
         <section className="flex-1 p-9 bg-gray-100 text-black flex flex-col w-full h-screen">
           <h1 className="text-2xl font-bold pb-4">Edit Ingredient</h1>
 
-          <div className="flex flex-col xl:flex-row gap-2 xl:gap-4 max-w-[493px]">
-            <h3 className=" xl:p-2 xl:pr-1 xl:w-[50px] ">Name:</h3>
+          <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 max-w-[493px]">
+            <h3 className=" lg:p-2 lg:pr-1 lg:w-[50px] ">Name:</h3>
 
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="border p-1 pl-2 rounded lg:w-[calc(100%-150px)]"
+              className="border p-1 pl-2 rounded lg:w-[calc(100%-150px)] text-sm"
             />
           </div>
 
-          <div className="pt-2 flex flex-col xl:flex-row gap-2 xl:gap-4 max-w-[493px]">
-            <label className="xl:p-2 xl:pr-1 xl:w-[50px]">Type:</label>
+          <div className="pt-2 flex flex-col lg:flex-row gap-2 lg:gap-4 max-w-[493px]">
+            <label className="lg:p-2 lg:pr-1 lg:w-[50px]">Type:</label>
 
             <TypeSelector value={type} onChange={setType} />
           </div>
 
-          <div className="pt-2 pb-4 flex flex-col h-full">
-            <h3 className="font-semibold pb-2"> OntoDL</h3>
+          <div className="pt-4 px-2 flex flex-col h-full">
+            <div className="pt-4 flex justify-between">
+              <h3 className="font-semibold pb-2"> OntoDL</h3>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleImportClick}
+                  className="font-semibold pb-2 hover:underline"
+                >
+                  Import
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".txt,.ontodl"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </button>
+
+                <button
+                  onClick={handleExport}
+                  className="font-semibold pb-2 hover:underline"
+                >
+                  Export
+                </button>
+              </div>
+            </div>
 
             <CodeEdit code={code} setCode={setCode} />
           </div>
-
-          <button
-            onClick={() => updateIngredient(ingredient.id, name, type, code)}
-            className="pt-2 bg-black text-white px-4 py-2 rounded w-min"
-          >
-            Save
-          </button>
+          <div className=" pt-2 px-2 flex justify-end">
+            <button
+              onClick={() => updateIngredient(ingredient.id, name, type, code)}
+              className="pt-2 bg-gray-800 text-white px-4 py-2 rounded w-min"
+            >
+              Save
+            </button>
+          </div>
         </section>
 
         <section className="flex-1 p-10 bg-white text-black border-l border-gray-300 flex flex-col justify-center">
