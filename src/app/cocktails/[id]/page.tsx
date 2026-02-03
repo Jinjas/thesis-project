@@ -10,15 +10,11 @@ import { Ingredient, INGREDIENT_TYPES, IngredientType } from "../../types";
 
 export default function CocktailDetailPage() {
   const { id } = useParams();
-
   const { cocktails, ingredients, addIngredientToCocktail } = useAppContext();
-
   const cocktail = cocktails.find((c) => c.id === id);
-
   const [selectedIngredient, setSelectedIngredient] = useState("");
 
   if (!cocktail) return <p>Cocktail not found</p>;
-
   function isIngredient(ing: Ingredient | undefined): ing is Ingredient {
     return ing !== undefined;
   }

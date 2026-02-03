@@ -14,6 +14,7 @@ type AppContextType = {
     id: string,
     newName: string,
     newType: IngredientType,
+    newCode: string,
   ) => void;
 
   addIngredientToCocktail: (cocktailId: string, ingredientId: string) => void;
@@ -44,6 +45,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         id: crypto.randomUUID(),
         name,
         type: "Language",
+        code: "",
       },
     ]);
   }
@@ -52,10 +54,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     id: string,
     newName: string,
     newType: IngredientType,
+    newCode: string,
   ) {
     setIngredients((prev) =>
       prev.map((ing) =>
-        ing.id === id ? { ...ing, name: newName, type: newType } : ing,
+        ing.id === id
+          ? { ...ing, name: newName, type: newType, code: newCode }
+          : ing,
       ),
     );
   }
