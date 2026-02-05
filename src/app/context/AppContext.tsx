@@ -7,7 +7,7 @@ type AppContextType = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
 
-  addCocktail: (name: string) => void;
+  addCocktail: (name: string) => string;
   addIngredient: (name: string) => string;
   remIngredient(id: string): void;
 
@@ -28,15 +28,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
   function addCocktail(name: string) {
+    const id = crypto.randomUUID();
     setCocktails((prev) => [
       ...prev,
       {
-        id: crypto.randomUUID(),
+        id: id,
         name,
         activeIngredients: [],
         inactiveIngredients: [],
       },
     ]);
+    return id;
   }
 
   function addIngredient(name: string) {
