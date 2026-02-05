@@ -7,6 +7,9 @@ import { IngredientType, INGREDIENT_TYPES } from "../../types";
 import TypeSelector from "../../components/TypeSelector";
 import CodeEdit from "../../components/CodeEdit";
 import Sidebar from "../../components/Sidebar";
+import ImportButton from "../../components/Import";
+import ExportButton from "../../components/Export";
+import TextCampEdit from "../../components/TextCampEdit";
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
@@ -36,43 +39,6 @@ export default function IngredientDetailPage() {
 
   if (!ingredient) return <p className="p-6">Redirecting…</p>;
 
-  function handleImportClick() {
-    fileInputRef.current?.click();
-  }
-
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      const text = reader.result as string;
-      setCode(text);
-    };
-
-    reader.readAsText(file);
-
-    e.target.value = "";
-  }
-
-  function handleExport() {
-    const blob = new Blob([code], {
-      type: "text/plain;charset=utf-8",
-    });
-
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${name || "ingredient"}.txt`; // nome do ficheiro
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
-
   return (
     <div className="flex h-screen w-full">
       <Sidebar />
@@ -80,15 +46,7 @@ export default function IngredientDetailPage() {
         <section className="flex-1 p-9 bg-gray-100 text-black flex flex-col w-full h-screen">
           <h1 className="text-2xl font-bold pb-4">Edit Ingredient</h1>
 
-          <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 max-w-[493px]">
-            <h3 className=" lg:p-2 lg:pr-1 lg:w-[50px] ">Name:</h3>
-
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="border p-1 pl-2 rounded lg:w-[calc(100%-150px)] text-sm"
-            />
-          </div>
+          <TextCampEdit label="Name" value={name} onChange={setName} />
 
           <div className="pt-2 flex flex-col lg:flex-row gap-2 lg:gap-4 max-w-[493px]">
             <label className="lg:p-2 lg:pr-1 lg:w-[50px]">Type:</label>
@@ -104,31 +62,15 @@ export default function IngredientDetailPage() {
             <div className="pt-4 flex justify-between">
               <h3 className="font-semibold pb-2"> OntoDL</h3>
               <div className="flex gap-2">
-                <button
-                  onClick={handleImportClick}
-                  className="font-semibold pb-2 hover:underline"
-                >
-                  Import
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".txt,.ontodl"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                </button>
+                <ImportButton setCode={setCode} />
 
-                <button
-                  onClick={handleExport}
-                  className="font-semibold pb-2 hover:underline"
-                >
-                  Export
-                </button>
+                <ExportButton code={code} filename={name || "ingredient"} />
               </div>
             </div>
 
             <CodeEdit code={code} setCode={setCode} />
           </div>
+
           <div className=" pt-2 px-2 flex gap-2 justify-end">
             <button
               onClick={() => {
