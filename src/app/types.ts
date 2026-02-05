@@ -14,9 +14,12 @@ export type Ingredient = {
   code: string;
 };
 
+export type ParamMap = {
+  [key: string]: boolean;
+};
+
 export type Cocktail = {
   id: string;
   name: string;
-  activeIngredients: string[];
-  inactiveIngredients: string[];
+  ingredients: ParamMap;
 };

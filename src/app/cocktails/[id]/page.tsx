@@ -11,10 +11,14 @@ import Link from "next/link";
 
 export default function CocktailDetailPage() {
   const { id } = useParams();
-  const { cocktails, ingredients, addIngredientToCocktail } = useAppContext();
+  const {
+    cocktails,
+    ingredients,
+    addIngredientToCocktail,
+    updateIngredientStatus,
+  } = useAppContext();
 
   const cocktail = cocktails.find((c) => c.id === id);
-  const [selectedIngredient, setSelectedIngredient] = useState("");
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -39,13 +43,14 @@ export default function CocktailDetailPage() {
     return ing !== undefined;
   }
 
-  const activeIngredientsFull = cocktail.activeIngredients
-    .map((id) => ingredients.find((i) => i.id === id))
+  const ingredientsFull = Object.entries(cocktail.ingredients)
+    //.filter(([_, active]) => active)
+    .map(([id]) => ingredients.find((i) => i.id === id))
     .filter(isIngredient);
 
   const groupedIngredients = INGREDIENT_TYPES.reduce(
     (acc, type) => {
-      acc[type] = activeIngredientsFull.filter((ing) => ing.type === type);
+      acc[type] = ingredientsFull.filter((ing) => ing.type === type);
       return acc;
     },
     {} as Record<IngredientType, Ingredient[]>,
@@ -103,7 +108,14 @@ export default function CocktailDetailPage() {
                     >
                       {list.map((ing) => (
                         <li key={ing.id} className="text-sm pb-1">
-                          {ing.name}
+                          <button
+                            className={`block px-2 py-1 rounded ${cocktail.ingredients[ing.id] ? "bg-green-200 hover:bg-green-300" : "bg-red-200 hover:bg-red-300"}`}
+                            onClick={() =>
+                              updateIngredientStatus(cocktail.id, ing.id)
+                            }
+                          >
+                            {ing.name}
+                          </button>
                         </li>
                       ))}
                     </ul>

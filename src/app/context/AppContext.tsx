@@ -19,6 +19,7 @@ type AppContextType = {
   ) => void;
 
   addIngredientToCocktail: (cocktailId: string, ingredientId: string) => void;
+  updateIngredientStatus: (cocktailId: string, ingredientId: string) => void;
 };
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -34,8 +35,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       {
         id: id,
         name,
-        activeIngredients: [],
-        inactiveIngredients: [],
+        ingredients: {},
       },
     ]);
     return id;
@@ -76,9 +76,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setCocktails((prev) =>
       prev.map((c) => ({
         ...c,
-        activeIngredients: c.activeIngredients.filter((ingId) => ingId !== id),
-        inactiveIngredients: c.inactiveIngredients.filter(
-          (ingId) => ingId !== id,
+        ingredients: Object.fromEntries(
+          Object.entries(c.ingredients).filter(([ingId]) => ingId !== id),
         ),
       })),
     );
@@ -89,11 +88,39 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       prev.map((cocktail) => {
         if (cocktail.id !== cocktailId) return cocktail;
 
-        if (cocktail.activeIngredients.includes(ingredientId)) return cocktail;
+        if (cocktail.ingredients[ingredientId]) return cocktail;
 
         return {
           ...cocktail,
-          activeIngredients: [...cocktail.activeIngredients, ingredientId],
+          ingredients: {
+            ...cocktail.ingredients,
+            [ingredientId]: true,
+          },
+        };
+      }),
+    );
+  }
+
+  function updateIngredientStatus(cocktailId: string, ingredientId: string) {
+    setCocktails((prev) =>
+      prev.map((cocktail) => {
+        if (cocktail.id !== cocktailId) return cocktail;
+
+        if (cocktail.ingredients[ingredientId])
+          return {
+            ...cocktail,
+            ingredients: {
+              ...cocktail.ingredients,
+              [ingredientId]: false,
+            },
+          };
+
+        return {
+          ...cocktail,
+          ingredients: {
+            ...cocktail.ingredients,
+            [ingredientId]: true,
+          },
         };
       }),
     );
@@ -109,6 +136,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         remIngredient,
         updateIngredient,
         addIngredientToCocktail,
+        updateIngredientStatus,
       }}
     >
       {children}
