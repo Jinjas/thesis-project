@@ -13,6 +13,7 @@ export default function IngredientsPage() {
   return (
     <div className="flex h-screen w-full">
       <Sidebar />
+
       <main className="flex flex-1">
         <section className="flex-1 p-9 bg-gray-100 text-black flex flex-col w-full h-screen">
           <h1 className="text-2xl font-bold ">Ingredients</h1>
@@ -22,7 +23,7 @@ export default function IngredientsPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Ingredient name..."
-              className="border p-2 rounded flex-1 "
+              className="border p-2 rounded flex-1"
             />
 
             <button
