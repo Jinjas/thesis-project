@@ -2,19 +2,39 @@
 
 import Sidebar from "../../components/Sidebar";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../context/AppContext";
-import { useState } from "react";
-
+import { useState, useEffect, useRef } from "react";
+import IngredientSearch from "../../components/IngredientSearch";
 import { Ingredient, INGREDIENT_TYPES, IngredientType } from "../../types";
+import Link from "next/link";
 
 export default function CocktailDetailPage() {
   const { id } = useParams();
   const { cocktails, ingredients, addIngredientToCocktail } = useAppContext();
+
   const cocktail = cocktails.find((c) => c.id === id);
   const [selectedIngredient, setSelectedIngredient] = useState("");
+  const router = useRouter();
 
-  if (!cocktail) return <p>Cocktail not found</p>;
+  const [name, setName] = useState("");
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (cocktail) {
+      setName(cocktail.name);
+    }
+  }, [cocktail]);
+
+  useEffect(() => {
+    if (!cocktail) {
+      router.replace("/cocktails");
+    }
+  }, [cocktail, router]);
+
+  if (!cocktail) return <p className="p-6">Redirecting…</p>;
+
   function isIngredient(ing: Ingredient | undefined): ing is Ingredient {
     return ing !== undefined;
   }
@@ -36,48 +56,55 @@ export default function CocktailDetailPage() {
       <Sidebar />
 
       <main className="flex flex-1">
-        <section className="flex-1 p-10 bg-gray-100 text-black flex flex-col justify-center">
-          <h1 className="text-2xl font-bold">{cocktail.name}</h1>
-          <div className="mt-4 flex gap-2">
-            <select
-              value={selectedIngredient}
-              onChange={(e) => setSelectedIngredient(e.target.value)}
-              className="border p-2 rounded"
-            >
-              <option value="">Select ingredient...</option>
-              {ingredients.map((ing) => (
-                <option key={ing.id} value={ing.id}>
-                  {ing.name}
-                </option>
-              ))}
-            </select>
+        <section className="flex-1 p-9 bg-gray-100 text-black flex flex-col w-full h-screen">
+          <h1 className="text-2xl font-bold pb-1.5">Edit Cocktail: {name}</h1>
 
-            <button
-              onClick={() =>
-                addIngredientToCocktail(cocktail.id, selectedIngredient)
-              }
-              className="bg-black text-white px-4 rounded"
-            >
-              Add
-            </button>
+          <div>
+            <div className="flex flex-row justify-between">
+              <h3 className=" p-1 pb-0">Add Ingredient </h3>
+              <Link
+                href={`/ingredients`}
+                className=" bg-gray-700 hover:bg-gray-800 text-white px-2 pt-1 rounded border text-center text-sm"
+              >
+                New...
+              </Link>
+            </div>
+            <IngredientSearch
+              ingredients={ingredients}
+              onSelect={(id) => addIngredientToCocktail(cocktail.id, id)}
+            />
           </div>
 
-          <div className="mt-6">
+          <div className="pt-2.5">
             <h2 className="font-semibold text-lg">Active Ingredients</h2>
 
             {INGREDIENT_TYPES.map((type) => {
               const list = groupedIngredients[type];
 
               return (
-                <div key={type} className="mt-4">
+                <div key={type} className="pt-1">
                   <h3 className="font-bold">{type}</h3>
 
                   {list.length === 0 ? (
-                    <p className="text-gray-500 text-sm">(none)</p>
+                    <p className="text-gray-500 text-sm h-[6.5rem]">(none)</p>
                   ) : (
-                    <ul className="list-disc ml-6">
+                    <ul
+                      className="
+                        grid
+                        xl:grid-cols-6
+                        lg:grid-cols-5
+                        md:grid-cols-4
+                        sm:grid-cols-2
+                        gap-x-6
+                        pl-4 pt-1 text-sm
+                        h-[6.5rem]
+                        overflow-y-auto
+                      "
+                    >
                       {list.map((ing) => (
-                        <li key={ing.id}>{ing.name}</li>
+                        <li key={ing.id} className="text-sm pb-1">
+                          {ing.name}
+                        </li>
                       ))}
                     </ul>
                   )}
