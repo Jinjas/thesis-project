@@ -34,9 +34,7 @@ export default function IngredientDetailPage() {
     }
   }, [ingredient, router]);
 
-  if (!ingredient) {
-    return <p className="p-6">Redirecting…</p>;
-  }
+  if (!ingredient) return <p className="p-6">Redirecting…</p>;
 
   function handleImportClick() {
     fileInputRef.current?.click();
@@ -55,7 +53,6 @@ export default function IngredientDetailPage() {
 
     reader.readAsText(file);
 
-    // permite importar o mesmo ficheiro outra vez
     e.target.value = "";
   }
 
