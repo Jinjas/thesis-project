@@ -3,6 +3,8 @@
 import { createContext, useContext, useState } from "react";
 import { Cocktail, Ingredient, IngredientType } from "../types";
 
+import { INGREDIENTS, COCKTAILS } from "./data";
+
 type AppContextType = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
@@ -25,8 +27,12 @@ type AppContextType = {
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [cocktails, setCocktails] = useState<Cocktail[]>([]);
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  // para fazer de raiz sem dados iniciais
+  //  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  //  const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+
+  const [ingredients, setIngredients] = useState<Ingredient[]>(INGREDIENTS);
+  const [cocktails, setCocktails] = useState<Cocktail[]>(COCKTAILS);
 
   function addCocktail(name: string) {
     const id = crypto.randomUUID();
