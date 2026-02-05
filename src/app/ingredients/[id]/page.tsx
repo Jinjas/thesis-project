@@ -7,12 +7,16 @@ import { IngredientType, INGREDIENT_TYPES } from "../../types";
 import TypeSelector from "../../components/TypeSelector";
 import CodeEdit from "../../components/CodeEdit";
 import Sidebar from "../../components/Sidebar";
+import { redirect } from "next/navigation";
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
   const { ingredients, updateIngredient } = useAppContext();
   const ingredient = ingredients.find((i) => i.id === id);
-  if (!ingredient) return <p>Ingredient not found</p>;
+  if (!ingredient) {
+    redirect("/ingredients");
+    return <p>Ingredient not found</p>;
+  }
 
   const [name, setName] = useState(ingredient.name);
   const [type, setType] = useState<IngredientType>(ingredient.type);
