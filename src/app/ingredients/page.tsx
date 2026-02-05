@@ -39,7 +39,7 @@ export default function IngredientsPage() {
             </button>
           </div>
 
-          <ul className="pt-4">
+          <ul className="pt-4 overflow-y-auto">
             {ingredients.map((i) => (
               <li key={i.id}>
                 <div
@@ -48,7 +48,7 @@ export default function IngredientsPage() {
                   grid-cols-[1fr_1fr_80px]
                   items-center
                   gap-2
-                  py-2
+                  py-1
                   px-2
                   border-b
                 "

@@ -7,18 +7,20 @@ export default function Sidebar() {
   const { cocktails, ingredients } = useAppContext();
 
   return (
-    <aside className="w-28 bg-gray-900 text-white p-4 flex flex-col gap-4">
-      <div>
-        <Link href="/cocktails" className="font-semibold hover:text-gray-300">
+    <aside className="w-32 bg-gray-900 text-white px-4 py-6 flex flex-col">
+      <div className=" h-1/4 flex flex-col pb-4">
+        <Link
+          href="/cocktails"
+          className="font-semibold hover:bg-gray-700 rounded"
+        >
           Cocktails
         </Link>
-
-        <ul className="space-y-1">
+        <ul className="pt-1 overflow-y-scroll h-full [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-600 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700">
           {cocktails.map((c) => (
             <li key={c.id}>
               <Link
                 href={`/cocktails/${c.id}`}
-                className="block hover:bg-gray-700 px-2 py-1 rounded"
+                className="block hover:bg-gray-700 px-2 rounded"
               >
                 {c.name}
               </Link>
@@ -27,16 +29,19 @@ export default function Sidebar() {
         </ul>
       </div>
 
-      <div>
-        <Link href="/ingredients" className="font-semibold hover:text-gray-300">
+      <div className=" h-3/4 flex flex-col">
+        <Link
+          href="/ingredients"
+          className="font-semibold hover:bg-gray-700 rounded"
+        >
           Ingredients
         </Link>
-        <ul className="space-y-1">
+        <ul className="pt-1 overflow-y-scroll h-full [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-600 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700">
           {ingredients.map((i) => (
             <li key={i.id}>
               <Link
                 href={`/ingredients/${i.id}`}
-                className="block hover:bg-gray-700 px-2 py-1 rounded"
+                className="block hover:bg-gray-700 px-2 rounded"
               >
                 {i.name}
               </Link>
