@@ -43,17 +43,7 @@ export default function IngredientsPage() {
           <ul className="pt-4 overflow-y-auto">
             {ingredients.map((i) => (
               <li key={i.id}>
-                <div
-                  className="
-                  grid
-                  grid-cols-[1fr_1fr_80px]
-                  items-center
-                  gap-2
-                  py-1
-                  px-2
-                  border-b
-                "
-                >
+                <div className="grid grid-cols-[1fr_1fr_80px] items-center gap-2 py-1 px-2 border-b">
                   <h3 className="font-semibold">{i.name}</h3>
                   <h3 className="text-md">{i.type}</h3>
                   <Link

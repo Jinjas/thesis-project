@@ -44,7 +44,6 @@ export default function CocktailDetailPage() {
   }
 
   const ingredientsFull = Object.entries(cocktail.ingredients)
-    //.filter(([_, active]) => active)
     .map(([id]) => ingredients.find((i) => i.id === id))
     .filter(isIngredient);
 
@@ -63,7 +62,6 @@ export default function CocktailDetailPage() {
       <main className="flex flex-1">
         <section className="flex-1 p-9 bg-gray-100 text-black flex flex-col w-full h-screen">
           <h1 className="text-2xl font-bold pb-1.5">Edit Cocktail: {name}</h1>
-
           <div>
             <div className="flex flex-row justify-between">
               <h3 className=" p-1 pb-0">Add Ingredient </h3>
@@ -79,7 +77,6 @@ export default function CocktailDetailPage() {
               onSelect={(id) => addIngredientToCocktail(cocktail.id, id)}
             />
           </div>
-
           <div className="pt-2.5">
             <h2 className="font-semibold text-lg">Active Ingredients</h2>
 
@@ -90,26 +87,36 @@ export default function CocktailDetailPage() {
                 <div key={type} className="pt-1">
                   <h3 className="font-bold">{type}</h3>
 
+                  {(() => {
+                    console.group(`INGREDIENT TYPE: ${type}`);
+                    console.log("list:", list);
+                    console.log(
+                      "ids:",
+                      list.map((i) => i.id),
+                    );
+                    console.log(
+                      "status:",
+                      list.map((i) => ({
+                        id: i.id,
+                        active: cocktail.ingredients[i.id],
+                      })),
+                    );
+                    console.groupEnd();
+                    return null;
+                  })()}
+
                   {list.length === 0 ? (
                     <p className="text-gray-500 text-sm h-[6.5rem]">(none)</p>
                   ) : (
-                    <ul
-                      className="
-                        grid
-                        xl:grid-cols-6
-                        lg:grid-cols-5
-                        md:grid-cols-4
-                        sm:grid-cols-2
-                        gap-x-6
-                        pl-4 pt-1 text-sm
-                        h-[6.5rem]
-                        overflow-y-auto
-                      "
-                    >
+                    <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-x-6 pl-4 pt-1 text-sm h-[6.5rem] overflow-y-auto">
                       {list.map((ing) => (
                         <li key={ing.id} className="text-sm pb-1">
                           <button
-                            className={`block px-2 py-1 rounded ${cocktail.ingredients[ing.id] ? "bg-green-200 hover:bg-green-300" : "bg-red-200 hover:bg-red-300"}`}
+                            className={`block px-2 py-1 rounded ${
+                              cocktail.ingredients[ing.id]
+                                ? "bg-green-200 hover:bg-green-300"
+                                : "bg-red-200 hover:bg-red-300"
+                            }`}
                             onClick={() =>
                               updateIngredientStatus(cocktail.id, ing.id)
                             }

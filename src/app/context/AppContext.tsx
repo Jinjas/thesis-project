@@ -24,18 +24,22 @@ type AppContextType = {
   updateIngredientStatus: (cocktailId: string, ingredientId: string) => void;
 };
 
+function createId(prefix: string) {
+  return `${prefix}-${performance.now().toFixed(0)}`;
+}
+
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   // para fazer de raiz sem dados iniciais
-  //  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  //  const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+  //const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  //const [cocktails, setCocktails] = useState<Cocktail[]>([]);
 
   const [ingredients, setIngredients] = useState<Ingredient[]>(INGREDIENTS);
   const [cocktails, setCocktails] = useState<Cocktail[]>(COCKTAILS);
 
   function addCocktail(name: string) {
-    const id = crypto.randomUUID();
+    const id = createId("cocktail");
     setCocktails((prev) => [
       ...prev,
       {
@@ -48,7 +52,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }
 
   function addIngredient(name: string) {
-    const id = crypto.randomUUID();
+    const id = createId("ingredient");
     setIngredients((prev) => [
       ...prev,
       {
