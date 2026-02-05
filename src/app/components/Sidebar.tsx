@@ -7,7 +7,7 @@ export default function Sidebar() {
   const { cocktails, ingredients } = useAppContext();
 
   return (
-    <aside className="w-32 bg-gray-900 text-white px-4 py-6 flex flex-col">
+    <aside className="w-40 bg-gray-900 text-white px-4 py-6 flex flex-col">
       <div className=" h-1/4 flex flex-col pb-4">
         <Link
           href="/cocktails"
@@ -17,10 +17,10 @@ export default function Sidebar() {
         </Link>
         <ul className="pt-1 overflow-y-scroll h-full [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-600 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700">
           {cocktails.map((c) => (
-            <li key={c.id}>
+            <li key={c.id} className="px-1">
               <Link
                 href={`/cocktails/${c.id}`}
-                className="block hover:bg-gray-700 px-2 rounded"
+                className="block hover:bg-gray-700 py-1 px-1 rounded border-b border-gray-500 text-sm"
               >
                 {c.name}
               </Link>
@@ -38,10 +38,10 @@ export default function Sidebar() {
         </Link>
         <ul className="pt-1 overflow-y-scroll h-full [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-600 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700">
           {ingredients.map((i) => (
-            <li key={i.id}>
+            <li key={i.id} className="px-1">
               <Link
                 href={`/ingredients/${i.id}`}
-                className="block hover:bg-gray-700 px-2 rounded"
+                className="block hover:bg-gray-700 py-1 px-1 rounded border-b border-gray-500 text-sm"
               >
                 {i.name}
               </Link>
