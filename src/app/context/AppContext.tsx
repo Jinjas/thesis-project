@@ -8,7 +8,8 @@ type AppContextType = {
   ingredients: Ingredient[];
 
   addCocktail: (name: string) => void;
-  addIngredient: (name: string) => void;
+  addIngredient: (name: string) => string;
+  remIngredient(id: string): void;
 
   updateIngredient: (
     id: string,
@@ -39,15 +40,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }
 
   function addIngredient(name: string) {
+    const id = crypto.randomUUID();
     setIngredients((prev) => [
       ...prev,
       {
-        id: crypto.randomUUID(),
+        id: id,
         name,
         type: "Language",
         code: "",
       },
     ]);
+    return id;
   }
 
   function updateIngredient(
@@ -62,6 +65,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           ? { ...ing, name: newName, type: newType, code: newCode }
           : ing,
       ),
+    );
+  }
+
+  function remIngredient(id: string) {
+    setIngredients((prev) => prev.filter((ing) => ing.id !== id));
+
+    setCocktails((prev) =>
+      prev.map((c) => ({
+        ...c,
+        activeIngredients: c.activeIngredients.filter((ingId) => ingId !== id),
+        inactiveIngredients: c.inactiveIngredients.filter(
+          (ingId) => ingId !== id,
+        ),
+      })),
     );
   }
 
@@ -87,6 +104,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         ingredients,
         addCocktail,
         addIngredient,
+        remIngredient,
         updateIngredient,
         addIngredientToCocktail,
       }}

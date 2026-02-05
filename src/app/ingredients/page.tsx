@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { useAppContext } from "../context/AppContext";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function IngredientsPage() {
   const { ingredients, addIngredient } = useAppContext();
@@ -12,35 +14,43 @@ export default function IngredientsPage() {
     <div className="flex h-screen w-full">
       <Sidebar />
       <main className="flex flex-1">
-        <section className="flex-1 p-10 bg-gray-100 text-black flex flex-col justify-center">
-          <h1 className="text-2xl font-bold">Ingredients</h1>
+        <section className="flex-1 p-9 bg-gray-100 text-black flex flex-col w-full h-screen">
+          <h1 className="text-2xl font-bold ">Ingredients</h1>
 
-          <ul className="mt-6 space-y-2">
-            {ingredients.map((ing) => (
-              <li key={ing.id} className="border p-2 rounded">
-                {ing.name}
-              </li>
-            ))}
-          </ul>
-
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 pt-4 w-full">
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Ingredient name..."
-              className="border p-2 rounded"
+              className="border p-2 rounded flex-1 "
             />
 
             <button
               onClick={() => {
-                addIngredient(name);
-                setName("");
+                if (name.trim() !== "") {
+                  const id = addIngredient(name);
+                  setName("");
+                  redirect(`/ingredients/${id}`);
+                }
               }}
-              className="bg-black text-white px-4 rounded"
+              className="block bg-gray-700 hover:bg-gray-800 text-white px-4 rounded"
             >
               Add Ingredient
             </button>
           </div>
+
+          <ul className="space-y-1 pt-4">
+            {ingredients.map((i) => (
+              <li key={i.id}>
+                <Link
+                  href={`/ingredients/${i.id}`}
+                  className="flex hover:bg-gray-700 px-2 py-1 rounded border text-center"
+                >
+                  {i.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section className="flex-1 p-10 bg-white text-black border-l border-gray-300 flex flex-col justify-center">

@@ -1,28 +1,42 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../context/AppContext";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IngredientType, INGREDIENT_TYPES } from "../../types";
 import TypeSelector from "../../components/TypeSelector";
 import CodeEdit from "../../components/CodeEdit";
 import Sidebar from "../../components/Sidebar";
-import { redirect } from "next/navigation";
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
-  const { ingredients, updateIngredient } = useAppContext();
+  const { ingredients, updateIngredient, remIngredient } = useAppContext();
+  const router = useRouter();
   const ingredient = ingredients.find((i) => i.id === id);
-  if (!ingredient) {
-    redirect("/ingredients");
-    return <p>Ingredient not found</p>;
-  }
 
-  const [name, setName] = useState(ingredient.name);
-  const [type, setType] = useState<IngredientType>(ingredient.type);
-  const [code, setCode] = useState(ingredient.code);
+  const [name, setName] = useState("");
+  const [type, setType] = useState<IngredientType>("Language");
+  const [code, setCode] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (ingredient) {
+      setName(ingredient.name);
+      setType(ingredient.type);
+      setCode(ingredient.code);
+    }
+  }, [ingredient]);
+
+  useEffect(() => {
+    if (!ingredient) {
+      router.replace("/ingredients");
+    }
+  }, [ingredient, router]);
+
+  if (!ingredient) {
+    return <p className="p-6">Redirecting…</p>;
+  }
 
   function handleImportClick() {
     fileInputRef.current?.click();
@@ -118,10 +132,19 @@ export default function IngredientDetailPage() {
 
             <CodeEdit code={code} setCode={setCode} />
           </div>
-          <div className=" pt-2 px-2 flex justify-end">
+          <div className=" pt-2 px-2 flex gap-2 justify-end">
+            <button
+              onClick={() => {
+                remIngredient(ingredient.id);
+                router.push("/ingredients");
+              }}
+              className=" bg-red-800 hover:bg-red-900 text-white px-3 py-2 rounded w-min"
+            >
+              Remove
+            </button>
             <button
               onClick={() => updateIngredient(ingredient.id, name, type, code)}
-              className="pt-2 bg-gray-800 text-white px-4 py-2 rounded w-min"
+              className=" bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded w-min"
             >
               Save
             </button>
