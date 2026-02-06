@@ -1,5 +1,14 @@
 "use client";
 
+/*usage:
+
+  <TypeSelector
+      value={type}
+      onChange={setType}
+      types={INGREDIENT_TYPES}
+  />
+*/
+
 import { IngredientType } from "../types";
 import { Check } from "lucide-react";
 

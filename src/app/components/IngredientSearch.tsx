@@ -1,5 +1,13 @@
 "use client";
 
+/*usage:
+
+  <IngredientSearch
+      ingredients={ingredients}
+      onSelect={(id) => addIngredientToCocktail(cocktail.id, id)}
+  />
+*/
+
 import { useState, useMemo } from "react";
 import { Ingredient } from "../types";
 

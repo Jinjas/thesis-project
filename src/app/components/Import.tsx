@@ -1,5 +1,10 @@
 "use client";
 
+/*usage:
+
+<ImportButton setCode={setCode} />
+*/
+
 import { useRef } from "react";
 
 type Props = {

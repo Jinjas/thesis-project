@@ -1,5 +1,16 @@
 "use client";
 
+/*usage:
+  
+  <SidebarSection
+    title="Cocktails"
+    titleHref="/cocktails"
+    items={cocktails}
+    baseHref="/cocktails"
+    extraFlags="h-1/4 pb-4"
+  />
+*/
+
 import Link from "next/link";
 
 type Item = {

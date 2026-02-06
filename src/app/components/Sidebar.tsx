@@ -1,6 +1,10 @@
 "use client";
 
-import Link from "next/link";
+/*usage:
+
+  <Sidebar />
+*/
+
 import { useAppContext } from "../context/AppContext";
 import { useState } from "react";
 import SidebarSection from "./SidebarSection";

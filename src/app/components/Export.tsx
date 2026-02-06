@@ -1,5 +1,10 @@
 "use client";
 
+/*usage:
+
+<ExportButton code={code} filename={name || "ingredient"} />
+*/
+
 type Props = {
   code: string;
   filename?: string;

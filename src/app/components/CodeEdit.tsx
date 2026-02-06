@@ -1,5 +1,10 @@
 "use client";
 
+/*usage:
+
+<CodeEdit code={code} setCode={setCode} />
+*/
+
 type Props = {
   code: string;
   setCode: (value: string) => void;

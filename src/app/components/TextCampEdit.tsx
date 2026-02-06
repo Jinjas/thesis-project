@@ -1,5 +1,10 @@
 "use client";
 
+/*usage:
+
+<TextCampEdit label="Name" value={name} onChange={setName} />
+*/
+
 type Props = {
   label: string;
   value: string;
