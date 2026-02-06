@@ -10,14 +10,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`
-        relative
-        bg-gray-900 text-white
-        py-6
-        flex flex-col
-        transition-all duration-300
-        ${collapsed ? "w-2 px-2" : "w-40 px-4"}
-      `}
+      className={` relative bg-gray-900 text-white py-6 flex flex-col transition-all duration-300 ${collapsed ? "w-2 px-2" : "w-40 px-4"}`}
     >
       <button
         onClick={() => setCollapsed((v) => !v)}
