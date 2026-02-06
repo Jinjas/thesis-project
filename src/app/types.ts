@@ -21,5 +21,6 @@ export type ParamMap = {
 export type Cocktail = {
   id: string;
   name: string;
+  viz: string;
   ingredients: ParamMap;
 };

@@ -45,6 +45,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       {
         id: id,
         name,
+        viz: "OJS.pdf",
         ingredients: {},
       },
     ]);

@@ -44,6 +44,7 @@ export const COCKTAILS: Cocktail[] = [
   {
     id: "frontend-basic",
     name: "Frontend Basic",
+    viz: "/viz/OJS.svg",
     ingredients: {
       js: true,
       react: true,
@@ -55,6 +56,7 @@ export const COCKTAILS: Cocktail[] = [
   {
     id: "modern-stack",
     name: "Modern Stack",
+    viz: "/viz/OJS.svg",
     ingredients: {
       ts: true,
       react: true,
@@ -66,6 +68,7 @@ export const COCKTAILS: Cocktail[] = [
   {
     id: "vanilla-dev",
     name: "Vanilla Dev",
+    viz: "/viz/OJS.svg",
     ingredients: {
       js: true,
       ts: true,

@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import IngredientSearch from "../../components/IngredientSearch";
 import { Ingredient, INGREDIENT_TYPES, IngredientType } from "../../types";
 import Link from "next/link";
+import VizBar from "../../components/visualizationBar";
 
 export default function CocktailDetailPage() {
   const { id } = useParams();
@@ -87,24 +88,6 @@ export default function CocktailDetailPage() {
                 <div key={type} className="pt-1">
                   <h3 className="font-bold">{type}</h3>
 
-                  {(() => {
-                    console.group(`INGREDIENT TYPE: ${type}`);
-                    console.log("list:", list);
-                    console.log(
-                      "ids:",
-                      list.map((i) => i.id),
-                    );
-                    console.log(
-                      "status:",
-                      list.map((i) => ({
-                        id: i.id,
-                        active: cocktail.ingredients[i.id],
-                      })),
-                    );
-                    console.groupEnd();
-                    return null;
-                  })()}
-
                   {list.length === 0 ? (
                     <p className="text-gray-500 text-sm h-[6.5rem]">(none)</p>
                   ) : (
@@ -139,6 +122,7 @@ export default function CocktailDetailPage() {
             Resultados, visualizações, ferramentas.
           </p>
         </section>
+        <VizBar />
       </main>
     </div>
   );
