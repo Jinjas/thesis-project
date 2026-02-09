@@ -136,6 +136,6 @@ export const COCKTAILS: Cocktail[] = [
       next: true,
       sql: true,
     },
-    onto: FRONTEND_BASIC_ONTO,
+    onto: "",
   },
 ];

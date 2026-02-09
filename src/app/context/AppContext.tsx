@@ -24,7 +24,7 @@ type AppContextType = {
 
   addIngredientToCocktail: (cocktailId: string, ingredientId: string) => void;
   updateIngredientStatus: (cocktailId: string, ingredientId: string) => void;
-  updateOnto: (cocktailId: string, onto: string) => void;
+  updateOnto: (cocktailId: string, onto: string) => Promise<void>;
   updateCocktailViz: (cocktailId: string, viz: string) => void;
 };
 
@@ -219,17 +219,33 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     });
   }
 
-  function updateOnto(cocktailId: string, onto: string) {
+  async function updateOnto(cocktailId: string, onto: string) {
+    // optimistic update of onto
     setCocktails((prev) =>
-      prev.map((cocktail) => {
-        if (cocktail.id !== cocktailId) return cocktail;
-
-        return {
-          ...cocktail,
-          onto,
-        };
-      }),
+      prev.map((cocktail) => (cocktail.id === cocktailId ? { ...cocktail, onto } : cocktail)),
     );
+
+    try {
+      const response = await fetch("/api/ontology/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ onto }),
+      });
+
+      if (!response.ok) return;
+
+      const data = await response.json();
+      const svg = data?.svg;
+      if (typeof svg === "string") {
+        const vizValue = svg.trim().startsWith("<")
+          ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+          : svg;
+
+        setCocktails((prev) => prev.map((c) => (c.id === cocktailId ? { ...c, viz: vizValue } : c)));
+      }
+    } catch (err) {
+      console.error("Erro ao gerar viz ao atualizar onto para", cocktailId, err);
+    }
   }
 
   function updateCocktailViz(cocktailId: string, viz: string) {
