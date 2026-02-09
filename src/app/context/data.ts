@@ -16,9 +16,10 @@ individuals {
   JavaScript,
   TypeScript,
   React,
-  NextJS,
+  Next,
   TailwindCSS,
-  SQL
+  SQL,
+  ArchitectsPortal
 }
 
 relations {
@@ -37,6 +38,8 @@ triples {
   TailwindCSS = iof => Tool;
   SQL = iof => Language;
   
+  ArchitectsPortal = requires => FrontendBasic;
+
   SQL = supports => ArchitectsPortal;
 
   FrontendBasic = is_composed_of => JavaScript;
@@ -96,7 +99,7 @@ export const COCKTAILS: Cocktail[] = [
   {
     id: "frontend-basic",
     name: "Frontend Basic",
-    viz: "/viz/OJS.svg",
+    viz: "",
     ingredients: {
       js: true,
       react: true,
@@ -110,7 +113,7 @@ export const COCKTAILS: Cocktail[] = [
   {
     id: "modern-stack",
     name: "Modern Stack",
-    viz: "/viz/OJS.svg",
+    viz: "",
     ingredients: {
       js: true,
       react: true,
@@ -124,7 +127,7 @@ export const COCKTAILS: Cocktail[] = [
   {
     id: "vanilla-dev",
     name: "Vanilla Dev",
-    viz: "/viz/OJS.svg",
+    viz: "",
     ingredients: {
       js: true,
       react: true,

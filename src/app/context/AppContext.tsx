@@ -163,13 +163,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
         const data = await response.json();
 
+        const vizValue =
+          typeof data.updatedViz === "string" && data.updatedViz.trim().startsWith("<")
+            ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
+            : data.updatedViz;
+
         setCocktails((prev) =>
           prev.map((c) =>
             c.id === cocktailId
               ? {
                   ...c,
                   onto: data.updatedOnto,
-                  viz: data.updatedViz,
+                  viz: vizValue,
                 }
               : c,
           ),

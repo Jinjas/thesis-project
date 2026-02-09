@@ -38,6 +38,22 @@ export default function VisSidebar({ pdfUrl, scale, onScaleChange }: Props) {
     onScaleChange(Math.min(scaleX, scaleY));
   }, [pdfUrl, onScaleChange, scale]);
 
+  function handleImageLoad() {
+    if (!containerRef.current || !imgRef.current) return;
+
+    const cw = containerRef.current.clientWidth;
+    const ch = containerRef.current.clientHeight;
+    const iw = imgRef.current.naturalWidth;
+    const ih = imgRef.current.naturalHeight;
+
+    if (!iw || !ih) return;
+
+    const scaleX = cw / iw;
+    const scaleY = ch / ih;
+
+    onScaleChange(Math.min(scaleX, scaleY));
+  }
+
   return (
     <aside className="flex flex-col h-full">
       <div className="flex items-center justify-between pb-3">
@@ -76,6 +92,7 @@ export default function VisSidebar({ pdfUrl, scale, onScaleChange }: Props) {
             <img
               ref={imgRef}
               src={pdfUrl}
+              onLoad={handleImageLoad}
               style={{
                 width: imgRef.current
                   ? imgRef.current.naturalWidth * scale
