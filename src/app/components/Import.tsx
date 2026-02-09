@@ -2,16 +2,16 @@
 
 /*usage:
 
-<ImportButton setCode={setCode} />
+<ImportButton func={setCode} />
 */
 
 import { useRef } from "react";
 
 type Props = {
-  setCode: (code: string) => void;
+  func: (code: string) => void;
 };
 
-export default function ImportButton({ setCode }: Props) {
+export default function ImportButton({ func }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleImportClick() {
@@ -26,7 +26,7 @@ export default function ImportButton({ setCode }: Props) {
 
     reader.onload = () => {
       const text = reader.result as string;
-      setCode(text);
+      func(text);
     };
 
     reader.readAsText(file);

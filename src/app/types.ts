@@ -23,4 +23,5 @@ export type Cocktail = {
   name: string;
   viz: string;
   ingredients: ParamMap;
+  onto: string;
 };

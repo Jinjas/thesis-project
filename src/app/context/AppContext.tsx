@@ -5,6 +5,8 @@ import { Cocktail, Ingredient, IngredientType } from "../types";
 
 import { INGREDIENTS, COCKTAILS } from "./data";
 
+import { enqueueCocktailUpdate } from "@/lib/updateQueue";
+
 type AppContextType = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
@@ -22,6 +24,8 @@ type AppContextType = {
 
   addIngredientToCocktail: (cocktailId: string, ingredientId: string) => void;
   updateIngredientStatus: (cocktailId: string, ingredientId: string) => void;
+  updateOnto: (cocktailId: string, onto: string) => void;
+  updateCocktailViz: (cocktailId: string, viz: string) => void;
 };
 
 function createId(prefix: string) {
@@ -47,6 +51,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         name,
         viz: "OJS.pdf",
         ingredients: {},
+        onto: "",
       },
     ]);
     return id;
@@ -112,27 +117,87 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
-  function updateIngredientStatus(cocktailId: string, ingredientId: string) {
+  async function updateIngredientStatus(
+    cocktailId: string,
+    ingredientId: string,
+  ) {
+    const cocktail = cocktails.find((c) => c.id === cocktailId);
+    if (!cocktail) return;
+
+    const ingredient = ingredients.find((i) => i.id === ingredientId);
+    if (!ingredient) return;
+
+    const isActive = cocktail.ingredients[ingredientId];
+    const newStatus = !isActive;
+
+    setCocktails((prev) =>
+      prev.map((c) =>
+        c.id === cocktailId
+          ? {
+              ...c,
+              ingredients: {
+                ...c.ingredients,
+                [ingredientId]: newStatus,
+              },
+            }
+          : c,
+      ),
+    );
+
+    enqueueCocktailUpdate(cocktailId, async () => {
+      try {
+        const response = await fetch("/api/ontology/update", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ingredientName: ingredient.name,
+            ingredientType: ingredient.type,
+            active: newStatus,
+            currentOnto: cocktail.onto,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Ontology update failed");
+        }
+
+        const data = await response.json();
+
+        setCocktails((prev) =>
+          prev.map((c) =>
+            c.id === cocktailId
+              ? {
+                  ...c,
+                  onto: data.updatedOnto,
+                  viz: data.updatedViz,
+                }
+              : c,
+          ),
+        );
+      } catch (err) {
+        console.error("Erro ao atualizar ontologia", err);
+      }
+    });
+  }
+
+  function updateOnto(cocktailId: string, onto: string) {
     setCocktails((prev) =>
       prev.map((cocktail) => {
         if (cocktail.id !== cocktailId) return cocktail;
 
-        if (cocktail.ingredients[ingredientId])
-          return {
-            ...cocktail,
-            ingredients: {
-              ...cocktail.ingredients,
-              [ingredientId]: false,
-            },
-          };
-
         return {
           ...cocktail,
-          ingredients: {
-            ...cocktail.ingredients,
-            [ingredientId]: true,
-          },
+          onto,
         };
+      }),
+    );
+  }
+
+  function updateCocktailViz(cocktailId: string, viz: string) {
+    setCocktails((prev) =>
+      prev.map((cocktail) => {
+        if (cocktail.id !== cocktailId) return cocktail;
+        return { ...cocktail, viz };
       }),
     );
   }
@@ -146,8 +211,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         addIngredient,
         remIngredient,
         updateIngredient,
+        updateCocktailViz,
         addIngredientToCocktail,
         updateIngredientStatus,
+        updateOnto,
       }}
     >
       {children}

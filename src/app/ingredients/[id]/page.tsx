@@ -62,7 +62,7 @@ export default function IngredientDetailPage() {
             <div className="pt-4 flex justify-between">
               <h3 className="font-semibold pb-2"> OntoDL</h3>
               <div className="flex gap-2">
-                <ImportButton setCode={setCode} />
+                <ImportButton func={setCode} />
 
                 <ExportButton code={code} filename={name || "ingredient"} />
               </div>

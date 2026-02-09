@@ -52,6 +52,7 @@ export const COCKTAILS: Cocktail[] = [
       ts: true,
       next: true,
     },
+    onto: "",
   },
   {
     id: "modern-stack",
@@ -64,6 +65,7 @@ export const COCKTAILS: Cocktail[] = [
       tailwind: true,
       vite: true,
     },
+    onto: "",
   },
   {
     id: "vanilla-dev",
@@ -75,5 +77,6 @@ export const COCKTAILS: Cocktail[] = [
       react: true,
       vite: true,
     },
+    onto: "",
   },
 ];

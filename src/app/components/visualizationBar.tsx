@@ -18,20 +18,15 @@ export default function VizBar() {
 
   const cocktail = cocktails.find((c) => c.id === id);
 
-  const [pdf, setpdf] = useState("");
   const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    if (cocktail) {
-      setpdf(cocktail.viz);
-    }
-  }, [cocktail]);
 
   useEffect(() => {
     if (!cocktail) {
       router.replace("/cocktails");
     }
   }, [cocktail, router]);
+
+  if (!cocktail) return <p className="p-6">Redirecting…</p>;
 
   return (
     <aside
@@ -45,7 +40,19 @@ export default function VizBar() {
       </button>
 
       {!collapsed && (
-        <VisSidebar pdfUrl={pdf} scale={scale} onScaleChange={setScale} />
+        <div className="h-[calc(100%-200px)]">
+          {/* remove line above when debugging completed */}
+          <VisSidebar
+            key={cocktail.id + cocktail.viz + cocktail.onto}
+            pdfUrl={cocktail.viz}
+            scale={scale}
+            onScaleChange={setScale}
+          />
+          here {/* remove this line when debugging completed */}
+          <p className="text-sm mt-2">{cocktail.onto}</p>{" "}
+          {/* remove this line when debugging completed */}
+          here {/* remove this line when debugging completed */}
+        </div> /* remove this line when debugging completed */
       )}
     </aside>
   );

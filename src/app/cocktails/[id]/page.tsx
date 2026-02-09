@@ -4,11 +4,13 @@ import Sidebar from "../../components/Sidebar";
 
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../context/AppContext";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import IngredientSearch from "../../components/IngredientSearch";
 import { Ingredient, INGREDIENT_TYPES, IngredientType } from "../../types";
 import Link from "next/link";
 import VizBar from "../../components/visualizationBar";
+import ImportButton from "../../components/Import";
+import ExportButton from "@/app/components/Export";
 
 export default function CocktailDetailPage() {
   const { id } = useParams();
@@ -17,14 +19,14 @@ export default function CocktailDetailPage() {
     ingredients,
     addIngredientToCocktail,
     updateIngredientStatus,
+    updateCocktailViz,
+    updateOnto,
   } = useAppContext();
 
   const cocktail = cocktails.find((c) => c.id === id);
   const router = useRouter();
 
   const [name, setName] = useState("");
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (cocktail) {
@@ -79,7 +81,17 @@ export default function CocktailDetailPage() {
             />
           </div>
           <div className="pt-2.5">
-            <h2 className="font-semibold text-lg">Active Ingredients</h2>
+            <div className="pt-1 flex justify-between">
+              <h2 className="font-semibold text-lg">Active Ingredients</h2>
+              <div className="flex gap-2">
+                <ImportButton func={(onto) => updateOnto(cocktail.id, onto)} />
+
+                <ExportButton
+                  code={cocktail.onto}
+                  filename={name || "cocktail"}
+                />
+              </div>
+            </div>
 
             {INGREDIENT_TYPES.map((type) => {
               const list = groupedIngredients[type];
@@ -91,7 +103,7 @@ export default function CocktailDetailPage() {
                   {list.length === 0 ? (
                     <p className="text-gray-500 text-sm h-[6.5rem]">(none)</p>
                   ) : (
-                    <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-x-6 pl-4 pt-1 text-sm h-[6.5rem] overflow-y-auto">
+                    <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-x-6 pl-4 pt-0 text-sm h-[6rem] overflow-y-auto">
                       {list.map((ing) => (
                         <li key={ing.id} className="text-sm pb-1">
                           <button
