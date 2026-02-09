@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { Cocktail, Ingredient, IngredientType } from "../types";
 
 import { INGREDIENTS, COCKTAILS } from "./data";
@@ -41,6 +41,39 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const [ingredients, setIngredients] = useState<Ingredient[]>(INGREDIENTS);
   const [cocktails, setCocktails] = useState<Cocktail[]>(COCKTAILS);
+
+  useEffect(() => {
+    async function generateInitialViz() {
+      for (const cocktail of cocktails) {
+        if (!cocktail.onto) continue;
+
+        try {
+          const response = await fetch("/api/ontology/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ onto: cocktail.onto }),
+          });
+
+          if (!response.ok) continue;
+
+          const data = await response.json();
+          const svg = data?.svg;
+          if (typeof svg === "string" && svg.trim().startsWith("<")) {
+            const vizValue = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+            setCocktails((prev) =>
+              prev.map((c) =>
+                c.id === cocktail.id ? { ...c, viz: vizValue } : c,
+              ),
+            );
+          }
+        } catch (err) {
+          console.error("Erro ao gerar viz inicial para", cocktail.name, err);
+        }
+      }
+    }
+
+    generateInitialViz();
+  }, []);
 
   function addCocktail(name: string) {
     const id = createId("cocktail");
@@ -164,7 +197,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const data = await response.json();
 
         const vizValue =
-          typeof data.updatedViz === "string" && data.updatedViz.trim().startsWith("<")
+          typeof data.updatedViz === "string" &&
+          data.updatedViz.trim().startsWith("<")
             ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
             : data.updatedViz;
 
