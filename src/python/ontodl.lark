@@ -1,0 +1,36 @@
+%import common (WS, ESCAPED_STRING, SIGNED_NUMBER, CNAME)
+%ignore WS
+
+_list{item}: item ("," item)*
+
+COMMENT: /%.*/
+%ignore COMMENT
+
+ONTOLOGY   : "Ontologia"  | "Ontology"
+CONCEPTS   : "conceitos"  | "concepts"
+INDIVIDUALS: "individuos" | "individuals"
+RELATIONS  : "relacoes"   | "relations"
+TRIPLES    : "triplos"    | "triples"
+
+start: ONTOLOGY CNAME concepts_decl individuals_decl? relations_decl? triples_decl "."
+
+concepts_decl  : CONCEPTS "{" _list{concept_decl} "}"
+concept_decl   : CNAME attributes_decl?
+attributes_decl: "[" _list{attribute_decl} "]"
+attribute_decl : CNAME ":" type
+type           : CNAME
+
+individuals_decl: INDIVIDUALS "{" _list{individual_decl} "}"
+individual_decl : CNAME
+
+relations_decl: RELATIONS "{" _list{relation_decl} "}"
+relation_decl : CNAME
+
+triples_decl: TRIPLES "{" triple_decl* "}"
+triple_decl : src "=" rel "=>" dst properties_def? ";"
+src: CNAME
+dst: CNAME
+rel: CNAME
+properties_def: _list{property_def}
+property_def  : CNAME "=" value
+value: ESCAPED_STRING -> string | SIGNED_NUMBER -> number

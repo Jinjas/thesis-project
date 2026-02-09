@@ -1,6 +1,52 @@
 // app/data.ts
 import { Ingredient, Cocktail } from "../types";
 
+const FRONTEND_BASIC_ONTO = `
+Ontologia FrontendBasic
+
+concepts {
+  Language,
+  Library,
+  Framework,
+  Tool
+}
+
+individuals {
+  FrontendBasic,
+  JavaScript,
+  TypeScript,
+  React,
+  NextJS,
+  TailwindCSS,
+  SQL
+}
+
+relations {
+	uses,
+	requires,
+	is_composed_of,
+	supports,
+	is_used_for
+}
+
+triples {
+  JavaScript = iof => Language;
+  TypeScript = iof => Language;
+  React = iof => Library;
+  Next = iof => Framework;
+  TailwindCSS = iof => Tool;
+  SQL = iof => Language;
+  
+  SQL = supports => ArchitectsPortal;
+
+  FrontendBasic = is_composed_of => JavaScript;
+  FrontendBasic = is_composed_of => TypeScript;
+  FrontendBasic = is_composed_of => React;
+  FrontendBasic = is_composed_of => Next;
+  FrontendBasic = is_composed_of => TailwindCSS;
+}
+.`.trim();
+
 export const INGREDIENTS: Ingredient[] = [
   {
     id: "ts",
@@ -22,13 +68,13 @@ export const INGREDIENTS: Ingredient[] = [
   },
   {
     id: "next",
-    name: "Next.js",
+    name: "Next",
     type: "Framework",
     code: "export default function Page() {}",
   },
   {
     id: "tailwind",
-    name: "Tailwind CSS",
+    name: "TailwindCSS",
     type: "Tool",
     code: "@tailwind base;\n@tailwind components;\n@tailwind utilities;",
   },
@@ -37,6 +83,12 @@ export const INGREDIENTS: Ingredient[] = [
     name: "Vite",
     type: "Tool",
     code: "import { defineConfig } from 'vite';",
+  },
+  {
+    id: "sql",
+    name: "SQL",
+    type: "Language",
+    code: "SELECT * FROM table;",
   },
 ];
 
@@ -51,21 +103,23 @@ export const COCKTAILS: Cocktail[] = [
       tailwind: true,
       ts: true,
       next: true,
+      sql: true,
     },
-    onto: "",
+    onto: FRONTEND_BASIC_ONTO,
   },
   {
     id: "modern-stack",
     name: "Modern Stack",
     viz: "/viz/OJS.svg",
     ingredients: {
-      ts: true,
+      js: true,
       react: true,
-      next: true,
       tailwind: true,
-      vite: true,
+      ts: true,
+      next: true,
+      sql: true,
     },
-    onto: "",
+    onto: FRONTEND_BASIC_ONTO,
   },
   {
     id: "vanilla-dev",
@@ -73,10 +127,12 @@ export const COCKTAILS: Cocktail[] = [
     viz: "/viz/OJS.svg",
     ingredients: {
       js: true,
-      ts: true,
       react: true,
-      vite: true,
+      tailwind: true,
+      ts: true,
+      next: true,
+      sql: true,
     },
-    onto: "",
+    onto: FRONTEND_BASIC_ONTO,
   },
 ];
