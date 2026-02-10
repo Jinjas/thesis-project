@@ -1,6 +1,6 @@
 import sys
 import json
-
+import re
 
 import odlc
 
@@ -12,9 +12,11 @@ def toggle_ingredient_lines(onto_text: str, ingredient: str,ingredient_type: str
     in_zone = False
     rem_concept = True
     
+    ingredient_pattern = re.compile(r'\b' + re.escape(ingredient) + r'\b')
+    
     if not active:
         for line in lines:
-            if not line.lstrip().startswith("%") and ("= iof => " + ingredient_type) in line and ingredient not in line:
+            if not line.lstrip().startswith("%") and ("= iof => " + ingredient_type) in line and not ingredient_pattern.search(line):
                 rem_concept = False
                 break
     
@@ -38,6 +40,7 @@ def toggle_ingredient_lines(onto_text: str, ingredient: str,ingredient_type: str
 
             result.extend(conceptsHolder)
             result.append(line)
+            conceptsHolder = []
             continue
 
         if in_zone:
@@ -66,7 +69,7 @@ def toggle_ingredient_lines(onto_text: str, ingredient: str,ingredient_type: str
                             
                     
 
-        elif ingredient in line: 
+        elif ingredient_pattern.search(line):
             if active:
                 if stripped.startswith("%"):
                     idx = line.index("%")
