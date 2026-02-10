@@ -12,13 +12,14 @@ concepts {
 }
 
 individuals {
-  FrontendBasic,
+  FrontendBasicCocktail,
   JavaScript,
   TypeScript,
   React,
   Next,
   TailwindCSS,
   SQL,
+  ESLint,
   ArchitectsPortal
 }
 
@@ -37,16 +38,70 @@ triples {
   Next = iof => Framework;
   TailwindCSS = iof => Tool;
   SQL = iof => Language;
+  ESLint = iof => Tool;
   
-  ArchitectsPortal = requires => FrontendBasic;
+  ArchitectsPortal = requires => FrontendBasicCocktail;
 
   SQL = supports => ArchitectsPortal;
 
-  FrontendBasic = is_composed_of => JavaScript;
-  FrontendBasic = is_composed_of => TypeScript;
-  FrontendBasic = is_composed_of => React;
-  FrontendBasic = is_composed_of => Next;
-  FrontendBasic = is_composed_of => TailwindCSS;
+  FrontendBasicCocktail = is_composed_of => JavaScript;
+  FrontendBasicCocktail = is_composed_of => TypeScript;
+  FrontendBasicCocktail = is_composed_of => React;
+  FrontendBasicCocktail = is_composed_of => Next;
+  FrontendBasicCocktail = is_composed_of => TailwindCSS;
+  FrontendBasicCocktail = is_composed_of => ESLint;
+}
+.`.trim();
+
+const Backend_BASIC_ONTO = `
+Ontologia BackendBasic
+
+concepts {
+  Language,
+  % Library,
+  Framework,
+  Tool
+}
+
+individuals {
+  BackendBasicCocktail,
+  Python,
+  Java,
+  % PyGame,
+  Rabit,
+  VScode,
+  SQL,
+  PostgreSQL,
+  ArchitectsPortal
+}
+
+relations {
+	uses,
+	requires,
+	is_composed_of,
+	supports,
+	is_used_for
+}
+
+triples {
+  Python = iof => Language;
+  Java = iof => Language;
+  % PyGame = iof => Library;
+  Rabit = iof => Tool;
+  VScode = iof => Tool;
+  SQL = iof => Language;
+  PostgreSQL = iof => Framework;
+  
+  ArchitectsPortal = requires => BackendBasicCocktail;
+
+  SQL = supports => ArchitectsPortal;
+
+  BackendBasicCocktail = is_composed_of => Python;
+  BackendBasicCocktail = is_composed_of => Java;
+  % BackendBasicCocktail = is_composed_of => PyGame;
+  BackendBasicCocktail = is_composed_of => Rabit;
+  BackendBasicCocktail = is_composed_of => VScode;
+  BackendBasicCocktail = is_composed_of => PostgreSQL;
 }
 .`.trim();
 
@@ -100,29 +155,15 @@ export const COCKTAILS: Cocktail[] = [
     id: "frontend-basic",
     name: "Frontend Basic",
     viz: "",
-    ingredients: {
-      js: true,
-      react: true,
-      tailwind: true,
-      ts: true,
-      next: true,
-      sql: true,
-    },
+    ingredients: {},
     onto: FRONTEND_BASIC_ONTO,
   },
   {
     id: "modern-stack",
     name: "Modern Stack",
     viz: "",
-    ingredients: {
-      js: true,
-      react: true,
-      tailwind: true,
-      ts: true,
-      next: true,
-      sql: true,
-    },
-    onto: FRONTEND_BASIC_ONTO,
+    ingredients: {},
+    onto: Backend_BASIC_ONTO,
   },
   {
     id: "vanilla-dev",

@@ -43,36 +43,92 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [cocktails, setCocktails] = useState<Cocktail[]>(COCKTAILS);
 
   useEffect(() => {
-    async function generateInitialViz() {
+    async function generateInitialCocktail() {
       for (const cocktail of cocktails) {
         if (!cocktail.onto) continue;
 
         try {
-          const response = await fetch("/api/ontology/generate", {
+          // Criar visualização da ontologia
+          const vizResponse = await fetch("/api/ontology/generate", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ onto: cocktail.onto }),
           });
 
-          if (!response.ok) continue;
+          if (vizResponse.ok) {
+            const vizData = await vizResponse.json();
+            const svg = vizData?.svg;
+            if (typeof svg === "string" && svg.trim().startsWith("<")) {
+              const vizValue = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+              setCocktails((prev) =>
+                prev.map((c) =>
+                  c.id === cocktail.id ? { ...c, viz: vizValue } : c,
+                ),
+              );
+            }
+          }
 
-          const data = await response.json();
-          const svg = data?.svg;
-          if (typeof svg === "string" && svg.trim().startsWith("<")) {
-            const vizValue = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-            setCocktails((prev) =>
-              prev.map((c) =>
-                c.id === cocktail.id ? { ...c, viz: vizValue } : c,
-              ),
-            );
+          // Extrair ingredientes da ontologia
+          const extractResponse = await fetch("/api/ontology/extract", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ onto: cocktail.onto }),
+          });
+
+          if (extractResponse.ok) {
+            const extractData = await extractResponse.json();
+            const extractedIngredients = extractData?.ingredients || [];
+
+            setIngredients((prev) => {
+              const existingNames = new Set(prev.map((ing) => ing.name));
+              const newIngredientsList = [...prev];
+              const ingredientNameToId: { [key: string]: string } = {};
+
+              prev.forEach((ing) => {
+                ingredientNameToId[ing.name] = ing.id;
+              });
+
+              for (const extracted of extractedIngredients) {
+                if (!existingNames.has(extracted.name)) {
+                  const newId = `ingredient-${extracted.name}`;
+                  ingredientNameToId[extracted.name] = newId;
+                  newIngredientsList.push({
+                    id: newId,
+                    name: extracted.name,
+                    type: (extracted.type as IngredientType) || "Language",
+                    code: "Please insert code for this ingredient",
+                  });
+                }
+              }
+
+              setCocktails((prevCocktails) =>
+                prevCocktails.map((c) => {
+                  if (c.id !== cocktail.id) return c;
+
+                  const ingredientMap: { [key: string]: boolean } = {
+                    ...c.ingredients,
+                  };
+                  for (const extracted of extractedIngredients) {
+                    const ingredientId = ingredientNameToId[extracted.name];
+                    if (ingredientId) {
+                      ingredientMap[ingredientId] = extracted.active;
+                    }
+                  }
+
+                  return { ...c, ingredients: ingredientMap };
+                }),
+              );
+
+              return newIngredientsList;
+            });
           }
         } catch (err) {
-          console.error("Erro ao gerar viz inicial para", cocktail.name, err);
+          console.error("Error parsing the ontology", cocktail.name, err);
         }
       }
     }
 
-    generateInitialViz();
+    generateInitialCocktail();
   }, []);
 
   function addCocktail(name: string) {
@@ -222,7 +278,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   async function updateOnto(cocktailId: string, onto: string) {
     // optimistic update of onto
     setCocktails((prev) =>
-      prev.map((cocktail) => (cocktail.id === cocktailId ? { ...cocktail, onto } : cocktail)),
+      prev.map((cocktail) =>
+        cocktail.id === cocktailId ? { ...cocktail, onto } : cocktail,
+      ),
     );
 
     try {
@@ -241,10 +299,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
           : svg;
 
-        setCocktails((prev) => prev.map((c) => (c.id === cocktailId ? { ...c, viz: vizValue } : c)));
+        setCocktails((prev) =>
+          prev.map((c) => (c.id === cocktailId ? { ...c, viz: vizValue } : c)),
+        );
       }
     } catch (err) {
-      console.error("Erro ao gerar viz ao atualizar onto para", cocktailId, err);
+      console.error(
+        "Erro ao gerar viz ao atualizar onto para",
+        cocktailId,
+        err,
+      );
     }
   }
 
