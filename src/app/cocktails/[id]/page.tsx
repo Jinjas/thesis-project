@@ -19,7 +19,6 @@ export default function CocktailDetailPage() {
     ingredients,
     addIngredientToCocktail,
     updateIngredientStatus,
-    updateCocktailViz,
     updateOnto,
   } = useAppContext();
 

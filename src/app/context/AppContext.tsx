@@ -284,24 +284,80 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
 
     try {
+      // Gerar visualização
       const response = await fetch("/api/ontology/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ onto }),
       });
 
-      if (!response.ok) return;
+      if (response.ok) {
+        const data = await response.json();
+        const svg = data?.svg;
+        if (typeof svg === "string") {
+          const vizValue = svg.trim().startsWith("<")
+            ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+            : svg;
 
-      const data = await response.json();
-      const svg = data?.svg;
-      if (typeof svg === "string") {
-        const vizValue = svg.trim().startsWith("<")
-          ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
-          : svg;
+          setCocktails((prev) =>
+            prev.map((c) =>
+              c.id === cocktailId ? { ...c, viz: vizValue } : c,
+            ),
+          );
+        }
+      }
 
-        setCocktails((prev) =>
-          prev.map((c) => (c.id === cocktailId ? { ...c, viz: vizValue } : c)),
-        );
+      // Extrair ingredientes da ontologia
+      const extractResponse = await fetch("/api/ontology/extract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ onto }),
+      });
+
+      if (extractResponse.ok) {
+        const extractData = await extractResponse.json();
+        const extractedIngredients = extractData?.ingredients || [];
+
+        setIngredients((prev) => {
+          const existingNames = new Set(prev.map((ing) => ing.name));
+          const newIngredientsList = [...prev];
+          const ingredientNameToId: { [key: string]: string } = {};
+
+          prev.forEach((ing) => {
+            ingredientNameToId[ing.name] = ing.id;
+          });
+
+          for (const extracted of extractedIngredients) {
+            if (!existingNames.has(extracted.name)) {
+              const newId = `ingredient-${extracted.name}`;
+              ingredientNameToId[extracted.name] = newId;
+              newIngredientsList.push({
+                id: newId,
+                name: extracted.name,
+                type: (extracted.type as IngredientType) || "Language",
+                code: "Please insert code for this ingredient",
+              });
+            }
+          }
+
+          setCocktails((prevCocktails) =>
+            prevCocktails.map((c) => {
+              if (c.id !== cocktailId) return c;
+
+              const ingredientMap: { [key: string]: boolean } = {};
+              for (const extracted of extractedIngredients) {
+                const ingredientId = ingredientNameToId[extracted.name];
+                if (ingredientId) {
+                  ingredientMap[ingredientId] = extracted.active;
+                }
+              }
+
+              return { ...c, ingredients: ingredientMap };
+            }),
+          );
+
+          return newIngredientsList;
+        });
       }
     } catch (err) {
       console.error(

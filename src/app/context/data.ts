@@ -69,7 +69,7 @@ individuals {
   Java,
   % PyGame,
   Rabit,
-  VScode,
+  VisualStudioCode,
   SQL,
   PostgreSQL,
   ArchitectsPortal
@@ -88,7 +88,7 @@ triples {
   Java = iof => Language;
   % PyGame = iof => Library;
   Rabit = iof => Tool;
-  VScode = iof => Tool;
+  VisualStudioCode = iof => Tool;
   SQL = iof => Language;
   PostgreSQL = iof => Framework;
   
@@ -100,7 +100,7 @@ triples {
   BackendBasicCocktail = is_composed_of => Java;
   % BackendBasicCocktail = is_composed_of => PyGame;
   BackendBasicCocktail = is_composed_of => Rabit;
-  BackendBasicCocktail = is_composed_of => VScode;
+  BackendBasicCocktail = is_composed_of => VisualStudioCode;
   BackendBasicCocktail = is_composed_of => PostgreSQL;
 }
 .`.trim();
