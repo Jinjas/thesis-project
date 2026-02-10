@@ -11,6 +11,7 @@ def toggle_ingredient_lines(onto_text: str, ingredient: str,ingredient_type: str
     conceptsHolder = []
     in_zone = False
     rem_concept = True
+    in_zone_indiv = False
     
     ingredient_pattern = re.compile(r'\b' + re.escape(ingredient) + r'\b')
     
@@ -28,11 +29,17 @@ def toggle_ingredient_lines(onto_text: str, ingredient: str,ingredient_type: str
             result.append(line)
             continue
 
-        if in_zone and stripped.startswith("}"):
+        if stripped.startswith("individuals"):
+            in_zone_indiv = True
+            result.append(line)
+            continue
+
+        if (in_zone or in_zone_indiv) and stripped.startswith("}"):
             in_zone = False
+            in_zone_indiv = False
     
             if active:
-                if not result[-2].rstrip().endswith(",") and not result[-2].lstrip().startswith("concepts"):
+                if not result[-2].rstrip().endswith(",") and not result[-2].lstrip().startswith("concepts") and not result[-2].lstrip().startswith("individuals"):
                     result[-2] = result[-2] + ","
 
             elif result[-1].rstrip().endswith(","):
@@ -67,7 +74,30 @@ def toggle_ingredient_lines(onto_text: str, ingredient: str,ingredient_type: str
                     conceptsHolder.append(line)
                     continue
                             
-                    
+        if in_zone_indiv:
+            if ingredient_pattern.search(line):
+                if active:
+                    if stripped.startswith("%"):
+                        idx = line.index("%")
+                        line = line[:idx] + line[idx + 1 :]
+                    result.append(line)
+                    continue
+                elif not stripped.startswith("%"):
+                    line = "%" + line
+                    if line.rstrip().endswith(","):
+                        line = line.rstrip()[:-1]
+                    conceptsHolder.append(line)
+                    continue
+                else:
+                    conceptsHolder.append(line)
+                    continue
+            else:
+                if stripped.startswith("%"):
+                    conceptsHolder.append(line)
+                    continue
+                else:
+                    result.append(line)
+                    continue
 
         elif ingredient_pattern.search(line):
             if active:
