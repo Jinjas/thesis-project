@@ -24,25 +24,29 @@ export default function Sidebar() {
         {collapsed ? "›" : "‹"}
       </button>
 
-      {!collapsed && (
-        <SidebarSection
-          title="Cocktails"
-          titleHref="/cocktails"
-          items={cocktails}
-          baseHref="/cocktails"
-          extraFlags="h-1/4 pb-4"
-        />
-      )}
+      <div className="overflow-hidden">
+        <div className="w-32">
+          {!collapsed && (
+            <SidebarSection
+              title="Cocktails"
+              titleHref="/cocktails"
+              items={cocktails}
+              baseHref="/cocktails"
+              extraFlags="h-1/4 pb-4"
+            />
+          )}
 
-      {!collapsed && (
-        <SidebarSection
-          title="Ingredients"
-          titleHref="/ingredients"
-          items={ingredients}
-          baseHref="/ingredients"
-          extraFlags="h-3/4"
-        />
-      )}
+          {!collapsed && (
+            <SidebarSection
+              title="Ingredients"
+              titleHref="/ingredients"
+              items={ingredients}
+              baseHref="/ingredients"
+              extraFlags="h-3/4"
+            />
+          )}
+        </div>
+      </div>
     </aside>
   );
 }

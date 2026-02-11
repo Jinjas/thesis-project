@@ -66,6 +66,7 @@ export default function VisSidebar({ pdfUrl, scale, onScaleChange }: Props) {
           >
             <Minus size={16} />
           </button>
+
           <button
             onClick={zoomIn}
             className="p-1 border rounded hover:bg-gray-200"

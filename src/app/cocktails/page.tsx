@@ -46,7 +46,6 @@ export default function CocktailsPage() {
               <li key={i.id}>
                 <div className="grid grid-cols-[2fr_80px] items-center gap-2 py-1 px-2 border-b">
                   <h3 className="font-semibold">{i.name}</h3>
-                  {/* <h3 className="text-md">{LanguagesList <=3 elems  }...</h3> */}
                   <Link
                     href={`/cocktails/${i.id}`}
                     className=" bg-gray-700 hover:bg-gray-800 text-white px-2 py-1 rounded border text-center"
@@ -61,6 +60,7 @@ export default function CocktailsPage() {
 
         <section className="flex-1 p-10 bg-white text-black border-l border-gray-300 flex flex-col justify-center">
           <h2 className="text-2xl font-semibold mb-4">Conteúdo</h2>
+
           <p className="text-gray-600 max-w-md">
             Resultados, visualizações, ferramentas.
           </p>

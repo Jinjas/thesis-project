@@ -42,6 +42,7 @@ export default function IngredientDetailPage() {
   return (
     <div className="flex h-screen w-full">
       <Sidebar />
+
       <main className="flex flex-1">
         <section className="flex-1 p-9 bg-gray-100 text-black flex flex-col w-full h-screen">
           <h1 className="text-2xl font-bold pb-4">Edit Ingredient</h1>
@@ -61,6 +62,7 @@ export default function IngredientDetailPage() {
           <div className="pt-4 px-2 flex flex-col h-full">
             <div className="pt-4 flex justify-between">
               <h3 className="font-semibold pb-2"> OntoDL</h3>
+
               <div className="flex gap-2">
                 <ImportButton func={setCode} />
 
@@ -81,6 +83,7 @@ export default function IngredientDetailPage() {
             >
               Remove
             </button>
+
             <button
               onClick={() => updateIngredient(ingredient.id, name, type, code)}
               className=" bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded w-min"

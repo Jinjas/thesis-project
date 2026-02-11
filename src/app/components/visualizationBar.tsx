@@ -30,7 +30,7 @@ export default function VizBar() {
 
   return (
     <aside
-      className={` relative bg-gray-100 text-black py-6 flex flex-col transition-all duration-300 ${collapsed ? "w-2 px-2" : "w-80 px-4"}`}
+      className={`bg-gray-100 duration-300 flex flex-col py-6 relative text-black transition-all ${collapsed ? "px-2 w-2" : "px-4 w-80"}`}
     >
       <button
         onClick={() => setCollapsed((v) => !v)}
@@ -39,14 +39,18 @@ export default function VizBar() {
         {collapsed ? "‹" : "›"}
       </button>
 
-      {!collapsed && (
-        <VisSidebar
-          key={cocktail.id + cocktail.viz + cocktail.onto}
-          pdfUrl={cocktail.viz}
-          scale={scale}
-          onScaleChange={setScale}
-        />
-      )}
+      <div className="overflow-hidden">
+        <div className="w-72">
+          {!collapsed && (
+            <VisSidebar
+              key={cocktail.id + cocktail.viz + cocktail.onto}
+              pdfUrl={cocktail.viz}
+              scale={scale}
+              onScaleChange={setScale}
+            />
+          )}
+        </div>
+      </div>
     </aside>
   );
 }
