@@ -3,6 +3,7 @@ export const INGREDIENT_TYPES = [
   "Library",
   "Framework",
   "Tool",
+  "Resource",
 ] as const;
 
 export type IngredientType = (typeof INGREDIENT_TYPES)[number];

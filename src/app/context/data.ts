@@ -54,25 +54,31 @@ triples {
 .`.trim();
 
 const Backend_BASIC_ONTO = `
-Ontologia BackendBasic
+Ontologia AutomaiseIA
 
 concepts {
-  Language,
-  % Library,
-  Framework,
+	Resource,
+	Language,
+	Library,
+	Framework,
   Tool
 }
 
 individuals {
-  BackendBasicCocktail,
-  Python,
-  Java,
-  % PyGame,
-  Rabit,
+	AutomaiseIA,
+	AutomaiseIADevelopment,
+	AutomaiseIACocktail,
+	ApacheAirFlow,
+	Celery,
+	Flower,
+	JupyterNotebook,
+	Python,
+	PyTorch,
+	TensorFlow,
+	Tornado,
+  TBD,
   VisualStudioCode,
-  SQL,
-  PostgreSQL,
-  ArchitectsPortal
+  GeneralProgramming
 }
 
 relations {
@@ -84,25 +90,121 @@ relations {
 }
 
 triples {
-  Python = iof => Language;
-  Java = iof => Language;
-  % PyGame = iof => Library;
-  Rabit = iof => Tool;
+	ApacheAirFlow = iof => Resource;
+	Celery = iof => Resource;
+	Flower = iof => Resource;
+	JupyterNotebook = iof => Resource;
+	Python = iof => Language;
+	PyTorch = iof => Framework;
+	TensorFlow = iof => Library;
+	Tornado = iof => Framework;
   VisualStudioCode = iof => Tool;
-  SQL = iof => Language;
-  PostgreSQL = iof => Framework;
-  
-  ArchitectsPortal = requires => BackendBasicCocktail;
 
-  SQL = supports => ArchitectsPortal;
+	Python = is_used_for => TBD;
+	PyTorch = is_used_for => TBD;
+	TensorFlow = is_used_for => TBD;
+	Tornado = is_used_for => TBD;
+  VisualStudioCode= is_used_for => GeneralProgramming;
 
-  BackendBasicCocktail = is_composed_of => Python;
-  BackendBasicCocktail = is_composed_of => Java;
-  % BackendBasicCocktail = is_composed_of => PyGame;
-  BackendBasicCocktail = is_composed_of => Rabit;
-  BackendBasicCocktail = is_composed_of => VisualStudioCode;
-  BackendBasicCocktail = is_composed_of => PostgreSQL;
+	ApacheAirFlow = supports => AutomaiseIA;
+	Celery = supports => AutomaiseIA;
+	Flower = supports => AutomaiseIA;
+	JupyterNotebook = supports => AutomaiseIA;
+
+	AutomaiseIA = requires => AutomaiseIADevelopment;
+	AutomaiseIADevelopment = uses => AutomaiseIACocktail;
+
+	AutomaiseIACocktail = is_composed_of => Python;
+	AutomaiseIACocktail = is_composed_of => PyTorch;
+	AutomaiseIACocktail = is_composed_of => TensorFlow;
+	AutomaiseIACocktail = is_composed_of => Tornado;
+  AutomaiseIACocktail = is_composed_of => VisualStudioCode;
 }
+.`.trim();
+
+const hitachi = `
+Ontologia HitachiDataWarehouse
+
+concepts {
+	Resource,
+	Language,
+	Library,
+	Tool,
+	GeneralProgramming,
+	TBD
+}
+
+individuals {
+	HitachiDataWarehouse,
+	HitachiDataWarehouseDevelopment,
+	HitachiDataWarehouseCocktail,
+	ApacheParquet,
+	ApacheSpark,
+	ApacheSparkSQL,
+	AzureDataLake,
+	AzureDevOps,
+	AzureSQLDB,
+	AzureSQLPool,
+	AzureSynapse,
+	JSON,
+	PySpark,
+	Python,
+	SQL,
+	TSQL,
+	VisualStudio
+}
+
+relations {
+	uses,
+	requires,
+	is_composed_of,
+	supports,
+	is_used_for
+}
+
+triples {
+	ApacheParquet = iof => Resource;
+	ApacheSpark = iof => Resource;
+	ApacheSparkSQL = iof => Resource;
+	AzureDataLake = iof => Resource;
+	AzureDevOps = iof => Resource;
+	AzureSQLDB = iof => Resource;
+	AzureSQLPool = iof => Resource;
+	AzureSynapse = iof => Resource;
+	JSON = iof => Language;
+	PySpark = iof => Library;
+	Python = iof => Language;
+	SQL = iof => Language;
+	TSQL = iof => Language;
+	VisualStudio = iof => Tool;
+
+	JSON = is_used_for => TBD;
+	PySpark = is_used_for => TBD;
+	Python = is_used_for => TBD;
+	SQL = is_used_for => TBD;
+	TSQL = is_used_for => TBD;
+	VisualStudio = is_used_for => GeneralProgramming;
+
+	ApacheParquet = supports => HitachiDataWarehouse;
+	ApacheSpark = supports => HitachiDataWarehouse;
+	ApacheSparkSQL = supports => HitachiDataWarehouse;
+	AzureDataLake = supports => HitachiDataWarehouse;
+	AzureDevOps = supports => HitachiDataWarehouse;
+	AzureSQLDB = supports => HitachiDataWarehouse;
+	AzureSQLPool = supports => HitachiDataWarehouse;
+	AzureSynapse = supports => HitachiDataWarehouse;
+
+	HitachiDataWarehouse = requires => HitachiDataWarehouseDevelopment;
+	HitachiDataWarehouseDevelopment = uses => HitachiDataWarehouseCocktail;
+
+	HitachiDataWarehouseCocktail = is_composed_of => JSON;
+	HitachiDataWarehouseCocktail = is_composed_of => PySpark;
+	HitachiDataWarehouseCocktail = is_composed_of => Python;
+	HitachiDataWarehouseCocktail = is_composed_of => SQL;
+	HitachiDataWarehouseCocktail = is_composed_of => TSQL;
+	HitachiDataWarehouseCocktail = is_composed_of => VisualStudio;
+}
+
 .`.trim();
 
 export const INGREDIENTS: Ingredient[] = [
@@ -164,6 +266,13 @@ export const COCKTAILS: Cocktail[] = [
     viz: "",
     ingredients: {},
     onto: Backend_BASIC_ONTO,
+  },
+  {
+    id: "HitachiDataWarehouse",
+    name: "Hitachi DataWarehouse",
+    viz: "",
+    ingredients: {},
+    onto: hitachi,
   },
   {
     id: "vanilla-dev",
