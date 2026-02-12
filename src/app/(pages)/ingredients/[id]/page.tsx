@@ -13,7 +13,7 @@ import {
   TextCampEdit,
   ActionButton,
 } from "../../../components";
-import { BaseLayout } from "../../../layouts";
+import { DoubleSectionLayout } from "../../../layouts";
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
@@ -44,7 +44,7 @@ export default function IngredientDetailPage() {
   if (!ingredient) return <p className="p-6">Redirecting…</p>;
 
   return (
-    <BaseLayout title="Edit Ingredient" typeOf2="ingredDetail">
+    <DoubleSectionLayout title="Edit Ingredient" typeOf2="ingredDetail">
       <TextCampEdit label="Name" value={name} onChange={setName} />
 
       <div className="pt-2 flex flex-col lg:flex-row gap-2 lg:gap-4 max-w-[493px]">
@@ -87,6 +87,6 @@ export default function IngredientDetailPage() {
           variant="save"
         />
       </div>
-    </BaseLayout>
+    </DoubleSectionLayout>
   );
 }

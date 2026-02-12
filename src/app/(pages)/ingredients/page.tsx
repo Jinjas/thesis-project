@@ -4,14 +4,14 @@ import { useState } from "react";
 import { IngredientList, AddItemForm } from "../../components";
 import { useAppContext } from "../../context/AppContext";
 import { redirect } from "next/navigation";
-import { BaseLayout } from "../../layouts";
+import { DoubleSectionLayout } from "../../layouts";
 
 export default function IngredientsPage() {
   const { ingredients, addIngredient } = useAppContext();
   const [name, setName] = useState("");
 
   return (
-    <BaseLayout title="Ingredients" typeOf2="ingredList">
+    <DoubleSectionLayout title="Ingredients" typeOf2="ingredList">
       <AddItemForm
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -27,6 +27,6 @@ export default function IngredientsPage() {
       />
 
       <IngredientList ingredients={ingredients} />
-    </BaseLayout>
+    </DoubleSectionLayout>
   );
 }

@@ -13,6 +13,7 @@ import { useAppContext } from "../../../context/AppContext";
 import { useState, useEffect } from "react";
 import { Ingredient, INGREDIENT_TYPES, IngredientType } from "../../../types";
 import Link from "next/link";
+import { DoubleSectionLayout } from "../../../layouts";
 
 export default function CocktailDetailPage() {
   const { id } = useParams();
@@ -60,63 +61,46 @@ export default function CocktailDetailPage() {
   );
 
   return (
-    <div className="flex h-screen w-full">
-      <Sidebar />
+    <DoubleSectionLayout
+      title={`Edit Cocktail: ${name}`}
+      typeOf2="cocktailDetail"
+      withViz={true}
+    >
+      <div>
+        <div className="flex flex-row justify-between">
+          <h3 className=" p-1 pb-0">Add Ingredient </h3>
 
-      <main className="flex flex-1">
-        <section className="flex-1 p-9 bg-gray-100 text-black flex flex-col w-full h-screen">
-          <h1 className="text-2xl font-bold pb-1.5">Edit Cocktail: {name}</h1>
+          <Link
+            href={`/ingredients`}
+            className=" bg-gray-700 hover:bg-gray-800 text-white px-2 pt-1 rounded border text-center text-sm"
+          >
+            New...
+          </Link>
+        </div>
 
-          <div>
-            <div className="flex flex-row justify-between">
-              <h3 className=" p-1 pb-0">Add Ingredient </h3>
+        <IngredientSearch
+          ingredients={ingredients}
+          onSelect={(id) => addIngredientToCocktail(cocktail.id, id)}
+        />
+      </div>
 
-              <Link
-                href={`/ingredients`}
-                className=" bg-gray-700 hover:bg-gray-800 text-white px-2 pt-1 rounded border text-center text-sm"
-              >
-                New...
-              </Link>
-            </div>
+      <div className="pt-2.5">
+        <div className="pt-1 flex justify-between">
+          <h2 className="font-semibold text-lg">Active Ingredients</h2>
 
-            <IngredientSearch
-              ingredients={ingredients}
-              onSelect={(id) => addIngredientToCocktail(cocktail.id, id)}
-            />
+          <div className="flex gap-2">
+            <ImportButton func={(onto) => updateOnto(cocktail.id, onto)} />
+
+            <ExportButton code={cocktail.onto} filename={name || "cocktail"} />
           </div>
+        </div>
 
-          <div className="pt-2.5">
-            <div className="pt-1 flex justify-between">
-              <h2 className="font-semibold text-lg">Active Ingredients</h2>
-
-              <div className="flex gap-2">
-                <ImportButton func={(onto) => updateOnto(cocktail.id, onto)} />
-
-                <ExportButton
-                  code={cocktail.onto}
-                  filename={name || "cocktail"}
-                />
-              </div>
-            </div>
-
-            <IngredientGroups
-              groupedIngredients={groupedIngredients}
-              cocktail={cocktail}
-              updateIngredientStatus={updateIngredientStatus}
-            />
-          </div>
-        </section>
-
-        <section className="flex-1 p-10 bg-white text-black border-l border-gray-300 flex flex-col justify-center">
-          <h2 className="text-2xl font-semibold mb-4">Conteúdo</h2>
-
-          <p className="text-gray-600 max-w-md">
-            Resultados, visualizações, ferramentas.
-          </p>
-        </section>
-
-        <VizBar />
-      </main>
-    </div>
+        <IngredientGroups
+          groupedIngredients={groupedIngredients}
+          cocktail={cocktail}
+          updateIngredientStatus={updateIngredientStatus}
+        />
+      </div>
+    </DoubleSectionLayout>
   );
 }
