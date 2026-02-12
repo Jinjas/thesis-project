@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Sidebar, IngredientList, AddItemForm } from "../components";
-import { useAppContext } from "../context/AppContext";
+import { Sidebar, IngredientList, AddItemForm } from "../../components";
+import { useAppContext } from "../../context/AppContext";
 import { redirect } from "next/navigation";
 
 export default function IngredientsPage() {

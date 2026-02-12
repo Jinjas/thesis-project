@@ -1,9 +1,9 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../../context/AppContext";
 import { useState, useEffect, useRef } from "react";
-import { IngredientType, INGREDIENT_TYPES } from "../../types";
+import { IngredientType, INGREDIENT_TYPES } from "../../../types";
 import {
   TypeSelector,
   CodeEdit,
@@ -12,7 +12,7 @@ import {
   ExportButton,
   TextCampEdit,
   ActionButton,
-} from "../../components";
+} from "../../../components";
 
 export default function IngredientDetailPage() {
   const { id } = useParams();

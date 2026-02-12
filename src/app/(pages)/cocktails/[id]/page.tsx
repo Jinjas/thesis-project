@@ -7,11 +7,11 @@ import {
   VizBar,
   ImportButton,
   ExportButton,
-} from "../../components";
+} from "../../../components";
 import { useParams, useRouter } from "next/navigation";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../../context/AppContext";
 import { useState, useEffect } from "react";
-import { Ingredient, INGREDIENT_TYPES, IngredientType } from "../../types";
+import { Ingredient, INGREDIENT_TYPES, IngredientType } from "../../../types";
 import Link from "next/link";
 
 export default function CocktailDetailPage() {

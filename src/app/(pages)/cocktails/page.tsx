@@ -1,8 +1,8 @@
 "use client";
 
-import { Sidebar, CocktailList, AddItemForm } from "../components";
+import { Sidebar, CocktailList, AddItemForm } from "../../components";
 import { useState } from "react";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../../context/AppContext";
 import { redirect } from "next/navigation";
 
 export default function CocktailsPage() {
