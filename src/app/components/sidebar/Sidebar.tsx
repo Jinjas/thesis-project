@@ -15,7 +15,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={` relative bg-gray-900 text-white py-6 flex flex-col transition-all duration-300 ${collapsed ? "w-2 px-2" : "w-40 px-4"}`}
+      className={` relative bg-gray-900 text-white py-6 flex flex-col h-screen max-h-screen transition-all duration-300 ${collapsed ? "w-2 px-2" : "w-40 px-4"}`}
     >
       <button
         onClick={() => setCollapsed((v) => !v)}
@@ -24,15 +24,15 @@ export default function Sidebar() {
         {collapsed ? "›" : "‹"}
       </button>
 
-      <div className="overflow-hidden">
-        <div className="w-32">
+      <div className="h-full">
+        <div className="w-32 h-full">
           {!collapsed && (
             <SidebarSection
               title="Cocktails"
               titleHref="/cocktails"
               items={cocktails}
               baseHref="/cocktails"
-              extraFlags="h-1/4 pb-4"
+              extraFlags="h-[25%] max-h-[25%] pb-4"
             />
           )}
 
@@ -42,7 +42,7 @@ export default function Sidebar() {
               titleHref="/ingredients"
               items={ingredients}
               baseHref="/ingredients"
-              extraFlags="h-3/4"
+              extraFlags="h-[75%] max-h-[75%]"
             />
           )}
         </div>
