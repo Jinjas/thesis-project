@@ -4,12 +4,15 @@ import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../context/AppContext";
 import { useState, useEffect, useRef } from "react";
 import { IngredientType, INGREDIENT_TYPES } from "../../types";
-import TypeSelector from "../../components/TypeSelector";
-import CodeEdit from "../../components/CodeEdit";
-import Sidebar from "../../components/Sidebar";
-import ImportButton from "../../components/Import";
-import ExportButton from "../../components/Export";
-import TextCampEdit from "../../components/TextCampEdit";
+import {
+  TypeSelector,
+  CodeEdit,
+  Sidebar,
+  ImportButton,
+  ExportButton,
+  TextCampEdit,
+  ActionButton,
+} from "../../components";
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
@@ -73,23 +76,21 @@ export default function IngredientDetailPage() {
             <CodeEdit code={code} setCode={setCode} />
           </div>
 
-          <div className=" pt-2 px-2 flex gap-2 justify-end">
-            <button
+          <div className="pt-2 px-2 flex gap-2 justify-end">
+            <ActionButton
               onClick={() => {
                 remIngredient(ingredient.id);
                 router.push("/ingredients");
               }}
-              className=" bg-red-800 hover:bg-red-900 text-white px-3 py-2 rounded w-min"
-            >
-              Remove
-            </button>
+              label="Remove"
+              variant="remove"
+            />
 
-            <button
+            <ActionButton
               onClick={() => updateIngredient(ingredient.id, name, type, code)}
-              className=" bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded w-min"
-            >
-              Save
-            </button>
+              label="Save"
+              variant="save"
+            />
           </div>
         </section>
 

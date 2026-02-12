@@ -5,7 +5,7 @@
   <Sidebar />
 */
 
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../../context/AppContext";
 import { useState, useEffect } from "react";
 import VisSidebar from "./VizImgSideBar";
 import { useParams, useRouter } from "next/navigation";

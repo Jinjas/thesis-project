@@ -9,7 +9,7 @@
 */
 
 import { useState, useMemo } from "react";
-import { Ingredient } from "../types";
+import { Ingredient } from "../../types";
 
 type Props = {
   ingredients: Ingredient[];

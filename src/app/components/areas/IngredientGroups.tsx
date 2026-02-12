@@ -5,7 +5,7 @@ import {
   IngredientType,
   INGREDIENT_TYPES,
   Cocktail,
-} from "../types";
+} from "../../types";
 
 type Props = {
   groupedIngredients: Record<IngredientType, Ingredient[]>;

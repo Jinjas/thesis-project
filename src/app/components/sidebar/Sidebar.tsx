@@ -5,7 +5,7 @@
   <Sidebar />
 */
 
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../../context/AppContext";
 import { useState } from "react";
 import SidebarSection from "./SidebarSection";
 

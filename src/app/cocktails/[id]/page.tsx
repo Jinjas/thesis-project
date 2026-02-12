@@ -1,17 +1,18 @@
 "use client";
 
-import Sidebar from "../../components/Sidebar";
-
+import {
+  Sidebar,
+  IngredientSearch,
+  IngredientGroups,
+  VizBar,
+  ImportButton,
+  ExportButton,
+} from "../../components";
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../context/AppContext";
 import { useState, useEffect } from "react";
-import IngredientSearch from "../../components/IngredientSearch";
 import { Ingredient, INGREDIENT_TYPES, IngredientType } from "../../types";
-import IngredientGroups from "../../components/IngredientGroups";
 import Link from "next/link";
-import VizBar from "../../components/visualizationBar";
-import ImportButton from "../../components/Import";
-import ExportButton from "../../components/Export";
 
 export default function CocktailDetailPage() {
   const { id } = useParams();
