@@ -2,7 +2,7 @@ import sys
 import json
 import re
 
-def extract_ingredients_from_ontology(onto_text: str) -> list:
+def extract_ingredients_from_ontology(onto_text: str, types:set) -> list:
     lines = onto_text.strip().split('\n')
     
     # Extrair ingredientes: tudo que tem "= iof =>" é um ingrediente
@@ -16,10 +16,11 @@ def extract_ingredients_from_ontology(onto_text: str) -> list:
             is_commented = match.group(1) == "%"
             ingredient_name = match.group(2)
             ingredient_type = match.group(3)
-            ingredient_types[ingredient_name] = {
-                "type": ingredient_type,
-                "active": not is_commented
-            }
+            if ingredient_type in types:
+                ingredient_types[ingredient_name] = {
+                    "type": ingredient_type,
+                    "active": not is_commented
+                }
     
     # Construir resultado ordenado
     result = []
@@ -35,7 +36,7 @@ def extract_ingredients_from_ontology(onto_text: str) -> list:
 def main():
     onto = sys.stdin.read()
     
-    ingredients = extract_ingredients_from_ontology(onto)
+    ingredients = extract_ingredients_from_ontology(onto,types={"Framework", "Language", "Library", "Tool"})
     
     print(json.dumps({
         "ingredients": ingredients

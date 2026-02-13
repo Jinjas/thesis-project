@@ -2,7 +2,6 @@
 import sys
 import os
 
-# ensure local python modules (odlc.py) can be imported
 sys.path.insert(0, os.path.dirname(__file__))
 
 from odlc import generate_svg
