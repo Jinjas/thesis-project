@@ -188,22 +188,75 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
-  function addIngredientToCocktail(cocktailId: string, ingredientId: string) {
+  async function addIngredientToCocktail(
+    cocktailId: string,
+    ingredientId: string,
+  ) {
+    const cocktail = cocktails.find((c) => c.id === cocktailId);
+    if (!cocktail) return;
+
+    const ingredient = ingredients.find((i) => i.id === ingredientId);
+    if (!ingredient) return;
+
+    if (ingredientId in cocktail.ingredients) {
+      if (!cocktail.ingredients[ingredientId]) {
+        updateIngredientStatus(cocktailId, ingredientId);
+      }
+      return;
+    }
+
     setCocktails((prev) =>
-      prev.map((cocktail) => {
-        if (cocktail.id !== cocktailId) return cocktail;
-
-        if (cocktail.ingredients[ingredientId]) return cocktail;
-
-        return {
-          ...cocktail,
-          ingredients: {
-            ...cocktail.ingredients,
-            [ingredientId]: true,
-          },
-        };
-      }),
+      prev.map((c) =>
+        c.id === cocktailId
+          ? {
+              ...c,
+              ingredients: {
+                ...c.ingredients,
+                [ingredientId]: true,
+              },
+            }
+          : c,
+      ),
     );
+    enqueueCocktailUpdate(cocktailId, async () => {
+      try {
+        const response = await fetch("/api/ontology/addIngred", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ingredientName: ingredient.name,
+            ingredientType: ingredient.type,
+            currentOnto: cocktail.onto,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Ontology update failed");
+        }
+
+        const data = await response.json();
+
+        const vizValue =
+          typeof data.updatedViz === "string" &&
+          data.updatedViz.trim().startsWith("<")
+            ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
+            : data.updatedViz;
+
+        setCocktails((prev) =>
+          prev.map((c) =>
+            c.id === cocktailId
+              ? {
+                  ...c,
+                  onto: data.updatedOnto,
+                  viz: vizValue,
+                }
+              : c,
+          ),
+        );
+      } catch (err) {
+        console.error("Erro ao atualizar ontologia", err);
+      }
+    });
   }
 
   async function updateIngredientStatus(
