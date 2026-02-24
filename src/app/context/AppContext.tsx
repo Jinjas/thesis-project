@@ -12,7 +12,7 @@ type AppContextType = {
   ingredients: Ingredient[];
 
   addCocktail: (name: string) => string;
-  addIngredient: (name: string) => string;
+  addIngredient: (name: string, type: IngredientType) => string;
   remIngredient(id: string): void;
 
   updateIngredient: (
@@ -146,14 +146,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return id;
   }
 
-  function addIngredient(name: string) {
+  function addIngredient(name: string, type: IngredientType) {
     const id = createId("ingredient");
     setIngredients((prev) => [
       ...prev,
       {
         id: id,
         name,
-        type: "Language",
+        type: type,
         code: "",
       },
     ]);

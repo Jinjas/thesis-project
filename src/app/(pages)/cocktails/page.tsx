@@ -10,6 +10,11 @@ export default function CocktailsPage() {
   const { cocktails, addCocktail } = useAppContext();
 
   const [cocktailName, setCocktailName] = useState("");
+  const { ingredients } = useAppContext();
+
+  const ingredNames = ingredients.map((i) => i.name);
+
+  const [ingred, setingred] = useState("");
 
   return (
     <DoubleSectionLayout title="Cocktails" typeOf2="cocktailList">
@@ -24,7 +29,10 @@ export default function CocktailsPage() {
           }
         }}
         placeholder="Cocktail name..."
-        buttonLabel="Add Cocktail"
+        buttonLabel="Create"
+        value2="Ingredient name..."
+        onChange2={setingred}
+        elements={ingredNames}
       />
 
       <CocktailList cocktails={cocktails} />
