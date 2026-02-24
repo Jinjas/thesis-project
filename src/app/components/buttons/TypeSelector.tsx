@@ -9,7 +9,7 @@
   />
 */
 
-import { IngredientType } from "../types";
+import { IngredientType } from "../../types";
 import { Check } from "lucide-react";
 
 type Props = {
