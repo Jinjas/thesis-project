@@ -48,37 +48,37 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         if (!cocktail.onto) continue;
 
         try {
-          // Criar visualização da ontologia
-          const vizResponse = await fetch("/api/ontology/generate", {
+          const response = await fetch("/api/ontology/prepare", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ onto: cocktail.onto }),
+            body: JSON.stringify({
+              currentOnto: cocktail.onto,
+            }),
           });
 
-          if (vizResponse.ok) {
-            const vizData = await vizResponse.json();
-            const svg = vizData?.svg;
-            if (typeof svg === "string" && svg.trim().startsWith("<")) {
-              const vizValue = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-              setCocktails((prev) =>
-                prev.map((c) =>
-                  c.id === cocktail.id ? { ...c, viz: vizValue } : c,
-                ),
-              );
-            }
-          }
+          if (response.ok) {
+            const data = await response.json();
 
-          // Extrair ingredientes da ontologia
-          const extractResponse = await fetch("/api/ontology/extract", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ onto: cocktail.onto }),
-          });
+            const vizValue =
+              typeof data.updatedViz === "string" &&
+              data.updatedViz.trim().startsWith("<")
+                ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
+                : data.updatedViz;
 
-          if (extractResponse.ok) {
-            const extractData = await extractResponse.json();
-            const extractedIngredients = extractData?.ingredients || [];
+            setCocktails((prev) =>
+              prev.map((c) =>
+                c.id === cocktail.id
+                  ? {
+                      ...c,
+                      onto: data.updatedOnto,
+                      viz: vizValue,
+                    }
+                  : c,
+              ),
+            );
 
+            const extractedIngredients = data?.ingreds || [];
+            console.log("Extracted Ingredients:", extractedIngredients);
             setIngredients((prev) => {
               const existingNames = new Set(prev.map((ing) => ing.name));
               const newIngredientsList = [...prev];
@@ -276,48 +276,38 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function updateOnto(cocktailId: string, onto: string) {
-    // optimistic update of onto
-    setCocktails((prev) =>
-      prev.map((cocktail) =>
-        cocktail.id === cocktailId ? { ...cocktail, onto } : cocktail,
-      ),
-    );
-
     try {
-      // Gerar visualização
-      const response = await fetch("/api/ontology/generate", {
+      const response = await fetch("/api/ontology/prepare", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ onto }),
+        body: JSON.stringify({
+          currentOnto: onto,
+        }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        const svg = data?.svg;
-        if (typeof svg === "string") {
-          const vizValue = svg.trim().startsWith("<")
-            ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
-            : svg;
 
-          setCocktails((prev) =>
-            prev.map((c) =>
-              c.id === cocktailId ? { ...c, viz: vizValue } : c,
-            ),
-          );
-        }
-      }
+        const vizValue =
+          typeof data.updatedViz === "string" &&
+          data.updatedViz.trim().startsWith("<")
+            ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
+            : data.updatedViz;
 
-      // Extrair ingredientes da ontologia
-      const extractResponse = await fetch("/api/ontology/extract", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ onto }),
-      });
+        setCocktails((prev) =>
+          prev.map((c) =>
+            c.id === cocktailId
+              ? {
+                  ...c,
+                  onto: data.updatedOnto,
+                  viz: vizValue,
+                }
+              : c,
+          ),
+        );
 
-      if (extractResponse.ok) {
-        const extractData = await extractResponse.json();
-        const extractedIngredients = extractData?.ingredients || [];
-
+        const extractedIngredients = data?.ingreds || [];
+        console.log("Extracted Ingredients:", extractedIngredients);
         setIngredients((prev) => {
           const existingNames = new Set(prev.map((ing) => ing.name));
           const newIngredientsList = [...prev];

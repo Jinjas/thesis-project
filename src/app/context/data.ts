@@ -5,51 +5,53 @@ const FRONTEND_BASIC_ONTO = `
 Ontologia FrontendBasic
 
 concepts {
-  Language,
-  Library,
-  Framework,
-  Tool
+    Language,
+    Library,
+    Framework,
+    Tool
 }
 
 individuals {
-  FrontendBasicCocktail,
-  JavaScript,
-  TypeScript,
-  React,
-  Next,
-  TailwindCSS,
-  SQL,
-  ESLint,
-  ArchitectsPortal
+    FrontendBasic,
+    FrontendBasicDevelopment,
+    FrontendBasicCocktail,
+    JavaScript,
+    TypeScript,
+    %React,
+    Next,
+    TailwindCSS,
+    SQL,
+    ESLint
 }
 
 relations {
-	uses,
-	requires,
-	is_composed_of,
-	supports,
-	is_used_for
+    uses,
+    requires,
+    is_composed_of,
+    supports,
+    is_used_for
 }
 
 triples {
-  JavaScript = iof => Language;
-  TypeScript = iof => Language;
-  React = iof => Library;
-  Next = iof => Framework;
-  TailwindCSS = iof => Tool;
-  SQL = iof => Language;
-  ESLint = iof => Tool;
-  
-  ArchitectsPortal = requires => FrontendBasicCocktail;
+    JavaScript = iof => Language;
+    TypeScript = iof => Language;
+    %React = iof => Library;
+    Next = iof => Framework;
+    TailwindCSS = iof => Tool;
+    SQL = iof => Language;
+    ESLint = iof => Tool;
+    
+    FrontendBasic = requires => FrontendBasicDevelopment;
+    FrontendBasicDevelopment = uses => FrontendBasicCocktail;
 
-  SQL = supports => ArchitectsPortal;
+    SQL = supports => ArchitectsPortal;
 
-  FrontendBasicCocktail = is_composed_of => JavaScript;
-  FrontendBasicCocktail = is_composed_of => TypeScript;
-  FrontendBasicCocktail = is_composed_of => React;
-  FrontendBasicCocktail = is_composed_of => Next;
-  FrontendBasicCocktail = is_composed_of => TailwindCSS;
-  FrontendBasicCocktail = is_composed_of => ESLint;
+    FrontendBasicCocktail = is_composed_of => JavaScript;
+    FrontendBasicCocktail = is_composed_of => TypeScript;
+    %FrontendBasicCocktail = is_composed_of => React;
+    FrontendBasicCocktail = is_composed_of => Next;
+    FrontendBasicCocktail = is_composed_of => TailwindCSS;
+    FrontendBasicCocktail = is_composed_of => ESLint;
 }
 .`.trim();
 
