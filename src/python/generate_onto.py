@@ -19,9 +19,9 @@ def create_Ontology(cocktail_name: str, ingredient_name: str, ingredient_type: s
                   + f"    {cocktail_name},\n"
                   + f"    {cocktail_name}Development,\n"
                   + f"    {cocktail_name}Cocktail,\n"
-                  + f"    {ingredient_name}\n "
-                  + "}\n"
-                  + "relations {\n    uses,\n    requires,\n    is_composed_of,\n    supports,\n    is_used_for\n}\n")
+                  + f"    {ingredient_name}\n"
+                  + "}\n")
+    result.append("relations {\n    uses,\n    requires,\n    is_composed_of,\n    supports,\n    is_used_for\n}\n")
     result.append("triples {\n"
                   + f"    {ingredient_name} = iof => {ingredient_type};\n"
                   + f"    {cocktail_name} = requires => {cocktail_name}Development;\n"
