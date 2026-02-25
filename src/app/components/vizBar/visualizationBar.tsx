@@ -40,7 +40,7 @@ export default function VizBar() {
       </button>
 
       <div className="overflow-hidden">
-        <div className="w-72">
+        <div className="w-72 h-full pb-2">
           {!collapsed && (
             <VisSidebar
               key={cocktail.id + cocktail.viz + cocktail.onto}
