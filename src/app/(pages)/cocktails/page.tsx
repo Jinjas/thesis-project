@@ -23,7 +23,7 @@ export default function CocktailsPage() {
         onChange={(e) => setCocktailName(e.target.value)}
         onSubmit={() => {
           if (cocktailName.trim() !== "") {
-            const id = addCocktail(cocktailName);
+            const id = addCocktail(cocktailName, ingred);
             setCocktailName("");
             redirect(`/cocktails/${id}`);
           }

@@ -11,7 +11,7 @@ type AppContextType = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
 
-  addCocktail: (name: string) => string;
+  addCocktail: (name: string, firstIngred: string) => string;
   addIngredient: (name: string, type: IngredientType) => string;
   remIngredient(id: string): void;
 
@@ -131,15 +131,24 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     generateInitialCocktail();
   }, []);
 
-  function addCocktail(name: string) {
+  function addCocktail(name: string, firstIngred: string) {
     const id = createId("cocktail");
+
+    const ingredient = ingredients.find((i) => i.name === firstIngred);
+    if (!ingredient) {
+      console.warn(
+        `Ingredient "${firstIngred}" not found. Cocktail will be created without it.`,
+      );
+      return "";
+    }
+
     setCocktails((prev) => [
       ...prev,
       {
         id: id,
         name,
-        viz: "OJS.pdf",
-        ingredients: {},
+        viz: "",
+        ingredients: { [ingredient.id]: true },
         onto: "",
       },
     ]);
