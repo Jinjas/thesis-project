@@ -31,7 +31,7 @@ export default function AddItemForm({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="border p-2 rounded flex-1 text-md"
+        className="border p-2 rounded w-full text-md"
       />
       <GenericSearch
         elements={elements}
@@ -40,7 +40,7 @@ export default function AddItemForm({
       />
       <button
         onClick={onSubmit}
-        className="block bg-gray-700 hover:bg-gray-800 text-white px-4 rounded"
+        className="block bg-gray-700 hover:bg-gray-800 text-white px-4 rounded cursor-pointer"
       >
         {buttonLabel}
       </button>

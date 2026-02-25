@@ -25,7 +25,7 @@ export default function IngredientsPage() {
         }}
         placeholder="Ingredient name..."
         buttonLabel="Create"
-        value2="Type..."
+        value2="Type...(default: Tool)"
         onChange2={setType}
         elements={INGREDIENT_TYPES.map((t) => t.toString())}
       />

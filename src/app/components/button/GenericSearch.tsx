@@ -55,7 +55,7 @@ export default function GenericSearch({
   }
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full xl:w-auto">
       <input
         value={query}
         onChange={(e) => {
@@ -64,7 +64,7 @@ export default function GenericSearch({
         }}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="border p-2 pl-2 rounded w-full text-md"
+        className="border p-2 rounded w-full xl:w-auto text-md"
       />
 
       {filtered.length > 0 && highlight >= 0 && (
@@ -77,7 +77,7 @@ export default function GenericSearch({
                 setQuery(ing);
                 setHighlight(-1);
               }}
-              className={`px-2 py-1 cursor-pointer text-sm
+              className={`px-2 py-1 cursor-pointer text-sm 
                 ${
                   i === highlight
                     ? "bg-gray-800 text-white"
