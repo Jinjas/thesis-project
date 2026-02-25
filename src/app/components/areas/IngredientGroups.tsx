@@ -34,7 +34,7 @@ export default function IngredientGroups({
                 {list.map((ing) => (
                   <li key={ing.id} className="text-sm pb-1">
                     <button
-                      className={`block px-2 py-1 rounded ${
+                      className={`block px-2 py-1 rounded cursor-pointer ${
                         cocktail.ingredients[ing.id]
                           ? "bg-green-200 hover:bg-green-300"
                           : "bg-red-200 hover:bg-red-300"

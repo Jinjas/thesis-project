@@ -8,7 +8,7 @@ type Props = {
 
 export default function BaseLayout({ children, withViz }: Props) {
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex h-screen w-full cursor-default">
       <Sidebar />
 
       <main className="flex flex-1">{children}</main>

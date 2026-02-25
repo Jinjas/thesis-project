@@ -36,7 +36,7 @@ export default function ExportButton({
   return (
     <button
       onClick={handleExport}
-      className="font-semibold pb-2 hover:underline"
+      className="font-semibold pb-2 hover:underline cursor-pointer"
     >
       Export
     </button>

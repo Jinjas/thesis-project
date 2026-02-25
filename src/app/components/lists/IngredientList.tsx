@@ -19,7 +19,7 @@ export default function IngredientList({ ingredients }: Props) {
 
             <Link
               href={`/ingredients/${i.id}`}
-              className=" bg-gray-700 hover:bg-gray-800 text-white px-2 py-1 rounded border text-center"
+              className=" bg-gray-700 hover:bg-gray-800 text-white px-2 py-1 rounded border text-center cursor-pointer"
             >
               Edit
             </Link>

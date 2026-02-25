@@ -28,7 +28,7 @@ export default function TypeSelector({ value, onChange, types }: Props) {
           <button
             key={t}
             onClick={() => onChange(t)}
-            className={`flex items-center gap-1 px-2 py-1 rounded border transition text-sm
+            className={`flex items-center gap-1 px-2 py-1 rounded border transition text-sm cursor-pointer
               ${
                 selected
                   ? "bg-gray-700 hover:bg-gray-800 text-white"

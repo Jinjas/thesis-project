@@ -62,14 +62,14 @@ export default function VisSidebar({ pdfUrl, scale, onScaleChange }: Props) {
         <div className="flex gap-1">
           <button
             onClick={zoomOut}
-            className="p-1 border rounded hover:bg-gray-200"
+            className="p-1 border rounded hover:bg-gray-200 cursor-pointer"
           >
             <Minus size={16} />
           </button>
 
           <button
             onClick={zoomIn}
-            className="p-1 border rounded hover:bg-gray-200"
+            className="p-1 border rounded hover:bg-gray-200 cursor-pointer"
           >
             <Plus size={16} />
           </button>

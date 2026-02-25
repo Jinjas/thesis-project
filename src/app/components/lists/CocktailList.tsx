@@ -16,7 +16,7 @@ export default function CocktailList({ cocktails }: Props) {
             <h3 className="font-semibold">{i.name}</h3>
             <Link
               href={`/cocktails/${i.id}`}
-              className=" bg-gray-700 hover:bg-gray-800 text-white px-2 py-1 rounded border text-center"
+              className=" bg-gray-700 hover:bg-gray-800 text-white px-2 py-1 rounded border text-center cursor-pointer"
             >
               Edit
             </Link>

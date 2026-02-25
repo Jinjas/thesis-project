@@ -19,7 +19,7 @@ export default function Sidebar() {
     >
       <button
         onClick={() => setCollapsed((v) => !v)}
-        className=" absolute top-1/2 -right-3 -translate-y-1/2 bg-gray-800 border border-gray-600 rounded-full w-6 h-6 flex items-center justify-center hover:bg-gray-700"
+        className=" absolute top-1/2 -right-3 -translate-y-1/2 bg-gray-800 border border-gray-600 rounded-full w-6 h-6 flex items-center justify-center hover:bg-gray-700 cursor-pointer"
       >
         {collapsed ? "›" : "‹"}
       </button>

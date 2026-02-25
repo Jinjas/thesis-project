@@ -37,7 +37,7 @@ export default function ImportButton({ func }: Props) {
   return (
     <button
       onClick={handleImportClick}
-      className="font-semibold pb-2 hover:underline"
+      className="font-semibold pb-2 hover:underline cursor-pointer"
     >
       Import
       <input
