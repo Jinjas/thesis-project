@@ -1,35 +1,34 @@
-import { NextResponse } from "next/server";
-import { execFileSync } from "child_process";
-import path from "path";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+import { generateCocktail } from "@/lib/generatingCocktailService";
+
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const onto = body?.onto;
-    if (!onto) {
-      return NextResponse.json(
-        { error: 'Missing "onto" in request body' },
-        { status: 400 },
-      );
+
+    const { cocktailName, ingredientName, ingredientType } = body;
+
+    if (
+      cocktailName === "undefined" ||
+      ingredientName === "undefined" ||
+      ingredientType === "undefined"
+    ) {
+      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
-    const scriptPath = path.join(
-      process.cwd(),
-      "src",
-      "python",
-      "generate_onto.py",
+    const result = await generateCocktail(
+      cocktailName,
+      ingredientName,
+      ingredientType,
     );
-    const pythonCmd = process.env.PYTHON || "python";
 
-    const svg = execFileSync(pythonCmd, [scriptPath], {
-      input: onto,
-      encoding: "utf8",
-      maxBuffer: 10 * 1024 * 1024,
-    });
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("Ontology update error:", error);
 
-    return NextResponse.json({ svg });
-  } catch (err: any) {
-    console.error("Error generating ontology SVG", err);
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }

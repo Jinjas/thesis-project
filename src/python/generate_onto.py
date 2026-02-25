@@ -1,25 +1,53 @@
-#!/usr/bin/env python3
 import sys
-import os
+import json
+import re
 
-sys.path.insert(0, os.path.dirname(__file__))
+import odlc
 
-from odlc import generate_svg
+def create_Ontology(cocktail_name: str, ingredient_name: str, ingredient_type: str) -> str:
+    types={"Framework", "Language", "Library", "Tool"}
+
+    result = []
+    result.append(f"Ontologia {cocktail_name}\n")
+    result.append("concepts {\n" + f"    {ingredient_type}")
+
+    for tipe in types:
+        if tipe != ingredient_type:
+            result.append(f"%    {tipe}")
+    result.append("}\n")
+    result.append("individuals {\n"
+                  + f"    {cocktail_name},\n"
+                  + f"    {cocktail_name}Development,\n"
+                  + f"    {cocktail_name}Cocktail,\n"
+                  + f"    {ingredient_name}\n "
+                  + "}\n"
+                  + "relations {\n    uses,\n    requires,\n    is_composed_of,\n    supports,\n    is_used_for\n}\n")
+    result.append("triples {\n"
+                  + f"    {ingredient_name} = iof => {ingredient_type};\n"
+                  + f"    {cocktail_name} = requires => {cocktail_name}Development;\n"
+                  + f"    {cocktail_name}Development = uses => {cocktail_name}Cocktail;\n"
+                  + f"    {cocktail_name}Cocktail = is_composed_of => {ingredient_name};\n"
+                  + "}\n")
+    result.append(".")    
+    
+    return "\n".join(result)
 
 def main():
-    onto_text = sys.stdin.read()
-    if not onto_text:
-        return
+    input_data = json.loads(sys.stdin.read())
+    
+    path = input_data["path"]
+    cocktail_name = input_data["cocktail_name"]
+    ingredient_name = input_data["ingredient_name"]
+    ingredient_type = input_data["ingredient_type"]
+    
+    new_onto = create_Ontology(cocktail_name, ingredient_name, ingredient_type)
 
-    try:
-        svg = generate_svg(onto_text, os.path.dirname(__file__))
-        if isinstance(svg, bytes):
-            sys.stdout.buffer.write(svg)
-        else:
-            sys.stdout.write(svg)
-    except Exception as e:
-        sys.stderr.write(str(e))
-        sys.exit(1)
+    updated_svg = odlc.generate_svg(new_onto, path)
+    
+    print(json.dumps({
+        "updatedOnto": new_onto,
+        "updatedSvg": updated_svg
+    }))
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

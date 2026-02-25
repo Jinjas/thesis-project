@@ -11,7 +11,7 @@ type AppContextType = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
 
-  addCocktail: (name: string, firstIngred: string) => string;
+  addCocktail: (name: string, firstIngred: string) => Promise<string>;
   addIngredient: (name: string, type: IngredientType) => string;
   remIngredient(id: string): void;
 
@@ -22,8 +22,14 @@ type AppContextType = {
     newCode: string,
   ) => void;
 
-  addIngredientToCocktail: (cocktailId: string, ingredientId: string) => void;
-  updateIngredientStatus: (cocktailId: string, ingredientId: string) => void;
+  addIngredientToCocktail: (
+    cocktailId: string,
+    ingredientId: string,
+  ) => Promise<void>;
+  updateIngredientStatus: (
+    cocktailId: string,
+    ingredientId: string,
+  ) => Promise<void>;
   updateOnto: (cocktailId: string, onto: string) => Promise<void>;
   updateCocktailViz: (cocktailId: string, viz: string) => void;
 };
@@ -131,7 +137,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     generateInitialCocktail();
   }, []);
 
-  function addCocktail(name: string, firstIngred: string) {
+  async function addCocktail(name: string, firstIngred: string) {
     const id = createId("cocktail");
 
     const ingredient = ingredients.find((i) => i.name === firstIngred);
@@ -142,16 +148,39 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       return "";
     }
 
-    setCocktails((prev) => [
-      ...prev,
-      {
-        id: id,
-        name,
-        viz: "",
-        ingredients: { [ingredient.id]: true },
-        onto: "",
-      },
-    ]);
+    try {
+      const response = await fetch("/api/ontology/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cocktailName: name,
+          ingredientName: firstIngred,
+          ingredientType: ingredient.type,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        const vizValue =
+          typeof data.updatedViz === "string" &&
+          data.updatedViz.trim().startsWith("<")
+            ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
+            : data.updatedViz;
+        setCocktails((prev) => [
+          ...prev,
+          {
+            id: id,
+            name,
+            viz: vizValue,
+            ingredients: { [ingredient.id]: true },
+            onto: data.updatedOnto,
+          },
+        ]);
+      }
+    } catch (err) {
+      console.error("Erro ao gerar viz ou ao atualizar onto para", id, err);
+    }
     return id;
   }
 
