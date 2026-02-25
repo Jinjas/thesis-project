@@ -10,6 +10,15 @@ export default function IngredientsPage() {
   const { ingredients, addIngredient } = useAppContext();
   const [name, setName] = useState("");
   const [type, setType] = useState<IngredientType>("Tool");
+  const [temporaryType, setTemporaryType] = useState("");
+
+  function setTypeFromString(value: string) {
+    if (INGREDIENT_TYPES.includes(value as IngredientType)) {
+      setType(value as IngredientType);
+    } else {
+      setType("Tool");
+    }
+  }
 
   return (
     <DoubleSectionLayout title="Ingredients" typeOf2="ingredList">
@@ -25,8 +34,10 @@ export default function IngredientsPage() {
         }}
         placeholder="Ingredient name..."
         buttonLabel="Create"
-        value2="Type...(default: Tool)"
-        onChange2={setType}
+        placeholder2="Type...(default: Tool)"
+        value2={temporaryType}
+        onChange2={setTemporaryType}
+        onSelect={setTypeFromString}
         elements={INGREDIENT_TYPES.map((t) => t.toString())}
       />
 

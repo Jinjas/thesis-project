@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import GenericSearch from "../button/GenericSearch";
-import { IngredientType } from "@/app/types";
 
 type Props = {
   value: string;
@@ -10,8 +8,10 @@ type Props = {
   onSubmit: () => void;
   placeholder: string;
   buttonLabel: string;
+  placeholder2: string;
   value2: string;
-  onChange2: (value: IngredientType) => void;
+  onChange2: (value: string) => void;
+  onSelect: (value: string) => void;
   elements: string[];
 };
 
@@ -21,8 +21,10 @@ export default function AddItemForm({
   onSubmit,
   placeholder,
   buttonLabel,
+  placeholder2,
   value2,
   onChange2,
+  onSelect,
   elements,
 }: Props) {
   return (
@@ -35,8 +37,10 @@ export default function AddItemForm({
       />
       <GenericSearch
         elements={elements}
-        onSelect={onChange2}
-        placeholder={value2}
+        onChange={onChange2}
+        onSelect={onSelect}
+        placeholder={placeholder2}
+        value={value2}
       />
       <button
         onClick={onSubmit}

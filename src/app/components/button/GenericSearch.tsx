@@ -14,23 +14,26 @@ import { useState, useMemo } from "react";
 type Props = {
   elements: string[];
   placeholder: string;
-  onSelect: (value: IngredientType) => void;
+  onSelect: (value: string) => void;
+  onChange: (value: string) => void;
+  value: string;
 };
 
 export default function GenericSearch({
   elements,
   onSelect,
   placeholder,
+  onChange,
+  value,
 }: Props) {
-  const [query, setQuery] = useState("");
   const [highlight, setHighlight] = useState(0);
 
   const filtered = useMemo(() => {
-    if (!query) return [];
+    if (!value) return [];
     return elements.filter((i) =>
-      i.toLowerCase().includes(query.toLowerCase()),
+      i.toLowerCase().includes(value.toLowerCase()),
     );
-  }, [query, elements]);
+  }, [value, elements]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "ArrowDown") {
@@ -48,8 +51,8 @@ export default function GenericSearch({
       const selected = filtered[highlight];
       if (!selected) return;
 
-      onSelect(selected as IngredientType);
-      setQuery(selected);
+      onSelect(selected);
+      onChange(selected);
       setHighlight(-1);
     }
   }
@@ -57,9 +60,9 @@ export default function GenericSearch({
   return (
     <div className="relative w-full xl:w-auto">
       <input
-        value={query}
+        value={value}
         onChange={(e) => {
-          setQuery(e.target.value);
+          onChange(e.target.value);
           setHighlight(0);
         }}
         onKeyDown={handleKeyDown}
@@ -73,8 +76,8 @@ export default function GenericSearch({
             <li
               key={ing}
               onMouseDown={() => {
-                onSelect(ing as IngredientType);
-                setQuery(ing);
+                onSelect(ing);
+                onChange(ing);
                 setHighlight(-1);
               }}
               className={`px-2 py-1 cursor-pointer text-sm 

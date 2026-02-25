@@ -1,6 +1,6 @@
 "use client";
 
-import { Sidebar, CocktailList, AddItemForm } from "../../components";
+import { CocktailList, AddItemForm } from "../../components";
 import { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import { redirect } from "next/navigation";
@@ -22,16 +22,18 @@ export default function CocktailsPage() {
         value={cocktailName}
         onChange={(e) => setCocktailName(e.target.value)}
         onSubmit={() => {
-          if (cocktailName.trim() !== "") {
+          if (cocktailName.trim() !== "" && ingred.trim() !== "") {
             const id = addCocktail(cocktailName, ingred);
             setCocktailName("");
-            redirect(`/cocktails/${id}`);
+            setingred("");
           }
         }}
         placeholder="Cocktail name..."
         buttonLabel="Create"
-        value2="Ingredient name..."
+        placeholder2="Ingredient name..."
+        value2={ingred}
         onChange2={setingred}
+        onSelect={setingred}
         elements={ingredNames}
       />
 
