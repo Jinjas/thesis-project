@@ -24,6 +24,7 @@ type SidebarSectionProps = {
   items: Item[];
   baseHref: string;
   extraFlags?: string;
+  extraFlags2?: string;
 };
 
 export default function SidebarSection({
@@ -32,7 +33,9 @@ export default function SidebarSection({
   items,
   baseHref,
   extraFlags = "h-full",
+  extraFlags2 = "overflow-y-scroll",
 }: SidebarSectionProps) {
+  const moving = false;
   return (
     <div className={`${extraFlags} flex flex-col`}>
       <Link
@@ -42,7 +45,9 @@ export default function SidebarSection({
         {title}
       </Link>
 
-      <ul className="pt-1 overflow-y-scroll h-full [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-600 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700">
+      <ul
+        className={`pt-1 ${extraFlags2} h-full [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-600 dark:[&::-webkit-scrollbar-thumb]:bg-gray-700`}
+      >
         {items.map((item) => (
           <li key={item.id} className="px-1">
             <Link
