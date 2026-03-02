@@ -1,0 +1,7 @@
+Name: JavaScript;
+Type: Language;
+
+Characteristics {
+    objectParadigm;
+    hasCycles;
+}

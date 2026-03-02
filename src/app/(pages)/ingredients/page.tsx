@@ -29,7 +29,8 @@ export default function IngredientsPage() {
           if (name.trim() !== "") {
             const id = addIngredient(name, type);
             setName("");
-            redirect(`/ingredients/${id}`);
+            setTemporaryType("");
+            //redirect(`/ingredients/${id}`);
           }
         }}
         placeholder="Ingredient name..."

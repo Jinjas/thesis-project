@@ -12,7 +12,7 @@ type AppContextType = {
   ingredients: Ingredient[];
 
   addCocktail: (name: string, firstIngred: string) => Promise<string>;
-  addIngredient: (name: string, type: IngredientType) => string;
+  addIngredient: (name: string, type: IngredientType) => Promise<string>;
   remIngredient(id: string): void;
 
   updateIngredient: (
@@ -20,7 +20,7 @@ type AppContextType = {
     newName: string,
     newType: IngredientType,
     newCode: string,
-  ) => void;
+  ) => Promise<void>;
 
   addIngredientToCocktail: (
     cocktailId: string,
@@ -184,21 +184,40 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return id;
   }
 
-  function addIngredient(name: string, type: IngredientType) {
+  async function addIngredient(name: string, type: IngredientType) {
     const id = createId("ingredient");
-    setIngredients((prev) => [
-      ...prev,
-      {
-        id: id,
-        name,
-        type: type,
-        code: "",
-      },
-    ]);
+
+    try {
+      const response = await fetch("/api/ingredientCode/getIngredientCode", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ingredientName: name,
+          ingredientType: type,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        setIngredients((prev) => [
+          ...prev,
+          {
+            id: id,
+            name,
+            type: type,
+            code: data.updatedCode,
+          },
+        ]);
+      }
+    } catch (err) {
+      console.error("Erro ao gerar onto para", id, err);
+    }
+
     return id;
   }
 
-  function updateIngredient(
+  async function updateIngredient(
     id: string,
     newName: string,
     newType: IngredientType,
@@ -211,6 +230,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           : ing,
       ),
     );
+
+    try {
+      const response = await fetch("/api/ingredientCode/setIngredientCode", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ingredientName: newName,
+          newOnto: newCode,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Message Received. Code: ", data.code);
+      }
+    } catch (err) {
+      console.error("Erro ao gerar viz ou ao atualizar onto para", id, err);
+    }
+    return;
   }
 
   function remIngredient(id: string) {
