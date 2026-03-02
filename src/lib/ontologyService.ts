@@ -7,8 +7,14 @@ export async function generateOntoAndVizFromOntology(
   active: boolean,
   onto: string,
 ): Promise<{ updatedOnto: string; updatedViz: string }> {
-  const scriptPath = path.join(process.cwd(), "src", "python", "updateOnto.py");
-  const pythonDir = path.join(process.cwd(), "src", "python");
+  const scriptPath = path.join(
+    process.cwd(),
+    "src",
+    "python",
+    "cocktail",
+    "updateOnto.py",
+  );
+  const pythonDir = path.join(process.cwd(), "src", "python", "cocktail");
 
   const input = {
     path: pythonDir,

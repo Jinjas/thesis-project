@@ -10,9 +10,10 @@ export async function addIngredientService(
     process.cwd(),
     "src",
     "python",
+    "cocktail",
     "add_ingredient.py",
   );
-  const pythonDir = path.join(process.cwd(), "src", "python");
+  const pythonDir = path.join(process.cwd(), "src", "python", "cocktail");
 
   const input = {
     path: pythonDir,

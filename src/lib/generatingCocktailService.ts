@@ -10,9 +10,10 @@ export async function generateCocktail(
     process.cwd(),
     "src",
     "python",
+    "cocktail",
     "generate_onto.py",
   );
-  const pythonDir = path.join(process.cwd(), "src", "python");
+  const pythonDir = path.join(process.cwd(), "src", "python", "cocktail");
 
   const input = {
     path: pythonDir,

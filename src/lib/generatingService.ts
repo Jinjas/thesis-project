@@ -8,9 +8,10 @@ export async function generateDataFromOntology(
     process.cwd(),
     "src",
     "python",
+    "cocktail",
     "prepareOnto.py",
   );
-  const pythonDir = path.join(process.cwd(), "src", "python");
+  const pythonDir = path.join(process.cwd(), "src", "python", "cocktail");
 
   const input = {
     path: pythonDir,
