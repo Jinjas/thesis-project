@@ -12,9 +12,9 @@ export default function CocktailsPage() {
   const [cocktailName, setCocktailName] = useState("");
   const { ingredients } = useAppContext();
 
-  const ingredNames = ingredients.map((i) => i.name);
+  const ingredientsNames = ingredients.map((i) => i.name);
 
-  const [ingred, setingred] = useState("");
+  const [ingredient, setIngredient] = useState("");
 
   return (
     <DoubleSectionLayout title="Cocktails" typeOf2="cocktailList">
@@ -22,19 +22,19 @@ export default function CocktailsPage() {
         value={cocktailName}
         onChange={(e) => setCocktailName(e.target.value)}
         onSubmit={() => {
-          if (cocktailName.trim() !== "" && ingred.trim() !== "") {
-            const id = addCocktail(cocktailName, ingred);
+          if (cocktailName.trim() !== "" && ingredient.trim() !== "") {
+            const id = addCocktail(cocktailName, ingredient);
             setCocktailName("");
-            setingred("");
+            setIngredient("");
           }
         }}
         placeholder="Cocktail name..."
         buttonLabel="Create"
         placeholder2="Ingredient name..."
-        value2={ingred}
-        onChange2={setingred}
-        onSelect={setingred}
-        elements={ingredNames}
+        value2={ingredient}
+        onChange2={setIngredient}
+        onSelect={setIngredient}
+        elements={ingredientsNames}
       />
 
       <CocktailList cocktails={cocktails} />

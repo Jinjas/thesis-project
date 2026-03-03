@@ -17,8 +17,8 @@ def getOntology(ingredient_name:str,ingredient_type:str):
     if data_path.exists():
         content = data_path.read_text(encoding="utf-8")
         lines = content.splitlines()
-        carac = "\n".join(lines[3:])
-        return content, carac
+        characteristics = "\n".join(lines[3:])
+        return content, characteristics
     else:
         data = [
             f"Name: {ingredient_name};",
@@ -28,9 +28,9 @@ def getOntology(ingredient_name:str,ingredient_type:str):
             "}"
         ]
         content = "\n".join(data)
-        carac = "\n".join(data[2:])
+        characteristics = "\n".join(data[2:])
         data_path.write_text(content, encoding="utf-8")
-        return content, carac
+        return content, characteristics
 
 
 def main():
@@ -39,11 +39,11 @@ def main():
     ingredient_name = input_data["ingredient_name"]
     ingredient_type = input_data["ingredient_type"]
     
-    ingredient_Data , carac = getOntology(ingredient_name,ingredient_type)
+    ingredient_Data , characteristics = getOntology(ingredient_name,ingredient_type)
     
     print(json.dumps({
         "updatedCode": ingredient_Data,
-        "updatedCarac": carac,
+        "updatedCharacteristics": characteristics,
     }))
 
 if __name__ == "__main__":

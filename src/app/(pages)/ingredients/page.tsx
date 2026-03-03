@@ -21,7 +21,7 @@ export default function IngredientsPage() {
   }
 
   return (
-    <DoubleSectionLayout title="Ingredients" typeOf2="ingredList">
+    <DoubleSectionLayout title="Ingredients" typeOf2="ingredientList">
       <AddItemForm
         value={name}
         onChange={(e) => setName(e.target.value)}

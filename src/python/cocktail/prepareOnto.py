@@ -7,7 +7,7 @@ import odlc
 def extract_ingredients_from_ontology(onto_text: str, types:set) -> dict:
     typesActive = set()
     ingredientsGeneral = set()
-    activeIngreds = set()
+    activeIngredients = set()
 
     lines = onto_text.strip().split('\n')
     
@@ -28,7 +28,7 @@ def extract_ingredients_from_ontology(onto_text: str, types:set) -> dict:
                 ingredientsGeneral.add(ingredient_name)
                 if not is_commented:
                     typesActive.add(ingredient_type)
-                    activeIngreds.add(ingredient_name)
+                    activeIngredients.add(ingredient_name)
     
     result = []
     for ingredient_name in sorted(ingredient_types.keys()):
@@ -38,7 +38,7 @@ def extract_ingredients_from_ontology(onto_text: str, types:set) -> dict:
             "active": ingredient_types[ingredient_name]["active"]
         })
     
-    return {"ingredients": result, "types": list(typesActive), "generalIngreds": list(ingredientsGeneral) , "activeIngreds": list(activeIngreds)}
+    return {"ingredients": result, "types": list(typesActive), "generalIngredients": list(ingredientsGeneral) , "activeIngredients": list(activeIngredients)}
 
 def getNewData(onto_text: str, path:str) -> dict:
     types={"Framework", "Language", "Library", "Tool"}
@@ -46,15 +46,15 @@ def getNewData(onto_text: str, path:str) -> dict:
     extractions = extract_ingredients_from_ontology(onto_text,types)
 
     activeTypes = extractions["types"]
-    generalIngreds = extractions["generalIngreds"]
-    activeIngreds = extractions["activeIngreds"]
+    generalIngredients = extractions["generalIngredients"]
+    activeIngredients = extractions["activeIngredients"]
 
 
     lines = onto_text.splitlines()
     cocktail_name = lines[0].strip().split()[1]
     final_onto_lines = []
     in_concept_zone = False
-    in_indiv_zone = False
+    in_individual_zone = False
     in_triple_zone = False
     for line in lines:
         stripped = line.lstrip()
@@ -64,9 +64,9 @@ def getNewData(onto_text: str, path:str) -> dict:
             for activeType in activeTypes:
                 final_onto_lines.append(f"    {activeType},")
             final_onto_lines[-1] = final_onto_lines[-1].rstrip(",")  # Remove the comma from the last active type
-            for tipe in types:
-                if tipe not in activeTypes:
-                    final_onto_lines.append(f"%    {tipe}")
+            for type in types:
+                if type not in activeTypes:
+                    final_onto_lines.append(f"%    {type}")
             continue
         if in_concept_zone and stripped.startswith("}"):
             in_concept_zone = False
@@ -76,20 +76,20 @@ def getNewData(onto_text: str, path:str) -> dict:
             continue
 
         if stripped.startswith("individuals"):
-            in_indiv_zone = True
+            in_individual_zone = True
             final_onto_lines.append(line)
             continue
-        if in_indiv_zone and stripped.startswith("}"):
-            in_indiv_zone = False
-            for ingred in activeIngreds:
-                final_onto_lines.append(f"    {ingred},")
+        if in_individual_zone and stripped.startswith("}"):
+            in_individual_zone = False
+            for ingredient in activeIngredients:
+                final_onto_lines.append(f"    {ingredient},")
             final_onto_lines[-1] = final_onto_lines[-1].rstrip(",")  # Remove the comma from the last active ingredient
-            for ingred in generalIngreds:
-                if ingred not in activeIngreds:
-                    final_onto_lines.append(f"%    {ingred}")
+            for ingredient in generalIngredients:
+                if ingredient not in activeIngredients:
+                    final_onto_lines.append(f"%    {ingredient}")
             final_onto_lines.append(line)
             continue
-        if in_indiv_zone:
+        if in_individual_zone:
             if cocktail_name in line:
                 final_onto_lines.append(line)
             continue
@@ -111,7 +111,7 @@ def getNewData(onto_text: str, path:str) -> dict:
     final_onto = "\n".join(final_onto_lines)
 
     result = { "updatedOnto": final_onto, 
-               "ingreds": extractions["ingredients"], 
+               "ingredients": extractions["ingredients"], 
                "updatedSvg": odlc.generate_svg(final_onto, path)
             }
 

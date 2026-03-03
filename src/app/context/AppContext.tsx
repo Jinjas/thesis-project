@@ -17,7 +17,7 @@ type AppContextType = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
 
-  addCocktail: (name: string, firstIngred: string) => Promise<string>;
+  addCocktail: (name: string, firstIngredient: string) => Promise<string>;
   addIngredient: (name: string, type: IngredientType) => Promise<string>;
   remIngredient(id: string): void;
 
@@ -47,7 +47,6 @@ function createId(prefix: string, name: string) {
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  // para fazer de raiz sem dados iniciais
   //const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   //const [cocktails, setCocktails] = useState<Cocktail[]>([]);
   const creatingIngredients: { [name: string]: Promise<string> } = {};
@@ -56,11 +55,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [cocktails, setCocktails] = useState<Cocktail[]>(COCKTAILS);
 
   useEffect(() => {
-    getInicialIngredientsCode();
+    getInitialIngredientsCode();
     generateInitialCocktail();
   }, []);
 
-  async function getInicialIngredientsCode() {
+  async function getInitialIngredientsCode() {
     console.log(ingredients);
     for (const ingredient of ingredients) {
       try {
@@ -81,14 +80,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 ? {
                     ...c,
                     code: data.updatedCode,
-                    carac: data.updatedCarac,
+                    characteristics: data.updatedCharacteristics,
                   }
                 : c,
             ),
           );
         }
       } catch (err) {
-        console.error("Erro ao gerar onto para", ingredient.id, err);
+        console.error("error generating onto to", ingredient.id, err);
       }
     }
   }
@@ -128,7 +127,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           ),
         );
 
-        const extractedIngredients: ExtractedIngredient[] = data?.ingreds || [];
+        const extractedIngredients: ExtractedIngredient[] =
+          data?.ingredients || [];
 
         console.log("Extracted Ingredients:", extractedIngredients);
 
@@ -181,13 +181,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  async function addCocktail(name: string, firstIngred: string) {
+  async function addCocktail(name: string, firstIngredient: string) {
     const id = createId("cocktail", name);
 
-    const ingredient = ingredients.find((i) => i.name === firstIngred);
+    const ingredient = ingredients.find((i) => i.name === firstIngredient);
     if (!ingredient) {
       console.warn(
-        `Ingredient "${firstIngred}" not found. Cocktail will be created without it.`,
+        `Ingredient "${firstIngredient}" not found. Cocktail will be created without it.`,
       );
       return "";
     }
@@ -198,7 +198,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           cocktailName: name,
-          ingredientName: firstIngred,
+          ingredientName: firstIngredient,
           ingredientType: ingredient.type,
         }),
       });
@@ -250,7 +250,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             id: id,
             name,
             type: type,
-            carac: data.updatedCarac,
+            characteristics: data.updatedCharacteristics,
             code: data.updatedCode,
           },
         ]);
@@ -288,7 +288,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                   ...ing,
                   name: newName,
                   type: newType,
-                  carac: newCode,
+                  characteristics: newCode,
                   code: data.onto,
                 }
               : ing,
@@ -346,7 +346,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
     enqueueCocktailUpdate(cocktailId, async () => {
       try {
-        const response = await fetch("/api/ontology/addIngred", {
+        const response = await fetch("/api/ontology/addIngredient", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -486,7 +486,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         ),
       );
 
-      const extractedIngredients: ExtractedIngredient[] = data?.ingreds || [];
+      const extractedIngredients: ExtractedIngredient[] =
+        data?.ingredients || [];
       console.log("Extracted Ingredients:", extractedIngredients);
 
       const newIngredients = extractedIngredients.filter(

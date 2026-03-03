@@ -11,7 +11,7 @@ export type Ingredient = {
   id: string;
   name: string;
   type: IngredientType;
-  carac: string;
+  characteristics: string;
   code: string;
 };
 

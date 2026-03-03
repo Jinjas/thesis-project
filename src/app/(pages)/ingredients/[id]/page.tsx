@@ -7,7 +7,6 @@ import { IngredientType, INGREDIENT_TYPES } from "../../../types";
 import {
   TypeSelector,
   CodeEdit,
-  Sidebar,
   ImportButton,
   ExportButton,
   TextCampEdit,
@@ -24,16 +23,14 @@ export default function IngredientDetailPage() {
   const [name, setName] = useState("");
   const [type, setType] = useState<IngredientType>("Language");
   const [code, setCode] = useState("");
-  const [carac, setCarac] = useState("");
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [characteristics, setCharacteristics] = useState("");
 
   useEffect(() => {
     if (ingredient) {
       setName(ingredient.name);
       setType(ingredient.type);
       setCode(ingredient.code);
-      setCarac(ingredient.carac);
+      setCharacteristics(ingredient.characteristics);
     }
   }, [ingredient]);
 
@@ -46,7 +43,7 @@ export default function IngredientDetailPage() {
   if (!ingredient) return <p className="p-6">Redirecting…</p>;
 
   return (
-    <DoubleSectionLayout title="Edit Ingredient" typeOf2="ingredDetail">
+    <DoubleSectionLayout title="Edit Ingredient" typeOf2="ingredientDetail">
       <TextCampEdit label="Name" value={name} onChange={setName} />
 
       <div className="pt-2 flex flex-col lg:flex-row gap-2 lg:gap-4 max-w-[493px]">
@@ -64,13 +61,13 @@ export default function IngredientDetailPage() {
           <h3 className="font-semibold pb-2"> OntoDL</h3>
 
           <div className="flex gap-2">
-            <ImportButton func={setCarac} />
+            <ImportButton func={setCharacteristics} />
 
             <ExportButton code={code} filename={name || "ingredient"} />
           </div>
         </div>
 
-        <CodeEdit code={carac} setCode={setCarac} />
+        <CodeEdit code={characteristics} setCode={setCharacteristics} />
       </div>
 
       <div className="pt-2 px-2 flex gap-2 justify-end">
@@ -84,7 +81,9 @@ export default function IngredientDetailPage() {
         />
 
         <ActionButton
-          onClick={() => updateIngredient(ingredient.id, name, type, carac)}
+          onClick={() =>
+            updateIngredient(ingredient.id, name, type, characteristics)
+          }
           label="Save"
           variant="save"
         />

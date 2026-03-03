@@ -17,7 +17,7 @@ export default function DoubleSectionLayout({
 }: Props) {
   let children2 = <div></div>;
   switch (typeOf2) {
-    case "ingredList":
+    case "ingredientList":
       children2 = (
         <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen justify-center">
           <h2 className="text-2xl font-semibold pb-4">Conteúdo</h2>

@@ -10,7 +10,7 @@ data_dir.mkdir(exist_ok=True)
 def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
     data_path = data_dir / f"{ingredient_name.lower()}.onto"
     newOnto = f"Name: {ingredient_name};\nType: {ingredient_type};\n\n{newCode}"
-    data_path.write_text(newOnto, encoding="utf-8")  # cria ou sobrescreve
+    data_path.write_text(newOnto, encoding="utf-8") 
     return newOnto
 
 def main():

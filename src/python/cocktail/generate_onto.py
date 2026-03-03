@@ -11,9 +11,9 @@ def create_Ontology(cocktail_name: str, ingredient_name: str, ingredient_type: s
     result.append(f"Ontologia {cocktail_name}\n")
     result.append("concepts {\n" + f"    {ingredient_type}")
 
-    for tipe in types:
-        if tipe != ingredient_type:
-            result.append(f"%    {tipe}")
+    for type in types:
+        if type != ingredient_type:
+            result.append(f"%    {type}")
     result.append("}\n")
     result.append("individuals {\n"
                   + f"    {cocktail_name},\n"

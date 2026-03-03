@@ -11,7 +11,7 @@ def toggle_ingredient_lines(onto_text: str, ingredient: str,ingredient_type: str
     conceptsHolder = []
     in_zone = False
     rem_concept = True
-    in_zone_indiv = False
+    in_zone_individual = False
     
     ingredient_pattern = re.compile(r'\b' + re.escape(ingredient) + r'\b')
     
@@ -30,13 +30,13 @@ def toggle_ingredient_lines(onto_text: str, ingredient: str,ingredient_type: str
             continue
 
         if stripped.startswith("individuals"):
-            in_zone_indiv = True
+            in_zone_individual = True
             result.append(line)
             continue
 
-        if (in_zone or in_zone_indiv) and stripped.startswith("}"):
+        if (in_zone or in_zone_individual) and stripped.startswith("}"):
             in_zone = False
-            in_zone_indiv = False
+            in_zone_individual = False
     
             if active:
                 if not result[-2].rstrip().endswith(",") and not result[-2].lstrip().startswith("concepts") and not result[-2].lstrip().startswith("individuals"):
@@ -74,7 +74,7 @@ def toggle_ingredient_lines(onto_text: str, ingredient: str,ingredient_type: str
                     conceptsHolder.append(line)
                     continue
                             
-        if in_zone_indiv:
+        if in_zone_individual:
             if ingredient_pattern.search(line):
                 if active:
                     if stripped.startswith("%"):

@@ -3,7 +3,7 @@ import path from "path";
 
 export async function generateDataFromOntology(
   onto: string,
-): Promise<{ updatedOnto: string; updatedViz: string; ingreds: string }> {
+): Promise<{ updatedOnto: string; updatedViz: string; ingredients: string }> {
   const scriptPath = path.join(
     process.cwd(),
     "src",
@@ -48,6 +48,6 @@ export async function generateDataFromOntology(
   return {
     updatedOnto: parsed.updatedOnto,
     updatedViz: parsed.updatedSvg,
-    ingreds: parsed.ingreds,
+    ingredients: parsed.ingredients,
   };
 }

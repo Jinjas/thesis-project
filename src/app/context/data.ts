@@ -17,8 +17,8 @@ individuals {
     FrontendBasicCocktail,
     JavaScript,
     TypeScript,
-    %React,
-    Next,
+    %ReactJS,
+    NextJS,
     TailwindCSS,
     SQL,
     ESLint
@@ -35,8 +35,8 @@ relations {
 triples {
     JavaScript = iof => Language;
     TypeScript = iof => Language;
-    %React = iof => Library;
-    Next = iof => Framework;
+    %ReactJS = iof => Library;
+    NextJS = iof => Framework;
     TailwindCSS = iof => Tool;
     SQL = iof => Language;
     ESLint = iof => Tool;
@@ -48,8 +48,8 @@ triples {
 
     FrontendBasicCocktail = is_composed_of => JavaScript;
     FrontendBasicCocktail = is_composed_of => TypeScript;
-    %FrontendBasicCocktail = is_composed_of => React;
-    FrontendBasicCocktail = is_composed_of => Next;
+    %FrontendBasicCocktail = is_composed_of => ReactJS;
+    FrontendBasicCocktail = is_composed_of => NextJS;
     FrontendBasicCocktail = is_composed_of => TailwindCSS;
     FrontendBasicCocktail = is_composed_of => ESLint;
 }
@@ -214,49 +214,49 @@ export const INGREDIENTS: Ingredient[] = [
     id: "ts",
     name: "TypeScript",
     type: "Language",
-    carac: "",
+    characteristics: "",
     code: "",
   },
   {
     id: "js",
     name: "JavaScript",
     type: "Language",
-    carac: "",
+    characteristics: "",
     code: "",
   },
   {
     id: "react",
-    name: "React",
+    name: "ReactJS",
     type: "Library",
-    carac: "",
+    characteristics: "",
     code: "",
   },
   {
     id: "next",
-    name: "Next",
+    name: "NextJS",
     type: "Framework",
-    carac: "",
+    characteristics: "",
     code: "",
   },
   {
     id: "tailwind",
     name: "TailwindCSS",
     type: "Tool",
-    carac: "",
+    characteristics: "",
     code: "",
   },
   {
     id: "vite",
     name: "Vite",
     type: "Tool",
-    carac: "",
+    characteristics: "",
     code: "",
   },
   {
     id: "sql",
     name: "SQL",
     type: "Language",
-    carac: "",
+    characteristics: "",
     code: "",
   },
 ];
@@ -287,14 +287,7 @@ export const COCKTAILS: Cocktail[] = [
     id: "vanilla-dev",
     name: "Vanilla Dev",
     viz: "",
-    ingredients: {
-      js: true,
-      react: true,
-      tailwind: true,
-      ts: true,
-      next: true,
-      sql: true,
-    },
+    ingredients: {},
     onto: "",
   },
 ];
