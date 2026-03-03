@@ -24,6 +24,7 @@ export default function IngredientDetailPage() {
   const [name, setName] = useState("");
   const [type, setType] = useState<IngredientType>("Language");
   const [code, setCode] = useState("");
+  const [carac, setCarac] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -32,6 +33,7 @@ export default function IngredientDetailPage() {
       setName(ingredient.name);
       setType(ingredient.type);
       setCode(ingredient.code);
+      setCarac(ingredient.carac);
     }
   }, [ingredient]);
 
@@ -62,13 +64,13 @@ export default function IngredientDetailPage() {
           <h3 className="font-semibold pb-2"> OntoDL</h3>
 
           <div className="flex gap-2">
-            <ImportButton func={setCode} />
+            <ImportButton func={setCarac} />
 
             <ExportButton code={code} filename={name || "ingredient"} />
           </div>
         </div>
 
-        <CodeEdit code={code} setCode={setCode} />
+        <CodeEdit code={carac} setCode={setCarac} />
       </div>
 
       <div className="pt-2 px-2 flex gap-2 justify-end">
@@ -82,7 +84,7 @@ export default function IngredientDetailPage() {
         />
 
         <ActionButton
-          onClick={() => updateIngredient(ingredient.id, name, type, code)}
+          onClick={() => updateIngredient(ingredient.id, name, type, carac)}
           label="Save"
           variant="save"
         />

@@ -2,6 +2,5 @@ Name: Python;
 Type: Language;
 
 Characteristics {
-    objectParadigm;
-    hasCycles;
+    PythonSpecific;
 }

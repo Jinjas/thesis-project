@@ -5,4 +5,5 @@ Characteristics {
     objectParadigm;
     hasCycles;
     hasDefinedTypes;
+    JavaSpecific;
 }

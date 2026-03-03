@@ -4,7 +4,7 @@ import path from "path";
 export async function getIngredientCode(
   ingredientName: string,
   ingredientType: string,
-): Promise<{ updatedCode: string }> {
+): Promise<{ updatedCode: string; updatedCarac: string }> {
   const scriptPath = path.join(
     process.cwd(),
     "src",
@@ -47,5 +47,6 @@ export async function getIngredientCode(
 
   return {
     updatedCode: parsed.updatedCode,
+    updatedCarac: parsed.updatedCarac,
   };
 }

@@ -6,13 +6,21 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { ingredientName, newOnto } = body;
+    const { ingredientName, ingredientType, newCode } = body;
 
-    if (ingredientName === "undefined" || typeof newOnto !== "string") {
+    if (
+      ingredientName === "undefined" ||
+      ingredientType === "undefined" ||
+      typeof newCode !== "string"
+    ) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
-    const result = await setIngredientCode(ingredientName, newOnto);
+    const result = await setIngredientCode(
+      ingredientName,
+      ingredientType,
+      newCode,
+    );
 
     return NextResponse.json(result);
   } catch (error) {

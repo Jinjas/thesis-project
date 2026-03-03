@@ -3,8 +3,9 @@ import path from "path";
 
 export async function setIngredientCode(
   ingredientName: string,
-  code: string,
-): Promise<{ code: number }> {
+  ingredientType: string,
+  newCode: string,
+): Promise<{ onto: string }> {
   const scriptPath = path.join(
     process.cwd(),
     "src",
@@ -15,7 +16,8 @@ export async function setIngredientCode(
 
   const input = {
     ingredient_name: ingredientName,
-    newOnto: code,
+    ingredient_type: ingredientType,
+    newCode: newCode,
   };
 
   const result = await new Promise<string>((resolve, reject) => {
@@ -46,6 +48,6 @@ export async function setIngredientCode(
   const parsed = JSON.parse(result);
 
   return {
-    code: parsed.code,
+    onto: parsed.onto,
   };
 }

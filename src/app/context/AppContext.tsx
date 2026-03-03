@@ -81,6 +81,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 ? {
                     ...c,
                     code: data.updatedCode,
+                    carac: data.updatedCarac,
                   }
                 : c,
             ),
@@ -249,6 +250,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             id: id,
             name,
             type: type,
+            carac: data.updatedCarac,
             code: data.updatedCode,
           },
         ]);
@@ -266,27 +268,32 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     newType: IngredientType,
     newCode: string,
   ) {
-    setIngredients((prev) =>
-      prev.map((ing) =>
-        ing.id === id
-          ? { ...ing, name: newName, type: newType, code: newCode }
-          : ing,
-      ),
-    );
-
     try {
       const response = await fetch("/api/ingredientCode/setIngredientCode", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ingredientName: newName,
-          newOnto: newCode,
+          ingredientType: newType,
+          newCode: newCode,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Message Received. Code: ", data.code);
+        setIngredients((prev) =>
+          prev.map((ing) =>
+            ing.id === id
+              ? {
+                  ...ing,
+                  name: newName,
+                  type: newType,
+                  carac: newCode,
+                  code: data.onto,
+                }
+              : ing,
+          ),
+        );
       }
     } catch (err) {
       console.error("Erro ao gerar viz ou ao atualizar onto para", id, err);

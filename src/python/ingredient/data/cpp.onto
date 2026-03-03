@@ -1,5 +1,6 @@
-Name: C++;
+Name: Cpp;
 Type: Language;
 
 Characteristics {
+    CppSpecific;
 }
