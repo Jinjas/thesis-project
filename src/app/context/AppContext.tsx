@@ -7,6 +7,12 @@ import { INGREDIENTS, COCKTAILS } from "./data";
 
 import { enqueueCocktailUpdate } from "@/lib/updateQueue";
 
+type ExtractedIngredient = {
+  name: string;
+  type?: string;
+  active: boolean;
+};
+
 type AppContextType = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
@@ -34,8 +40,8 @@ type AppContextType = {
   updateCocktailViz: (cocktailId: string, viz: string) => void;
 };
 
-function createId(prefix: string) {
-  return `${prefix}-${performance.now().toFixed(0)}`;
+function createId(prefix: string, name: string) {
+  return `${prefix}-${name}`;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -44,101 +50,138 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // para fazer de raiz sem dados iniciais
   //const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   //const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+  const creatingIngredients: { [name: string]: Promise<string> } = {};
 
   const [ingredients, setIngredients] = useState<Ingredient[]>(INGREDIENTS);
   const [cocktails, setCocktails] = useState<Cocktail[]>(COCKTAILS);
 
   useEffect(() => {
-    async function generateInitialCocktail() {
-      for (const cocktail of cocktails) {
-        if (!cocktail.onto) continue;
-
-        try {
-          const response = await fetch("/api/ontology/prepare", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              currentOnto: cocktail.onto,
-            }),
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-
-            const vizValue =
-              typeof data.updatedViz === "string" &&
-              data.updatedViz.trim().startsWith("<")
-                ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
-                : data.updatedViz;
-
-            setCocktails((prev) =>
-              prev.map((c) =>
-                c.id === cocktail.id
-                  ? {
-                      ...c,
-                      onto: data.updatedOnto,
-                      viz: vizValue,
-                    }
-                  : c,
-              ),
-            );
-
-            const extractedIngredients = data?.ingreds || [];
-            console.log("Extracted Ingredients:", extractedIngredients);
-            setIngredients((prev) => {
-              const existingNames = new Set(prev.map((ing) => ing.name));
-              const newIngredientsList = [...prev];
-              const ingredientNameToId: { [key: string]: string } = {};
-
-              prev.forEach((ing) => {
-                ingredientNameToId[ing.name] = ing.id;
-              });
-
-              for (const extracted of extractedIngredients) {
-                if (!existingNames.has(extracted.name)) {
-                  const newId = `ingredient-${extracted.name}`;
-                  ingredientNameToId[extracted.name] = newId;
-                  newIngredientsList.push({
-                    id: newId,
-                    name: extracted.name,
-                    type: (extracted.type as IngredientType) || "Language",
-                    code: "Please insert code for this ingredient",
-                  });
-                }
-              }
-
-              setCocktails((prevCocktails) =>
-                prevCocktails.map((c) => {
-                  if (c.id !== cocktail.id) return c;
-
-                  const ingredientMap: { [key: string]: boolean } = {
-                    ...c.ingredients,
-                  };
-                  for (const extracted of extractedIngredients) {
-                    const ingredientId = ingredientNameToId[extracted.name];
-                    if (ingredientId) {
-                      ingredientMap[ingredientId] = extracted.active;
-                    }
-                  }
-
-                  return { ...c, ingredients: ingredientMap };
-                }),
-              );
-
-              return newIngredientsList;
-            });
-          }
-        } catch (err) {
-          console.error("Error parsing the ontology", cocktail.name, err);
-        }
-      }
-    }
-
+    getInicialIngredientsCode();
     generateInitialCocktail();
   }, []);
 
+  async function getInicialIngredientsCode() {
+    console.log(ingredients);
+    for (const ingredient of ingredients) {
+      try {
+        const response = await fetch("/api/ingredientCode/getIngredientCode", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ingredientName: ingredient.name,
+            ingredientType: ingredient.type,
+          }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+
+          setIngredients((prev) =>
+            prev.map((c) =>
+              c.id === ingredient.id
+                ? {
+                    ...c,
+                    code: data.updatedCode,
+                  }
+                : c,
+            ),
+          );
+        }
+      } catch (err) {
+        console.error("Erro ao gerar onto para", ingredient.id, err);
+      }
+    }
+  }
+
+  async function generateInitialCocktail() {
+    for (const cocktail of cocktails) {
+      if (!cocktail.onto) continue;
+
+      try {
+        const response = await fetch("/api/ontology/prepare", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            currentOnto: cocktail.onto,
+          }),
+        });
+
+        if (!response.ok) continue;
+
+        const data = await response.json();
+
+        const vizValue =
+          typeof data.updatedViz === "string" &&
+          data.updatedViz.trim().startsWith("<")
+            ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
+            : data.updatedViz;
+
+        setCocktails((prev) =>
+          prev.map((c) =>
+            c.id === cocktail.id
+              ? {
+                  ...c,
+                  onto: data.updatedOnto,
+                  viz: vizValue,
+                }
+              : c,
+          ),
+        );
+
+        const extractedIngredients: ExtractedIngredient[] = data?.ingreds || [];
+
+        console.log("Extracted Ingredients:", extractedIngredients);
+
+        const newIngredients = extractedIngredients.filter(
+          (extracted) => !ingredients.some((i) => i.name === extracted.name),
+        );
+
+        const createdIds: { [name: string]: string } = {};
+
+        await Promise.all(
+          newIngredients.map(async (extracted) => {
+            if (!creatingIngredients[extracted.name]) {
+              creatingIngredients[extracted.name] = addIngredient(
+                extracted.name,
+                (extracted.type as IngredientType) || "Language",
+              );
+            }
+
+            const id = await creatingIngredients[extracted.name];
+            createdIds[extracted.name] = id;
+          }),
+        );
+
+        setCocktails((prevCocktails) =>
+          prevCocktails.map((c) => {
+            if (c.id !== cocktail.id) return c;
+
+            const ingredientMap: Record<string, boolean> = {
+              ...c.ingredients,
+            };
+
+            for (const extracted of extractedIngredients) {
+              const existing = ingredients.find(
+                (i) => i.name === extracted.name,
+              );
+
+              const ingredientId = existing?.id || createdIds[extracted.name];
+
+              if (ingredientId) {
+                ingredientMap[ingredientId] = extracted.active;
+              }
+            }
+
+            return { ...c, ingredients: ingredientMap };
+          }),
+        );
+      } catch (err) {
+        console.error("Error parsing the ontology", cocktail.name, err);
+      }
+    }
+  }
+
   async function addCocktail(name: string, firstIngred: string) {
-    const id = createId("cocktail");
+    const id = createId("cocktail", name);
 
     const ingredient = ingredients.find((i) => i.name === firstIngred);
     if (!ingredient) {
@@ -185,7 +228,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function addIngredient(name: string, type: IngredientType) {
-    const id = createId("ingredient");
+    const id = createId("ingredient", name);
 
     try {
       const response = await fetch("/api/ingredientCode/getIngredientCode", {
@@ -414,70 +457,82 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (!response.ok) return;
 
-        const vizValue =
-          typeof data.updatedViz === "string" &&
-          data.updatedViz.trim().startsWith("<")
-            ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
-            : data.updatedViz;
+      const data = await response.json();
 
-        setCocktails((prev) =>
-          prev.map((c) =>
-            c.id === cocktailId
-              ? {
-                  ...c,
-                  onto: data.updatedOnto,
-                  viz: vizValue,
-                }
-              : c,
-          ),
-        );
+      const vizValue =
+        typeof data.updatedViz === "string" &&
+        data.updatedViz.trim().startsWith("<")
+          ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
+          : data.updatedViz;
 
-        const extractedIngredients = data?.ingreds || [];
-        console.log("Extracted Ingredients:", extractedIngredients);
-        setIngredients((prev) => {
-          const existingNames = new Set(prev.map((ing) => ing.name));
-          const newIngredientsList = [...prev];
-          const ingredientNameToId: { [key: string]: string } = {};
+      setCocktails((prev) =>
+        prev.map((c) =>
+          c.id === cocktailId
+            ? {
+                ...c,
+                onto: data.updatedOnto,
+                viz: vizValue,
+              }
+            : c,
+        ),
+      );
 
-          prev.forEach((ing) => {
-            ingredientNameToId[ing.name] = ing.id;
-          });
+      const extractedIngredients: ExtractedIngredient[] = data?.ingreds || [];
+      console.log("Extracted Ingredients:", extractedIngredients);
+
+      const newIngredients = extractedIngredients.filter(
+        (extracted) => !ingredients.some((i) => i.name === extracted.name),
+      );
+
+      const createdIds: { [name: string]: string } = {};
+
+      await Promise.all(
+        newIngredients.map(async (extracted) => {
+          if (!creatingIngredients[extracted.name]) {
+            creatingIngredients[extracted.name] = addIngredient(
+              extracted.name,
+              (extracted.type as IngredientType) || "Language",
+            );
+          }
+
+          const id = await creatingIngredients[extracted.name];
+          createdIds[extracted.name] = id;
+        }),
+      );
+
+      setIngredients((prev) => {
+        const ingredientNameToId: { [key: string]: string } = {};
+
+        prev.forEach((ing) => {
+          ingredientNameToId[ing.name] = ing.id;
+        });
+
+        Object.assign(ingredientNameToId, createdIds);
+
+        return prev;
+      });
+
+      setCocktails((prevCocktails) =>
+        prevCocktails.map((c) => {
+          if (c.id !== cocktailId) return c;
+
+          const ingredientMap: { [key: string]: boolean } = {};
 
           for (const extracted of extractedIngredients) {
-            if (!existingNames.has(extracted.name)) {
-              const newId = `ingredient-${extracted.name}`;
-              ingredientNameToId[extracted.name] = newId;
-              newIngredientsList.push({
-                id: newId,
-                name: extracted.name,
-                type: (extracted.type as IngredientType) || "Language",
-                code: "Please insert code for this ingredient",
-              });
+            const existing = ingredients.find((i) => i.name === extracted.name);
+
+            const ingredientId = existing?.id || createdIds[extracted.name];
+
+            if (ingredientId) {
+              ingredientMap[ingredientId] = extracted.active;
             }
           }
 
-          setCocktails((prevCocktails) =>
-            prevCocktails.map((c) => {
-              if (c.id !== cocktailId) return c;
-
-              const ingredientMap: { [key: string]: boolean } = {};
-              for (const extracted of extractedIngredients) {
-                const ingredientId = ingredientNameToId[extracted.name];
-                if (ingredientId) {
-                  ingredientMap[ingredientId] = extracted.active;
-                }
-              }
-
-              return { ...c, ingredients: ingredientMap };
-            }),
-          );
-
-          return newIngredientsList;
-        });
-      }
+          return { ...c, ingredients: ingredientMap };
+        }),
+      );
     } catch (err) {
       console.error(
         "Erro ao gerar viz ao atualizar onto para",
