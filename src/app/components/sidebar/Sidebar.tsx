@@ -28,7 +28,7 @@ export default function Sidebar() {
         {collapsed ? "›" : "‹"}
       </button>
 
-      <div className="h-full">
+      <div className="h-full overflow-hidden">
         <div className={`w-32 h-full ${collapsed ? "hidden" : ""}`}>
           {!collapsed && (
             <SidebarSection
@@ -36,7 +36,7 @@ export default function Sidebar() {
               titleHref="/cocktails"
               items={cocktails}
               baseHref="/cocktails"
-              extraFlags="h-[25%] max-h-[25%] pb-4"
+              extraFlags="h-[35%] max-h-[35%] pb-4"
               extraFlags2={moving ? "overflow-hidden" : "overflow-y-scroll"}
             />
           )}
@@ -47,7 +47,7 @@ export default function Sidebar() {
               titleHref="/ingredients"
               items={ingredients}
               baseHref="/ingredients"
-              extraFlags="h-[75%] max-h-[75%]"
+              extraFlags="h-[65%] max-h-[65%]"
               extraFlags2={moving ? "overflow-hidden" : "overflow-y-scroll"}
             />
           )}
