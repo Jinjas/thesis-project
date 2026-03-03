@@ -5,7 +5,15 @@ export const INGREDIENT_TYPES = [
   "Tool",
 ] as const;
 
-export type IngredientType = (typeof INGREDIENT_TYPES)[number];
+export const INGREDIENT_TYPES_AVAILABLE = [
+  "Language",
+  "Library",
+  "Framework",
+  "Tool",
+  "UNDEFINED",
+] as const;
+
+export type IngredientType = (typeof INGREDIENT_TYPES_AVAILABLE)[number];
 
 export type Ingredient = {
   id: string;

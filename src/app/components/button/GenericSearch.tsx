@@ -1,6 +1,5 @@
 "use client";
 
-import { IngredientType } from "@/app/types";
 /*usage:
 
   <genericSearch

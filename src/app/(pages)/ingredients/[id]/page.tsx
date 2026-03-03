@@ -21,7 +21,7 @@ export default function IngredientDetailPage() {
   const ingredient = ingredients.find((i) => i.id === id);
 
   const [name, setName] = useState("");
-  const [type, setType] = useState<IngredientType>("Language");
+  const [type, setType] = useState<IngredientType>("UNDEFINED");
   const [code, setCode] = useState("");
   const [characteristics, setCharacteristics] = useState("");
 

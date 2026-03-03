@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { IngredientList, AddItemForm } from "../../components";
 import { useAppContext } from "../../context/AppContext";
-import { redirect } from "next/navigation";
 import { DoubleSectionLayout } from "../../layouts";
-import { INGREDIENT_TYPES, IngredientType } from "../../types";
+import {
+  INGREDIENT_TYPES,
+  INGREDIENT_TYPES_AVAILABLE,
+  IngredientType,
+} from "../../types";
 export default function IngredientsPage() {
   const { ingredients, addIngredient } = useAppContext();
   const [name, setName] = useState("");
@@ -13,7 +16,7 @@ export default function IngredientsPage() {
   const [temporaryType, setTemporaryType] = useState("");
 
   function setTypeFromString(value: string) {
-    if (INGREDIENT_TYPES.includes(value as IngredientType)) {
+    if (INGREDIENT_TYPES_AVAILABLE.includes(value as IngredientType)) {
       setType(value as IngredientType);
     } else {
       setType("Tool");
