@@ -24,6 +24,8 @@ export default function IngredientDetailPage() {
   const [type, setType] = useState<IngredientType>("UNDEFINED");
   const [code, setCode] = useState("");
   const [characteristics, setCharacteristics] = useState("");
+  const [extraDataHidden, setExtraDataHidden] = useState(true);
+  const [extraData, setExtraData] = useState("");
 
   useEffect(() => {
     if (ingredient) {
@@ -31,6 +33,7 @@ export default function IngredientDetailPage() {
       setType(ingredient.type);
       setCode(ingredient.code);
       setCharacteristics(ingredient.characteristics);
+      setExtraData(ingredient.extraData);
     }
   }, [ingredient]);
 
@@ -43,7 +46,11 @@ export default function IngredientDetailPage() {
   if (!ingredient) return <p className="p-6">Redirecting…</p>;
 
   return (
-    <DoubleSectionLayout title="Edit Ingredient" typeOf2="ingredientDetail">
+    <DoubleSectionLayout
+      title="Edit Ingredient"
+      typeOf2="ingredientDetail"
+      extraFlag="min-h-screen overflow-auto"
+    >
       <TextCampEdit label="Name" value={name} onChange={setName} />
 
       <div className="pt-2 flex flex-col lg:flex-row gap-2 lg:gap-4 max-w-[493px]">
@@ -56,9 +63,19 @@ export default function IngredientDetailPage() {
         />
       </div>
 
-      <div className="pt-4 px-2 flex flex-col h-full">
+      <div className="pt-4 px-2 flex flex-col">
         <div className="pt-4 flex justify-between">
-          <h3 className="font-semibold pb-2"> OntoDL</h3>
+          <div className="flex gap-2 pb-2">
+            <h3 className="font-semibold"> OntoDL</h3>
+            <ActionButton
+              onClick={() => {
+                setExtraDataHidden(!extraDataHidden);
+              }}
+              label={extraDataHidden ? "More" : "Less"}
+              disabled={extraData == ""}
+              variant="expand"
+            />
+          </div>
 
           <div className="flex gap-2">
             <ImportButton func={setCharacteristics} />
@@ -66,7 +83,11 @@ export default function IngredientDetailPage() {
             <ExportButton code={code} filename={name || "ingredient"} />
           </div>
         </div>
-
+        {!extraDataHidden && (
+          <div className="flex text-gray-500 whitespace-pre text-sm px-2">
+            {extraData}
+          </div>
+        )}
         <CodeEdit code={characteristics} setCode={setCharacteristics} />
       </div>
 

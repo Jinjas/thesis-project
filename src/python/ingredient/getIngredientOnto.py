@@ -31,7 +31,8 @@ def getOntology(ingredient_name:str,ingredient_type:str):
                 break
 
         characteristics = "\n".join(lines[s_index:f_index])
-        return content, characteristics
+        extraData = "\n".join(lines[0:s_index-1])
+        return content, characteristics, extraData
     else:
         data = [
             f"Ontology cognitive_model_{ingredient_name}\n",
@@ -52,8 +53,9 @@ def getOntology(ingredient_name:str,ingredient_type:str):
 
         content = "\n".join(data)
         characteristics = "\n".join(data[11:13])
+        extraData = "\n".join(data[:10])
         data_path.write_text(content, encoding="utf-8")
-        return content, characteristics
+        return content, characteristics, extraData
 
 
 def main():
@@ -62,11 +64,12 @@ def main():
     ingredient_name = input_data["ingredient_name"]
     ingredient_type = input_data["ingredient_type"]
     
-    ingredient_Data , characteristics = getOntology(ingredient_name,ingredient_type)
+    ingredient_Data, characteristics, extraData = getOntology(ingredient_name,ingredient_type)
     
     print(json.dumps({
         "updatedCode": ingredient_Data,
         "updatedCharacteristics": characteristics,
+        "updatedExtraData": extraData,
     }))
 
 if __name__ == "__main__":

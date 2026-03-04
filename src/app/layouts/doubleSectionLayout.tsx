@@ -7,6 +7,7 @@ type Props = {
   children: React.ReactNode;
   typeOf2: string;
   withViz?: boolean;
+  extraFlag?: string;
 };
 
 export default function DoubleSectionLayout({
@@ -14,6 +15,7 @@ export default function DoubleSectionLayout({
   children,
   typeOf2,
   withViz = false,
+  extraFlag = "",
 }: Props) {
   let children2 = <div></div>;
   switch (typeOf2) {
@@ -42,7 +44,9 @@ export default function DoubleSectionLayout({
 
   return (
     <BaseLayout withViz={withViz}>
-      <section className="flex-1 p-9 bg-gray-100 text-black flex flex-col w-full h-screen">
+      <section
+        className={`flex-1 p-9 bg-gray-100 text-black flex flex-col w-full ${extraFlag != "" ? extraFlag : "h-screen"}`}
+      >
         <h1 className="text-2xl font-bold ">{title}</h1>
         {children}
       </section>

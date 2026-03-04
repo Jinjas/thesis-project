@@ -215,6 +215,7 @@ export const INGREDIENTS: Ingredient[] = [
     name: "TypeScript",
     type: "Language",
     characteristics: "",
+    extraData: "",
     code: "",
   },
   {
@@ -222,6 +223,7 @@ export const INGREDIENTS: Ingredient[] = [
     name: "JavaScript",
     type: "Language",
     characteristics: "",
+    extraData: "",
     code: "",
   },
   {
@@ -229,6 +231,7 @@ export const INGREDIENTS: Ingredient[] = [
     name: "ReactJS",
     type: "Library",
     characteristics: "",
+    extraData: "",
     code: "",
   },
   {
@@ -236,6 +239,7 @@ export const INGREDIENTS: Ingredient[] = [
     name: "NextJS",
     type: "Framework",
     characteristics: "",
+    extraData: "",
     code: "",
   },
   {
@@ -243,6 +247,7 @@ export const INGREDIENTS: Ingredient[] = [
     name: "TailwindCSS",
     type: "Tool",
     characteristics: "",
+    extraData: "",
     code: "",
   },
   {
@@ -250,6 +255,7 @@ export const INGREDIENTS: Ingredient[] = [
     name: "Vite",
     type: "Tool",
     characteristics: "",
+    extraData: "",
     code: "",
   },
   {
@@ -257,6 +263,7 @@ export const INGREDIENTS: Ingredient[] = [
     name: "SQL",
     type: "Language",
     characteristics: "",
+    extraData: "",
     code: "",
   },
 ];

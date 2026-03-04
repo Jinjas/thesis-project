@@ -36,14 +36,15 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
             "triples {",
             f'    {ingredient_name} =iof=> {ingredient_type};',
             f'    {ingredient_name} =generates=> {ingredient_name}_model;',
-            f'    {ingredient_name}_model =iof=> model;\n',
-            f'{newCode}\n'
+            f'    {ingredient_name}_model =iof=> model;',
+            f'\n{newCode}\n'
             "}\n."
         ]
     
     newOnto = "\n".join(data)
+    extraData = "\n".join(data[:10])
     data_path.write_text(newOnto, encoding="utf-8") 
-    return newOnto
+    return newOnto, extraData
 
 def main():
     input_data = json.loads(sys.stdin.read())
@@ -52,10 +53,11 @@ def main():
     ingredient_type = input_data["ingredient_type"]
     newCode = input_data["newCode"]
     
-    newOnto = setOntology(ingredient_name,ingredient_type, newCode)
+    newOnto,extraData = setOntology(ingredient_name,ingredient_type, newCode)
     
     print(json.dumps({
         "onto": newOnto,
+        "extraData":extraData,
     }))
 
 

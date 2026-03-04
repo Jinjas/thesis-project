@@ -20,6 +20,7 @@ export type Ingredient = {
   name: string;
   type: IngredientType;
   characteristics: string;
+  extraData: string;
   code: string;
 };
 

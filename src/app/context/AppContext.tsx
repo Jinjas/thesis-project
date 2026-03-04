@@ -81,6 +81,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                     ...c,
                     code: data.updatedCode,
                     characteristics: data.updatedCharacteristics,
+                    extraData: data.updatedExtraData,
                   }
                 : c,
             ),
@@ -251,6 +252,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             name,
             type: type,
             characteristics: data.updatedCharacteristics,
+            extraData: data.updatedExtraData,
             code: data.updatedCode,
           },
         ]);
@@ -289,6 +291,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                   name: newName,
                   type: newType,
                   characteristics: newCode,
+                  extraData: data.extraData,
                   code: data.onto,
                 }
               : ing,

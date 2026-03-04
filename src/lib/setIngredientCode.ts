@@ -5,7 +5,7 @@ export async function setIngredientCode(
   ingredientName: string,
   ingredientType: string,
   newCode: string,
-): Promise<{ onto: string }> {
+): Promise<{ onto: string; extraData: string }> {
   const scriptPath = path.join(
     process.cwd(),
     "src",
@@ -49,5 +49,6 @@ export async function setIngredientCode(
 
   return {
     onto: parsed.onto,
+    extraData: parsed.extraData,
   };
 }
