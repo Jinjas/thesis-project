@@ -1,0 +1,39 @@
+Ontology cognitive_model_Python
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    Python,
+    Python_model,
+    Python_specific_section
+}
+
+triples {
+    Python =iof=> Language;
+    Python =generates=> Python_model;
+    Python_model =iof=> model;
+
+    Python_specific_section =iof=> section;
+    Python_specific_section =pof=> Python_model;
+}
+.

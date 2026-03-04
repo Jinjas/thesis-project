@@ -1,9 +1,0 @@
-Name: Java;
-Type: Language;
-
-Characteristics {
-    objectParadigm;
-    hasCycles;
-    hasDefinedTypes;
-    JavaSpecific;
-}

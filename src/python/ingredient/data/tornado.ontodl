@@ -1,0 +1,44 @@
+Ontology cognitive_model_Tornado
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    Tornado,
+    Tornado_model,
+    Tornado_specific_section,
+    program_production
+}
+
+triples {
+    Tornado =iof=> Framework;
+    Tornado =generates=> Tornado_model;
+    Tornado_model =iof=> model;
+
+  Tornado_specific_section =iof=> section;
+  Tornado_specific_section =pof=> Tornado_model;
+
+
+  program_production =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production =pof=> Tornado_specific_section ;
+}
+.

@@ -1,0 +1,39 @@
+Ontology cognitive_model_JavaScript
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    JavaScript,
+    JavaScript_model,
+    JavaScript_specific_section
+}
+
+triples {
+    JavaScript =iof=> Language;
+    JavaScript =generates=> JavaScript_model;
+    JavaScript_model =iof=> model;
+
+    JavaScript_specific_section =iof=> section;
+    JavaScript_specific_section =pof=> JavaScript_model;
+}
+.

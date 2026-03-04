@@ -1,0 +1,39 @@
+Ontology cognitive_model_TailwindCSS
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    TailwindCSS,
+    TailwindCSS_model,
+    TailwindCSS_specific_section
+}
+
+triples {
+    TailwindCSS =iof=> Tool;
+    TailwindCSS =generates=> TailwindCSS_model;
+    TailwindCSS_model =iof=> model;
+
+    TailwindCSS_specific_section =iof=> section;
+    TailwindCSS_specific_section =pof=> TailwindCSS_model;
+}
+.

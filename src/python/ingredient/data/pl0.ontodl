@@ -1,0 +1,48 @@
+Ontology cognitive_model_PL0
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    PL0,
+    PL0_model,
+    program_section,
+    program_production
+}
+
+triples {
+    PL0 =iof=> Language;
+    PL0 =generates=> PL0_model;
+    PL0_model =iof=> model;
+
+  program_section =iof=> section;
+  program_section =pof=> model_PL0;
+
+  program_production =iof=> production[
+        condition="If a program is a subgoal", 
+        action="the program block is...", 
+        strength=1.0, 
+        probability=1.0
+  ];
+  program_production =pof=> program_section;
+}
+.

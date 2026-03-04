@@ -1,0 +1,39 @@
+Ontology cognitive_model_PyTorch
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    PyTorch,
+    PyTorch_model,
+    PyTorch_specific_section
+}
+
+triples {
+    PyTorch =iof=> Framework;
+    PyTorch =generates=> PyTorch_model;
+    PyTorch_model =iof=> model;
+
+    PyTorch_specific_section =iof=> section;
+    PyTorch_specific_section =pof=> PyTorch_model;
+}
+.

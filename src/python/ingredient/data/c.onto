@@ -1,9 +1,0 @@
-Name: C;
-Type: Language;
-
-Characteristics {
-    imperativeParadigm;
-    hasCycles;
-    hasDefinedTypes;
-    CSpecific;
-}

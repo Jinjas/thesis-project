@@ -1,0 +1,39 @@
+Ontology cognitive_model_VisualStudioCode
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    VisualStudioCode,
+    VisualStudioCode_model,
+    VisualStudioCode_specific_section
+}
+
+triples {
+    VisualStudioCode =iof=> Tool;
+    VisualStudioCode =generates=> VisualStudioCode_model;
+    VisualStudioCode_model =iof=> model;
+
+    VisualStudioCode_specific_section =iof=> section;
+    VisualStudioCode_specific_section =pof=> VisualStudioCode_model;
+}
+.

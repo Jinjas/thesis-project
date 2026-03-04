@@ -1,0 +1,39 @@
+Ontology cognitive_model_ESLint
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    ESLint,
+    ESLint_model,
+    ESLint_specific_section
+}
+
+triples {
+    ESLint =iof=> Tool;
+    ESLint =generates=> ESLint_model;
+    ESLint_model =iof=> model;
+
+    ESLint_specific_section =iof=> section;
+    ESLint_specific_section =pof=> ESLint_model;
+}
+.

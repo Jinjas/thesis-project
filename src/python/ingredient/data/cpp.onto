@@ -1,6 +1,0 @@
-Name: Cpp;
-Type: Language;
-
-Characteristics {
-    CppSpecific;
-}

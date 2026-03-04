@@ -1,0 +1,39 @@
+Ontology cognitive_model_PySpark
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    PySpark,
+    PySpark_model,
+    PySpark_specific_section
+}
+
+triples {
+    PySpark =iof=> Library;
+    PySpark =generates=> PySpark_model;
+    PySpark_model =iof=> model;
+
+    PySpark_specific_section =iof=> section;
+    PySpark_specific_section =pof=> PySpark_model;
+}
+.

@@ -12,23 +12,46 @@ data_dir = base_dir / "data"
 data_dir.mkdir(exist_ok=True)
 
 def getOntology(ingredient_name:str,ingredient_type:str):
-    data_path = data_dir / f"{ingredient_name.lower()}.onto" #can change
+    data_path = data_dir / f"{ingredient_name.lower()}.ontodl" #can change
 
     if data_path.exists():
         content = data_path.read_text(encoding="utf-8")
         lines = content.splitlines()
-        characteristics = "\n".join(lines[3:])
+        s_index = 0
+        f_index = 0
+        in_zone=False
+        for i, line in enumerate(lines):
+            if line.startswith("triples {"):
+                s_index = i+5
+                in_zone=True
+                continue
+            if in_zone and line.startswith("}"):
+                in_zone = False
+                f_index = i
+                break
+
+        characteristics = "\n".join(lines[s_index:f_index])
         return content, characteristics
     else:
         data = [
-            f"Name: {ingredient_name};",
-            f"Type: {ingredient_type};\n",
-            "Characteristics {",
-            f"    {ingredient_name}Specific;",
-            "}"
+            f"Ontology cognitive_model_{ingredient_name}\n",
+            "attributes {\n    condition: string,\n    action: string,\n    strength: float,\n    probability: float\n}\n",
+            "concepts {\n    ingredient,\n    language,\n    library,\n    framework,\n    tool,\n    model,\n    production[condition, action, strength, probability],\n    section\n}\n",
+            "relations {\n    generates\n}\n",
+            "individuals {",
+            f"    {ingredient_name},\n    {ingredient_name}_model,\n    {ingredient_name}_specific_section",
+            "}\n",
+            "triples {",
+            f'    {ingredient_name} =iof=> {ingredient_type};',
+            f'    {ingredient_name} =generates=> {ingredient_name}_model;',
+            f'    {ingredient_name}_model =iof=> model;\n',
+            f'    {ingredient_name}_specific_section =iof=> section;',
+            f'    {ingredient_name}_specific_section =pof=> {ingredient_name}_model;',
+            "}\n."
         ]
+
         content = "\n".join(data)
-        characteristics = "\n".join(data[2:])
+        characteristics = "\n".join(data[11:13])
         data_path.write_text(content, encoding="utf-8")
         return content, characteristics
 

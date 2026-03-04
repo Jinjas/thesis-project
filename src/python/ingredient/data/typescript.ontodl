@@ -1,0 +1,39 @@
+Ontology cognitive_model_TypeScript
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    TypeScript,
+    TypeScript_model,
+    TypeScript_specific_section
+}
+
+triples {
+    TypeScript =iof=> Language;
+    TypeScript =generates=> TypeScript_model;
+    TypeScript_model =iof=> model;
+
+    TypeScript_specific_section =iof=> section;
+    TypeScript_specific_section =pof=> TypeScript_model;
+}
+.
