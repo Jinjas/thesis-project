@@ -18,6 +18,7 @@ export default function CodeEdit({ code, setCode }: Props) {
       onChange={(e) => setCode(e.target.value)}
       placeholder="Write ingredient code here..."
       className="w-full border rounded p-2 font-mono h-[400px] text-xs"
+      spellCheck="false"
     />
   );
 }
