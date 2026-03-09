@@ -4,6 +4,12 @@ import re
 
 import odlc
 
+from pathlib import Path
+base_dir = Path(__file__).resolve().parent
+
+data_dir = base_dir / "data"
+data_dir.mkdir(exist_ok=True)
+
 def extract_ingredients_from_ontology(onto_text: str, types:set) -> dict:
     typesActive = set()
     ingredientsGeneral = set()
@@ -113,6 +119,10 @@ def getNewData(onto_text: str, name: str, path:str) -> dict:
         final_onto_lines.append(line)
 
     final_onto = "\n".join(final_onto_lines)
+
+    data_path = data_dir / f"{name.lower()}.ontodl"
+
+    data_path.write_text(final_onto, encoding="utf-8")
 
     result = { "updatedOnto": final_onto, 
                "ingredients": extractions["ingredients"], 

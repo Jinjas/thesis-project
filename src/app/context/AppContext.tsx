@@ -1,9 +1,9 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { Cocktail, Ingredient, IngredientType } from "../types";
+import { Cocktail, Ingredient, IngredientType, ParamMap } from "../types";
 
-import { INGREDIENTS, COCKTAILS } from "./data";
+import { INGREDIENTS } from "./data";
 
 import { enqueueCocktailUpdate } from "@/lib/updateQueue";
 
@@ -48,11 +48,11 @@ const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   //const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  //const [cocktails, setCocktails] = useState<Cocktail[]>([]);
   const creatingIngredients: { [name: string]: Promise<string> } = {};
 
   const [ingredients, setIngredients] = useState<Ingredient[]>(INGREDIENTS);
-  const [cocktails, setCocktails] = useState<Cocktail[]>(COCKTAILS);
+  const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+  //const [cocktails, setCocktails] = useState<Cocktail[]>(COCKTAILS);
 
   useEffect(() => {
     getInitialIngredientsCode();
@@ -60,7 +60,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   async function getInitialIngredientsCode() {
-    console.log(ingredients);
     for (const ingredient of ingredients) {
       try {
         const response = await fetch("/api/ingredientCode/getIngredientCode", {
@@ -94,49 +93,29 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function generateInitialCocktail() {
-    for (const cocktail of cocktails) {
-      if (!cocktail.onto) continue;
+    try {
+      const response = await fetch("/api/ontology/getCocktails");
 
-      try {
-        const response = await fetch("/api/ontology/prepare", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            currentOnto: cocktail.onto,
-            cocktailName: cocktail.name,
-          }),
-        });
+      if (!response.ok) {
+        throw new Error("Failed to fetch cocktails");
+      }
 
-        if (!response.ok) continue;
-
-        const data = await response.json();
-
+      const data = await response.json();
+      for (const cocktail of data) {
         const vizValue =
-          typeof data.updatedViz === "string" &&
-          data.updatedViz.trim().startsWith("<")
-            ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
-            : data.updatedViz;
-
-        setCocktails((prev) =>
-          prev.map((c) =>
-            c.id === cocktail.id
-              ? {
-                  ...c,
-                  onto: data.updatedOnto,
-                  viz: vizValue,
-                }
-              : c,
-          ),
-        );
+          typeof cocktail.updatedSvg === "string" &&
+          cocktail.updatedSvg.trim().startsWith("<")
+            ? `data:image/svg+xml;utf8,${encodeURIComponent(cocktail.updatedSvg)}`
+            : cocktail.updatedSvg;
 
         const extractedIngredients: ExtractedIngredient[] =
-          data?.ingredients || [];
-
+          cocktail?.ingredients || [];
         console.log("Extracted Ingredients:", extractedIngredients);
 
         const newIngredients = extractedIngredients.filter(
           (extracted) => !ingredients.some((i) => i.name === extracted.name),
         );
+        const newIngredientMap: ParamMap = {};
 
         const createdIds: { [name: string]: string } = {};
 
@@ -154,32 +133,28 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           }),
         );
 
-        setCocktails((prevCocktails) =>
-          prevCocktails.map((c) => {
-            if (c.id !== cocktail.id) return c;
+        for (const extracted of extractedIngredients) {
+          const existing = ingredients.find((i) => i.name === extracted.name);
 
-            const ingredientMap: Record<string, boolean> = {
-              ...c.ingredients,
-            };
+          const ingredientId = existing?.id || createdIds[extracted.name];
 
-            for (const extracted of extractedIngredients) {
-              const existing = ingredients.find(
-                (i) => i.name === extracted.name,
-              );
-
-              const ingredientId = existing?.id || createdIds[extracted.name];
-
-              if (ingredientId) {
-                ingredientMap[ingredientId] = extracted.active;
-              }
-            }
-
-            return { ...c, ingredients: ingredientMap };
-          }),
-        );
-      } catch (err) {
-        console.error("Error parsing the ontology", cocktail.name, err);
+          if (ingredientId) {
+            newIngredientMap[ingredientId] = extracted.active;
+          }
+        }
+        setCocktails((prev) => [
+          ...prev,
+          {
+            id: createId("cocktail", cocktail.name),
+            name: cocktail.name,
+            viz: vizValue,
+            onto: cocktail.updatedOnto,
+            ingredients: newIngredientMap,
+          },
+        ]);
       }
+    } catch (err) {
+      console.error("Error loading cocktails", err);
     }
   }
 

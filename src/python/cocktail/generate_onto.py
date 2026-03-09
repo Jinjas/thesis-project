@@ -4,6 +4,12 @@ import re
 
 import odlc
 
+from pathlib import Path
+base_dir = Path(__file__).resolve().parent
+
+data_dir = base_dir / "data"
+data_dir.mkdir(exist_ok=True)
+
 def create_Ontology(cocktail_name: str, ingredient_name: str, ingredient_type: str) -> str:
     types={"Framework", "Language", "Library", "Tool"}
 
@@ -43,7 +49,15 @@ def main():
     ingredient_name = input_data["ingredient_name"]
     ingredient_type = input_data["ingredient_type"]
 
+    data_path = data_dir / f"{cocktail_name.replace(" ","_").lower()}.ontodl"
+
     new_onto = create_Ontology(cocktail_name, ingredient_name, ingredient_type)
+    data_path.write_text(new_onto, encoding="utf-8")
+
+    
+    names_file = data_dir / "NAMES.txt"
+    with open(names_file, "a", encoding="utf-8") as f:
+        f.write(f"\n{cocktail_name}")
 
     updated_svg = odlc.generate_svg(new_onto, path)
     

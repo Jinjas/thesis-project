@@ -4,7 +4,13 @@ import re
 
 import odlc
 
-def add_ingredient_lines(onto_text: str, ingredient_name: str, ingredient_type: str) -> str:
+from pathlib import Path
+base_dir = Path(__file__).resolve().parent
+
+data_dir = base_dir / "data"
+data_dir.mkdir(exist_ok=True)
+
+def add_ingredient_lines(onto_text: str, ingredient_name: str, ingredient_type: str):
     lines = onto_text.splitlines()
     result = []
     conceptsHolder = []
@@ -61,7 +67,7 @@ def add_ingredient_lines(onto_text: str, ingredient_name: str, ingredient_type: 
 
 
 
-    return "\n".join(result)
+    return cocktail_name, "\n".join(result)
 
 def main():
     input_data = json.loads(sys.stdin.read())
@@ -71,7 +77,10 @@ def main():
     ingredient_name = input_data["ingredient_name"]
     ingredient_type = input_data["ingredient_type"]
     
-    updated_onto = add_ingredient_lines(onto, ingredient_name,ingredient_type)
+    cocktail_name, updated_onto = add_ingredient_lines(onto, ingredient_name,ingredient_type)
+
+    data_path = data_dir / f"{cocktail_name.lower()}.ontodl"
+    data_path.write_text(updated_onto, encoding="utf-8")
 
     updated_svg = odlc.generate_svg(updated_onto, path)
     

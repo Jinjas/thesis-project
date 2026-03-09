@@ -1,0 +1,43 @@
+Ontology Modern_Stack
+
+concepts {
+    Framework,
+    Tool,
+    Language,
+    Library
+}
+
+individuals {
+	Modern_Stack,
+	Modern_StackDevelopment,
+	Modern_StackCocktail,
+    Tornado,
+    Python,
+    PyTorch,
+    VisualStudioCode,
+    TensorFlow
+%    JavaScript
+}
+
+relations {
+	uses,
+	requires
+}
+
+triples {
+%    JavaScript = iof => Language;
+	Python = iof => Language;
+	PyTorch = iof => Framework;
+	TensorFlow = iof => Library;
+	Tornado = iof => Framework;
+  VisualStudioCode = iof => Tool;
+	Modern_Stack = requires => Modern_StackDevelopment;
+	Modern_StackDevelopment = uses => Modern_StackCocktail;
+	Python = pof => Modern_StackCocktail;
+	PyTorch = pof => Modern_StackCocktail;
+	TensorFlow = pof => Modern_StackCocktail;
+	Tornado = pof => Modern_StackCocktail;
+  VisualStudioCode = pof => Modern_StackCocktail;
+%    JavaScript = pof => Modern_StackCocktail;
+}
+.

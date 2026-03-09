@@ -1,0 +1,47 @@
+Ontology Hitachi_DataWarehouse
+
+concepts {
+    Language,
+    Tool,
+    Library
+%    Framework
+}
+
+individuals {
+	Hitachi_DataWarehouse,
+	Hitachi_DataWarehouseDevelopment,
+	Hitachi_DataWarehouseCocktail,
+    SQL,
+    VisualStudio,
+    PySpark,
+    Python,
+    JSON,
+    TSQL
+%    TailwindCSS
+}
+
+relations {
+	uses,
+	requires
+}
+
+triples {
+%    TailwindCSS = iof => Tool;
+	JSON = iof => Language;
+	PySpark = iof => Library;
+	Python = iof => Language;
+	SQL = iof => Language;
+	TSQL = iof => Language;
+	VisualStudio = iof => Tool;
+	Hitachi_DataWarehouse = requires => Hitachi_DataWarehouseDevelopment;
+	Hitachi_DataWarehouseDevelopment = uses => Hitachi_DataWarehouseCocktail;
+	JSON = pof => Hitachi_DataWarehouseCocktail;
+	PySpark = pof => Hitachi_DataWarehouseCocktail;
+	Python = pof => Hitachi_DataWarehouseCocktail;
+	SQL = pof => Hitachi_DataWarehouseCocktail;
+	TSQL = pof => Hitachi_DataWarehouseCocktail;
+	VisualStudio = pof => Hitachi_DataWarehouseCocktail;
+%    TailwindCSS = pof => Hitachi_DataWarehouseCocktail;
+}
+
+.

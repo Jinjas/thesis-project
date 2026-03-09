@@ -1,0 +1,48 @@
+Ontology Frontend_Basic
+
+concepts {
+    Tool,
+    Language,
+    Framework
+%    Library
+}
+
+individuals {
+    Frontend_Basic,
+    Frontend_BasicDevelopment,
+    Frontend_BasicCocktail,
+    TailwindCSS,
+    ESLint,
+    JavaScript,
+    TypeScript,
+    SQL,
+    NextJS
+%    TensorFlow
+%    ReactJS
+}
+
+relations {
+    uses,
+    requires
+}
+
+triples {
+%    TensorFlow = iof => Library;
+    JavaScript = iof => Language;
+    TypeScript = iof => Language;
+    %ReactJS = iof => Library;
+    NextJS = iof => Framework;
+    TailwindCSS = iof => Tool;
+    SQL = iof => Language;
+    ESLint = iof => Tool;
+    Frontend_Basic = requires => Frontend_BasicDevelopment;
+    Frontend_BasicDevelopment = uses => Frontend_BasicCocktail;
+    JavaScript = pof => Frontend_BasicCocktail;
+    TypeScript = pof => Frontend_BasicCocktail;
+    %ReactJS = pof => Frontend_BasicCocktail;
+    NextJS = pof => Frontend_BasicCocktail;
+    TailwindCSS = pof => Frontend_BasicCocktail;
+    ESLint = pof => Frontend_BasicCocktail;
+%    TensorFlow = pof => Frontend_BasicCocktail;
+}
+.
