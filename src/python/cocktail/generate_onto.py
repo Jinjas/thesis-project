@@ -21,12 +21,12 @@ def create_Ontology(cocktail_name: str, ingredient_name: str, ingredient_type: s
                   + f"    {cocktail_name}Cocktail,\n"
                   + f"    {ingredient_name}\n"
                   + "}\n")
-    result.append("relations {\n    uses,\n    requires,\n    is_composed_of,\n    supports,\n    is_used_for\n}\n")
+    result.append("relations {\n    uses,\n    requires\n}\n")
     result.append("triples {\n"
                   + f"    {ingredient_name} = iof => {ingredient_type};\n"
                   + f"    {cocktail_name} = requires => {cocktail_name}Development;\n"
                   + f"    {cocktail_name}Development = uses => {cocktail_name}Cocktail;\n"
-                  + f"    {cocktail_name}Cocktail = is_composed_of => {ingredient_name};\n"
+                  + f"    {ingredient_name} = pof => {cocktail_name}Cocktail;\n"
                   + "}\n")
     result.append(".")    
     

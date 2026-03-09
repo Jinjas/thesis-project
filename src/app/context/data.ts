@@ -26,10 +26,7 @@ individuals {
 
 relations {
     uses,
-    requires,
-    is_composed_of,
-    supports,
-    is_used_for
+    requires
 }
 
 triples {
@@ -46,12 +43,12 @@ triples {
 
     SQL = supports => ArchitectsPortal;
 
-    FrontendBasicCocktail = is_composed_of => JavaScript;
-    FrontendBasicCocktail = is_composed_of => TypeScript;
-    %FrontendBasicCocktail = is_composed_of => ReactJS;
-    FrontendBasicCocktail = is_composed_of => NextJS;
-    FrontendBasicCocktail = is_composed_of => TailwindCSS;
-    FrontendBasicCocktail = is_composed_of => ESLint;
+    JavaScript = pof => FrontendBasicCocktail;
+    TypeScript = pof => FrontendBasicCocktail;
+    %ReactJS = pof => FrontendBasicCocktail;
+    NextJS = pof => FrontendBasicCocktail;
+    TailwindCSS = pof => FrontendBasicCocktail;
+    ESLint = pof => FrontendBasicCocktail;
 }
 .`.trim();
 
@@ -85,10 +82,7 @@ individuals {
 
 relations {
 	uses,
-	requires,
-	is_composed_of,
-	supports,
-	is_used_for
+	requires
 }
 
 triples {
@@ -116,11 +110,11 @@ triples {
 	AutomaiseIA = requires => AutomaiseIADevelopment;
 	AutomaiseIADevelopment = uses => AutomaiseIACocktail;
 
-	AutomaiseIACocktail = is_composed_of => Python;
-	AutomaiseIACocktail = is_composed_of => PyTorch;
-	AutomaiseIACocktail = is_composed_of => TensorFlow;
-	AutomaiseIACocktail = is_composed_of => Tornado;
-  AutomaiseIACocktail = is_composed_of => VisualStudioCode;
+	Python = pof => AutomaiseIACocktail;
+	PyTorch = pof => AutomaiseIACocktail;
+	TensorFlow = pof => AutomaiseIACocktail;
+	Tornado = pof => AutomaiseIACocktail;
+  VisualStudioCode = pof => AutomaiseIACocktail;
 }
 .`.trim();
 
@@ -158,10 +152,7 @@ individuals {
 
 relations {
 	uses,
-	requires,
-	is_composed_of,
-	supports,
-	is_used_for
+	requires
 }
 
 triples {
@@ -199,12 +190,12 @@ triples {
 	HitachiDataWarehouse = requires => HitachiDataWarehouseDevelopment;
 	HitachiDataWarehouseDevelopment = uses => HitachiDataWarehouseCocktail;
 
-	HitachiDataWarehouseCocktail = is_composed_of => JSON;
-	HitachiDataWarehouseCocktail = is_composed_of => PySpark;
-	HitachiDataWarehouseCocktail = is_composed_of => Python;
-	HitachiDataWarehouseCocktail = is_composed_of => SQL;
-	HitachiDataWarehouseCocktail = is_composed_of => TSQL;
-	HitachiDataWarehouseCocktail = is_composed_of => VisualStudio;
+	JSON = pof => HitachiDataWarehouseCocktail;
+	PySpark = pof => HitachiDataWarehouseCocktail;
+	Python = pof => HitachiDataWarehouseCocktail;
+	SQL = pof => HitachiDataWarehouseCocktail;
+	TSQL = pof => HitachiDataWarehouseCocktail;
+	VisualStudio = pof => HitachiDataWarehouseCocktail;
 }
 
 .`.trim();

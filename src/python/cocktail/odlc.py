@@ -55,7 +55,7 @@ class DotTranslator(Transformer):
 
     def triple_decl(self, children):
         edge_properties = ''
-        if children[1] == 'iof': edge_properties = ', style=dashed'
+        if children[1] == 'iof' or children[1] == 'pof': edge_properties = ', style=dashed'
         triple = f'"{children[0]}"->"{children[2]}" [label="{children[1]}"{edge_properties}];'
         self.triples.append(triple)
 

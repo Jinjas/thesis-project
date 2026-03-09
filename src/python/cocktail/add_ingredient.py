@@ -54,7 +54,7 @@ def add_ingredient_lines(onto_text: str, ingredient_name: str, ingredient_type: 
             continue
         if in_zone2 and stripped.startswith("}"):
             in_zone2 = False
-            result.append(f"    {cocktail_name}Cocktail = is_composed_of => {ingredient_name};")
+            result.append(f"    {ingredient_name} = pof => {cocktail_name}Cocktail;")
             result.append(line)
             continue
         result.append(line)
