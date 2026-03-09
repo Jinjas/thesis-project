@@ -401,61 +401,66 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     const isActive = cocktail.ingredients[ingredientId];
     const newStatus = !isActive;
+    const possible =
+      !isActive ||
+      Object.values(cocktail.ingredients).filter((v) => v).length > 1;
 
-    setCocktails((prev) =>
-      prev.map((c) =>
-        c.id === cocktailId
-          ? {
-              ...c,
-              ingredients: {
-                ...c.ingredients,
-                [ingredientId]: newStatus,
-              },
-            }
-          : c,
-      ),
-    );
+    if (possible) {
+      setCocktails((prev) =>
+        prev.map((c) =>
+          c.id === cocktailId
+            ? {
+                ...c,
+                ingredients: {
+                  ...c.ingredients,
+                  [ingredientId]: newStatus,
+                },
+              }
+            : c,
+        ),
+      );
 
-    enqueueCocktailUpdate(cocktailId, async () => {
-      try {
-        const response = await fetch("/api/ontology/update", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ingredientName: ingredient.name,
-            ingredientType: ingredient.type,
-            active: newStatus,
-            currentOnto: cocktail.onto,
-          }),
-        });
+      enqueueCocktailUpdate(cocktailId, async () => {
+        try {
+          const response = await fetch("/api/ontology/update", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ingredientName: ingredient.name,
+              ingredientType: ingredient.type,
+              active: newStatus,
+              currentOnto: cocktail.onto,
+            }),
+          });
 
-        if (!response.ok) {
-          throw new Error("Ontology update failed");
+          if (!response.ok) {
+            throw new Error("Ontology update failed");
+          }
+
+          const data = await response.json();
+
+          const vizValue =
+            typeof data.updatedViz === "string" &&
+            data.updatedViz.trim().startsWith("<")
+              ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
+              : data.updatedViz;
+
+          setCocktails((prev) =>
+            prev.map((c) =>
+              c.id === cocktailId
+                ? {
+                    ...c,
+                    onto: data.updatedOnto,
+                    viz: vizValue,
+                  }
+                : c,
+            ),
+          );
+        } catch (err) {
+          console.error("Erro ao atualizar ontologia", err);
         }
-
-        const data = await response.json();
-
-        const vizValue =
-          typeof data.updatedViz === "string" &&
-          data.updatedViz.trim().startsWith("<")
-            ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
-            : data.updatedViz;
-
-        setCocktails((prev) =>
-          prev.map((c) =>
-            c.id === cocktailId
-              ? {
-                  ...c,
-                  onto: data.updatedOnto,
-                  viz: vizValue,
-                }
-              : c,
-          ),
-        );
-      } catch (err) {
-        console.error("Erro ao atualizar ontologia", err);
-      }
-    });
+      });
+    }
   }
 
   async function updateOnto(cocktailId: string, onto: string) {

@@ -1,8 +1,27 @@
 ontology cognitive_model
 
-attributes { condition: string, action: string, strength: float, probability: float }
+attributes { 
+   condition: string,
+   action: string,
+   strength: float,
+   probability: float 
+}
 
-concepts { ingredient, language, library, framework, tool, model, production[condition, action, strength, probability], section }
+concepts { 
+   ingredient,
+   language,
+   library,
+   framework,
+   tool,
+   model,
+   production[
+          condition,
+          action,
+          strength,
+          probability
+    ],
+   section 
+  }
 
 relations { generates }
 
@@ -11,8 +30,8 @@ triples {
   library =isa=> ingredient;
   framework =isa=> ingredient;
   tool =isa=> ingredient;
-
   ingredient =generates=> model;
+
   section =pof=> model;
   production =pof=> section;
 }

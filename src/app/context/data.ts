@@ -281,11 +281,4 @@ export const COCKTAILS: Cocktail[] = [
     ingredients: {},
     onto: hitachi,
   },
-  {
-    id: "vanilla-dev",
-    name: "Vanilla Dev",
-    viz: "",
-    ingredients: {},
-    onto: "",
-  },
 ];
