@@ -2,7 +2,7 @@
 import { Ingredient, Cocktail } from "../types";
 
 const FRONTEND_BASIC_ONTO = `
-Ontologia FrontendBasic
+Ontology FrontendBasic
 
 concepts {
     Language,
@@ -53,7 +53,7 @@ triples {
 .`.trim();
 
 const Backend_BASIC_ONTO = `
-Ontologia AutomaiseIA
+Ontology AutomaiseIA
 
 concepts {
 	Resource,
@@ -119,7 +119,7 @@ triples {
 .`.trim();
 
 const hitachi = `
-Ontologia HitachiDataWarehouse
+Ontology HitachiDataWarehouse
 
 concepts {
 	Resource,

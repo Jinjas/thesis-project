@@ -8,10 +8,10 @@ def create_Ontology(cocktail_name: str, ingredient_name: str, ingredient_type: s
     types={"Framework", "Language", "Library", "Tool"}
 
     cocktail_name = cocktail_name.replace(" ","_")
-    
+
 
     result = []
-    result.append(f"Ontologia {cocktail_name}\n")
+    result.append(f"Ontology {cocktail_name}\n")
     result.append("concepts {\n" + f"    {ingredient_type}")
 
     for type in types:
