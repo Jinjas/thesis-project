@@ -40,7 +40,7 @@ def extract_ingredients_from_ontology(onto_text: str, types:set) -> dict:
     
     return {"ingredients": result, "types": list(typesActive), "generalIngredients": list(ingredientsGeneral) , "activeIngredients": list(activeIngredients)}
 
-def getNewData(onto_text: str, path:str) -> dict:
+def getNewData(onto_text: str, name: str, path:str) -> dict:
     types={"Framework", "Language", "Library", "Tool"}
 
     extractions = extract_ingredients_from_ontology(onto_text,types)
@@ -48,10 +48,11 @@ def getNewData(onto_text: str, path:str) -> dict:
     activeTypes = extractions["types"]
     generalIngredients = extractions["generalIngredients"]
     activeIngredients = extractions["activeIngredients"]
-
-
+    
+    name = name.replace(" ", "_")
     lines = onto_text.splitlines()
     cocktail_name = lines[0].strip().split()[1]
+    lines[0] = lines[0].replace(cocktail_name,name)
     final_onto_lines = []
     in_concept_zone = False
     in_individual_zone = False
@@ -91,7 +92,7 @@ def getNewData(onto_text: str, path:str) -> dict:
             continue
         if in_individual_zone:
             if cocktail_name in line:
-                final_onto_lines.append(line)
+                final_onto_lines.append(line.replace(cocktail_name,name))
             continue
     
         if stripped.startswith("triples"):
@@ -103,7 +104,10 @@ def getNewData(onto_text: str, path:str) -> dict:
             final_onto_lines.append(line)
             continue
         if in_triple_zone:
-            if any(type in line for type in types) or cocktail_name + "Cocktail" in line or cocktail_name + "Development" in line:
+            if cocktail_name + "Cocktail" in line or cocktail_name + "Development" in line:
+                final_onto_lines.append(line.replace(cocktail_name,name))
+                continue
+            if any(type in line for type in types):
                 final_onto_lines.append(line)
             continue
         final_onto_lines.append(line)
@@ -124,8 +128,9 @@ def main():
     
     path = input_data["path"]
     onto = input_data["onto"]
+    name = input_data["name"]
 
-    prepared_Data = getNewData(onto, path)
+    prepared_Data = getNewData(onto,name, path)
     
     print(json.dumps(prepared_Data))
 

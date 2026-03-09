@@ -7,6 +7,9 @@ import odlc
 def create_Ontology(cocktail_name: str, ingredient_name: str, ingredient_type: str) -> str:
     types={"Framework", "Language", "Library", "Tool"}
 
+    cocktail_name = cocktail_name.replace(" ","_")
+    
+
     result = []
     result.append(f"Ontologia {cocktail_name}\n")
     result.append("concepts {\n" + f"    {ingredient_type}")
@@ -39,7 +42,7 @@ def main():
     cocktail_name = input_data["cocktail_name"]
     ingredient_name = input_data["ingredient_name"]
     ingredient_type = input_data["ingredient_type"]
-    
+
     new_onto = create_Ontology(cocktail_name, ingredient_name, ingredient_type)
 
     updated_svg = odlc.generate_svg(new_onto, path)

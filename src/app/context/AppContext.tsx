@@ -41,7 +41,7 @@ type AppContextType = {
 };
 
 function createId(prefix: string, name: string) {
-  return `${prefix}-${name}`;
+  return `${prefix}-${name.replace(" ", "_")}`;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -103,6 +103,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             currentOnto: cocktail.onto,
+            cocktailName: cocktail.name,
           }),
         });
 
@@ -458,12 +459,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function updateOnto(cocktailId: string, onto: string) {
+    const cocktail = cocktails.find((c) => c.id === cocktailId);
+    if (!cocktail) return;
+
     try {
       const response = await fetch("/api/ontology/prepare", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           currentOnto: onto,
+          cocktailName: cocktail.name,
         }),
       });
 

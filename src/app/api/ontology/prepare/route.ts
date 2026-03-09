@@ -6,13 +6,13 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { currentOnto } = body;
+    const { currentOnto, cocktailName } = body;
 
-    if (typeof currentOnto !== "string") {
+    if (cocktailName === "undefined" || typeof currentOnto !== "string") {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
-    const result = await generateDataFromOntology(currentOnto);
+    const result = await generateDataFromOntology(currentOnto, cocktailName);
 
     return NextResponse.json(result);
   } catch (error) {

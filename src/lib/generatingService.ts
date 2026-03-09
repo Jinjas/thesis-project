@@ -3,6 +3,7 @@ import path from "path";
 
 export async function generateDataFromOntology(
   onto: string,
+  name: string,
 ): Promise<{ updatedOnto: string; updatedViz: string; ingredients: string }> {
   const scriptPath = path.join(
     process.cwd(),
@@ -16,6 +17,7 @@ export async function generateDataFromOntology(
   const input = {
     path: pythonDir,
     onto,
+    name,
   };
 
   const result = await new Promise<string>((resolve, reject) => {
