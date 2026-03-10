@@ -41,7 +41,7 @@ type AppContextType = {
 };
 
 function createId(prefix: string, name: string) {
-  return `${prefix}-${name.replace(" ", "_")}`;
+  return `${prefix}-${name.toLowerCase().replace(" ", "_")}`;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -161,11 +161,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   async function addCocktail(name: string, firstIngredient: string) {
     const id = createId("cocktail", name);
 
+    const cocktail = cocktails.find(
+      (c) => c.name.toLowerCase() === name.toLowerCase(),
+    );
+    if (cocktail) {
+      console.warn(`cocktail "${name}" already exists.`);
+      return "";
+    }
+
     const ingredient = ingredients.find((i) => i.name === firstIngredient);
     if (!ingredient) {
-      console.warn(
-        `Ingredient "${firstIngredient}" not found. Cocktail will be created without it.`,
-      );
+      console.warn(`Ingredient "${firstIngredient}" not found.`);
       return "";
     }
 
@@ -207,6 +213,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   async function addIngredient(name: string, type: IngredientType) {
     const id = createId("ingredient", name);
+
+    const ingredient = ingredients.find(
+      (c) => c.name.toLowerCase() === name.toLowerCase(),
+    );
+    if (ingredient) {
+      console.warn(
+        `ingredient "${name}" already exists by the name ${ingredient.name}.`,
+      );
+      return "";
+    }
 
     try {
       const response = await fetch("/api/ingredientCode/getIngredientCode", {
