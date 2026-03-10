@@ -2,10 +2,11 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import { Cocktail, Ingredient, IngredientType, ParamMap } from "../types";
-
 import { INGREDIENTS } from "./data";
-
 import { enqueueCocktailUpdate } from "@/lib/updateQueue";
+
+import { createId } from "./utils/createId";
+import { normalizeSvg } from "./utils/svgUtils";
 
 type ExtractedIngredient = {
   name: string;
@@ -38,10 +39,6 @@ type AppContextType = {
   ) => Promise<void>;
   updateOnto: (cocktailId: string, onto: string) => Promise<void>;
 };
-
-function createId(prefix: string, name: string) {
-  return `${prefix}-${name.toLowerCase().replace(" ", "_")}`;
-}
 
 const AppContext = createContext<AppContextType | null>(null);
 
@@ -101,11 +98,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       const data = await response.json();
       for (const cocktail of data) {
-        const vizValue =
-          typeof cocktail.updatedSvg === "string" &&
-          cocktail.updatedSvg.trim().startsWith("<")
-            ? `data:image/svg+xml;utf8,${encodeURIComponent(cocktail.updatedSvg)}`
-            : cocktail.updatedSvg;
+        const vizValue = normalizeSvg(cocktail.updatedSvg);
 
         const extractedIngredients: ExtractedIngredient[] =
           cocktail?.ingredients || [];
@@ -188,11 +181,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       if (response.ok) {
         const data = await response.json();
 
-        const vizValue =
-          typeof data.updatedViz === "string" &&
-          data.updatedViz.trim().startsWith("<")
-            ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
-            : data.updatedViz;
+        const vizValue = normalizeSvg(data.updatedViz);
+
         setCocktails((prev) => [
           ...prev,
           {
@@ -356,11 +346,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
         const data = await response.json();
 
-        const vizValue =
-          typeof data.updatedViz === "string" &&
-          data.updatedViz.trim().startsWith("<")
-            ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
-            : data.updatedViz;
+        const vizValue = normalizeSvg(data.updatedViz);
 
         setCocktails((prev) =>
           prev.map((c) =>
@@ -429,11 +415,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
           const data = await response.json();
 
-          const vizValue =
-            typeof data.updatedViz === "string" &&
-            data.updatedViz.trim().startsWith("<")
-              ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
-              : data.updatedViz;
+          const vizValue = normalizeSvg(data.updatedViz);
 
           setCocktails((prev) =>
             prev.map((c) =>
@@ -471,11 +453,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       const data = await response.json();
 
-      const vizValue =
-        typeof data.updatedViz === "string" &&
-        data.updatedViz.trim().startsWith("<")
-          ? `data:image/svg+xml;utf8,${encodeURIComponent(data.updatedViz)}`
-          : data.updatedViz;
+      const vizValue = normalizeSvg(data.updatedViz);
 
       setCocktails((prev) =>
         prev.map((c) =>
