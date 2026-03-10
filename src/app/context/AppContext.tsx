@@ -8,6 +8,15 @@ import { enqueueCocktailUpdate } from "@/lib/updateQueue";
 import { createId } from "./utils/createId";
 import { normalizeSvg } from "./utils/svgUtils";
 
+import { setIngredientCode, getIngredientCode } from "./services/ingredientApi";
+import {
+  addIngredientToOntology,
+  generate,
+  getCocktails,
+  update,
+  prepare,
+} from "./services/cocktailApi";
+
 type ExtractedIngredient = {
   name: string;
   type?: string;
@@ -58,30 +67,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   async function getInitialIngredientsCode() {
     for (const ingredient of ingredients) {
       try {
-        const response = await fetch("/api/ingredientCode/getIngredientCode", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ingredientName: ingredient.name,
-            ingredientType: ingredient.type,
-          }),
-        });
-        if (response.ok) {
-          const data = await response.json();
+        const data = await getIngredientCode(ingredient.name, ingredient.type);
 
-          setIngredients((prev) =>
-            prev.map((c) =>
-              c.id === ingredient.id
-                ? {
-                    ...c,
-                    code: data.updatedCode,
-                    characteristics: data.updatedCharacteristics,
-                    extraData: data.updatedExtraData,
-                  }
-                : c,
-            ),
-          );
-        }
+        setIngredients((prev) =>
+          prev.map((c) =>
+            c.id === ingredient.id
+              ? {
+                  ...c,
+                  code: data.updatedCode,
+                  characteristics: data.updatedCharacteristics,
+                  extraData: data.updatedExtraData,
+                }
+              : c,
+          ),
+        );
       } catch (err) {
         console.error("error generating onto to", ingredient.id, err);
       }
@@ -90,13 +89,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   async function generateInitialCocktail() {
     try {
-      const response = await fetch("/api/ontology/getCocktails");
+      const data = await getCocktails();
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch cocktails");
-      }
-
-      const data = await response.json();
       for (const cocktail of data) {
         const vizValue = normalizeSvg(cocktail.updatedSvg);
 
@@ -168,34 +162,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      const response = await fetch("/api/ontology/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cocktailName: name,
-          ingredientName: firstIngredient,
-          ingredientType: ingredient.type,
-        }),
+      const data = await generate({
+        cocktailName: name,
+        ingredientName: firstIngredient,
+        ingredientType: ingredient.type,
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      const vizValue = normalizeSvg(data.updatedViz);
 
-        const vizValue = normalizeSvg(data.updatedViz);
-
-        setCocktails((prev) => [
-          ...prev,
-          {
-            id: id,
-            name,
-            viz: vizValue,
-            ingredients: { [ingredient.id]: true },
-            onto: data.updatedOnto,
-          },
-        ]);
-      }
+      setCocktails((prev) => [
+        ...prev,
+        {
+          id: id,
+          name,
+          viz: vizValue,
+          ingredients: { [ingredient.id]: true },
+          onto: data.updatedOnto,
+        },
+      ]);
     } catch (err) {
-      console.error("Erro ao gerar viz ou ao atualizar onto para", id, err);
+      console.error("Error generating viz or onto to: ", id, err);
     }
     return id;
   }
@@ -214,32 +200,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      const response = await fetch("/api/ingredientCode/getIngredientCode", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ingredientName: name,
-          ingredientType: type,
-        }),
-      });
+      const data = await getIngredientCode(name, type);
 
-      if (response.ok) {
-        const data = await response.json();
-
-        setIngredients((prev) => [
-          ...prev,
-          {
-            id: id,
-            name,
-            type: type,
-            characteristics: data.updatedCharacteristics,
-            extraData: data.updatedExtraData,
-            code: data.updatedCode,
-          },
-        ]);
-      }
+      setIngredients((prev) => [
+        ...prev,
+        {
+          id: id,
+          name,
+          type: type,
+          characteristics: data.updatedCharacteristics,
+          extraData: data.updatedExtraData,
+          code: data.updatedCode,
+        },
+      ]);
     } catch (err) {
-      console.error("Erro ao gerar onto para", id, err);
+      console.error("error generating ontology to ", id, err);
     }
 
     return id;
@@ -252,35 +227,24 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     newCode: string,
   ) {
     try {
-      const response = await fetch("/api/ingredientCode/setIngredientCode", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ingredientName: newName,
-          ingredientType: newType,
-          newCode: newCode,
-        }),
-      });
+      const data = await setIngredientCode(newName, newType, newCode);
 
-      if (response.ok) {
-        const data = await response.json();
-        setIngredients((prev) =>
-          prev.map((ing) =>
-            ing.id === id
-              ? {
-                  ...ing,
-                  name: newName,
-                  type: newType,
-                  characteristics: newCode,
-                  extraData: data.extraData,
-                  code: data.onto,
-                }
-              : ing,
-          ),
-        );
-      }
+      setIngredients((prev) =>
+        prev.map((ing) =>
+          ing.id === id
+            ? {
+                ...ing,
+                name: newName,
+                type: newType,
+                characteristics: newCode,
+                extraData: data.extraData,
+                code: data.onto,
+              }
+            : ing,
+        ),
+      );
     } catch (err) {
-      console.error("Erro ao gerar viz ou ao atualizar onto para", id, err);
+      console.error("Error updating ingredient with id: ", id, err);
     }
     return;
   }
@@ -330,21 +294,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
     enqueueCocktailUpdate(cocktailId, async () => {
       try {
-        const response = await fetch("/api/ontology/addIngredient", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ingredientName: ingredient.name,
-            ingredientType: ingredient.type,
-            currentOnto: cocktail.onto,
-          }),
+        const data = await addIngredientToOntology({
+          ingredientName: ingredient.name,
+          ingredientType: ingredient.type,
+          currentOnto: cocktail.onto,
         });
-
-        if (!response.ok) {
-          throw new Error("Ontology update failed");
-        }
-
-        const data = await response.json();
 
         const vizValue = normalizeSvg(data.updatedViz);
 
@@ -360,7 +314,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           ),
         );
       } catch (err) {
-        console.error("Erro ao atualizar ontologia", err);
+        console.error("error updating ontology", err);
       }
     });
   }
@@ -398,22 +352,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       enqueueCocktailUpdate(cocktailId, async () => {
         try {
-          const response = await fetch("/api/ontology/update", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              ingredientName: ingredient.name,
-              ingredientType: ingredient.type,
-              active: newStatus,
-              currentOnto: cocktail.onto,
-            }),
+          const data = await update({
+            ingredientName: ingredient.name,
+            ingredientType: ingredient.type,
+            active: newStatus,
+            currentOnto: cocktail.onto,
           });
-
-          if (!response.ok) {
-            throw new Error("Ontology update failed");
-          }
-
-          const data = await response.json();
 
           const vizValue = normalizeSvg(data.updatedViz);
 
@@ -429,7 +373,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             ),
           );
         } catch (err) {
-          console.error("Erro ao atualizar ontologia", err);
+          console.error("error updating ontology", err);
         }
       });
     }
@@ -440,18 +384,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (!cocktail) return;
 
     try {
-      const response = await fetch("/api/ontology/prepare", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          currentOnto: onto,
-          cocktailName: cocktail.name,
-        }),
+      const data = await prepare({
+        currentOnto: onto,
+        cocktailName: cocktail.name,
       });
-
-      if (!response.ok) return;
-
-      const data = await response.json();
 
       const vizValue = normalizeSvg(data.updatedViz);
 
@@ -523,11 +459,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }),
       );
     } catch (err) {
-      console.error(
-        "Erro ao gerar viz ao atualizar onto para",
-        cocktailId,
-        err,
-      );
+      console.error("error generating viz or ontology to ", cocktailId, err);
     }
   }
 
