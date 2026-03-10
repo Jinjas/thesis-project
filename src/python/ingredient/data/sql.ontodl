@@ -1,4 +1,4 @@
-Ontology cognitive_model_NextJS
+Ontology cognitive_model_SQL
 
 attributes {
     condition: string,
@@ -23,17 +23,17 @@ relations {
 }
 
 individuals {
-    NextJS,
-    NextJS_model,
-    NextJS_specific_section
+    SQL,
+    SQL_model,
+    SQL_specific_section
 }
 
 triples {
-    NextJS =iof=> Framework;
-    NextJS =generates=> NextJS_model;
-    NextJS_model =iof=> model;
+    SQL =iof=> Language;
+    SQL =generates=> SQL_model;
+    SQL_model =iof=> model;
 
-    NextJS_specific_section =iof=> section;
-    NextJS_specific_section =pof=> NextJS_model;
+    SQL_specific_section =iof=> section;
+    SQL_specific_section =pof=> SQL_model;
 }
 .

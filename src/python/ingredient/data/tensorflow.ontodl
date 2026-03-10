@@ -1,4 +1,4 @@
-Ontology cognitive_model_NextJS
+Ontology cognitive_model_TensorFlow
 
 attributes {
     condition: string,
@@ -23,17 +23,17 @@ relations {
 }
 
 individuals {
-    NextJS,
-    NextJS_model,
-    NextJS_specific_section
+    TensorFlow,
+    TensorFlow_model,
+    TensorFlow_specific_section
 }
 
 triples {
-    NextJS =iof=> Framework;
-    NextJS =generates=> NextJS_model;
-    NextJS_model =iof=> model;
+    TensorFlow =iof=> Library;
+    TensorFlow =generates=> TensorFlow_model;
+    TensorFlow_model =iof=> model;
 
-    NextJS_specific_section =iof=> section;
-    NextJS_specific_section =pof=> NextJS_model;
+    TensorFlow_specific_section =iof=> section;
+    TensorFlow_specific_section =pof=> TensorFlow_model;
 }
 .

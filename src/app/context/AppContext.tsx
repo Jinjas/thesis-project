@@ -1,12 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useRef, useState, useEffect } from "react";
 import { Cocktail, Ingredient, IngredientType, ParamMap } from "../types";
 import { INGREDIENTS } from "./data";
 import { enqueueCocktailUpdate } from "@/lib/updateQueue";
 
 import { createId } from "./utils/createId";
 import { normalizeSvg } from "./utils/svgUtils";
+import { resolveIngredients } from "./utils/resolveIngredients";
 
 import { setIngredientCode, getIngredientCode } from "./services/ingredientApi";
 import {
@@ -52,7 +53,7 @@ type AppContextType = {
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const creatingIngredients: { [name: string]: Promise<string> } = {};
+  const creatingIngredients = useRef<{ [name: string]: Promise<string> }>({});
 
   //const [ingredients, setIngredients] = useState<Ingredient[]>(INGREDIENTS);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -63,6 +64,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     //getInitialIngredientsCode();
     generateInitialCocktail();
   }, []);
+
+  /* --------------------  INGREDIENT BASED FUNCTIONS  ----------------------*/
 
   async function getInitialIngredientsCode() {
     for (const ingredient of ingredients) {
@@ -85,105 +88,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         console.error("error generating onto to", ingredient.id, err);
       }
     }
-  }
-
-  async function generateInitialCocktail() {
-    try {
-      const data = await getCocktails();
-
-      for (const cocktail of data) {
-        const vizValue = normalizeSvg(cocktail.updatedSvg);
-
-        const extractedIngredients: ExtractedIngredient[] =
-          cocktail?.ingredients || [];
-        console.log("Extracted Ingredients:", extractedIngredients);
-
-        const newIngredients = extractedIngredients.filter(
-          (extracted) => !ingredients.some((i) => i.name === extracted.name),
-        );
-        const newIngredientMap: ParamMap = {};
-
-        const createdIds: { [name: string]: string } = {};
-
-        await Promise.all(
-          newIngredients.map(async (extracted) => {
-            if (!creatingIngredients[extracted.name]) {
-              creatingIngredients[extracted.name] = addIngredient(
-                extracted.name,
-                (extracted.type as IngredientType) || "Language",
-              );
-            }
-
-            const id = await creatingIngredients[extracted.name];
-            createdIds[extracted.name] = id;
-          }),
-        );
-
-        for (const extracted of extractedIngredients) {
-          const existing = ingredients.find((i) => i.name === extracted.name);
-
-          const ingredientId = existing?.id || createdIds[extracted.name];
-
-          if (ingredientId) {
-            newIngredientMap[ingredientId] = extracted.active;
-          }
-        }
-        setCocktails((prev) => [
-          ...prev,
-          {
-            id: createId("cocktail", cocktail.name),
-            name: cocktail.name,
-            viz: vizValue,
-            onto: cocktail.updatedOnto,
-            ingredients: newIngredientMap,
-          },
-        ]);
-      }
-    } catch (err) {
-      console.error("Error loading cocktails", err);
-    }
-  }
-
-  async function addCocktail(name: string, firstIngredient: string) {
-    const id = createId("cocktail", name);
-
-    const cocktail = cocktails.find(
-      (c) => c.name.toLowerCase() === name.toLowerCase(),
-    );
-    if (cocktail) {
-      console.warn(`cocktail "${name}" already exists.`);
-      return "";
-    }
-
-    const ingredient = ingredients.find((i) => i.name === firstIngredient);
-    if (!ingredient) {
-      console.warn(`Ingredient "${firstIngredient}" not found.`);
-      return "";
-    }
-
-    try {
-      const data = await generate({
-        cocktailName: name,
-        ingredientName: firstIngredient,
-        ingredientType: ingredient.type,
-      });
-
-      const vizValue = normalizeSvg(data.updatedViz);
-
-      setCocktails((prev) => [
-        ...prev,
-        {
-          id: id,
-          name,
-          viz: vizValue,
-          ingredients: { [ingredient.id]: true },
-          onto: data.updatedOnto,
-        },
-      ]);
-    } catch (err) {
-      console.error("Error generating viz or onto to: ", id, err);
-    }
-    return id;
   }
 
   async function addIngredient(name: string, type: IngredientType) {
@@ -260,6 +164,82 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         ),
       })),
     );
+  }
+
+  /* --------------------  COCKTAIL BASED FUNCTIONS  ----------------------*/
+
+  async function generateInitialCocktail() {
+    try {
+      const data = await getCocktails();
+
+      for (const cocktail of data) {
+        const vizValue = normalizeSvg(cocktail.updatedSvg);
+        const extractedIngredients: ExtractedIngredient[] =
+          cocktail?.ingredients || [];
+
+        const ingredientMap = await resolveIngredients(
+          extractedIngredients,
+          ingredients,
+          creatingIngredients.current,
+          addIngredient,
+        );
+
+        setCocktails((prev) => [
+          ...prev,
+          {
+            id: createId("cocktail", cocktail.name),
+            name: cocktail.name,
+            viz: vizValue,
+            onto: cocktail.updatedOnto,
+            ingredients: ingredientMap,
+          },
+        ]);
+      }
+    } catch (err) {
+      console.error("Error loading cocktails", err);
+    }
+  }
+
+  async function addCocktail(name: string, firstIngredient: string) {
+    const id = createId("cocktail", name);
+
+    const cocktail = cocktails.find(
+      (c) => c.name.toLowerCase() === name.toLowerCase(),
+    );
+    if (cocktail) {
+      console.warn(`cocktail "${name}" already exists.`);
+      return "";
+    }
+
+    const ingredient = ingredients.find((i) => i.name === firstIngredient);
+    if (!ingredient) {
+      console.warn(`Ingredient "${firstIngredient}" not found.`);
+      return "";
+    }
+
+    try {
+      const data = await generate({
+        cocktailName: name,
+        ingredientName: firstIngredient,
+        ingredientType: ingredient.type,
+      });
+
+      const vizValue = normalizeSvg(data.updatedViz);
+
+      setCocktails((prev) => [
+        ...prev,
+        {
+          id: id,
+          name,
+          viz: vizValue,
+          ingredients: { [ingredient.id]: true },
+          onto: data.updatedOnto,
+        },
+      ]);
+    } catch (err) {
+      console.error("Error generating viz or onto to: ", id, err);
+    }
+    return id;
   }
 
   async function addIngredientToCocktail(
@@ -391,6 +371,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       const vizValue = normalizeSvg(data.updatedViz);
 
+      const extractedIngredients: ExtractedIngredient[] =
+        data?.ingredients || [];
+
+      const ingredientMap = await resolveIngredients(
+        extractedIngredients,
+        ingredients,
+        creatingIngredients.current,
+        addIngredient,
+      );
+
       setCocktails((prev) =>
         prev.map((c) =>
           c.id === cocktailId
@@ -398,65 +388,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 ...c,
                 onto: data.updatedOnto,
                 viz: vizValue,
+                ingredients: ingredientMap,
               }
             : c,
         ),
-      );
-
-      const extractedIngredients: ExtractedIngredient[] =
-        data?.ingredients || [];
-      console.log("Extracted Ingredients:", extractedIngredients);
-
-      const newIngredients = extractedIngredients.filter(
-        (extracted) => !ingredients.some((i) => i.name === extracted.name),
-      );
-
-      const createdIds: { [name: string]: string } = {};
-
-      await Promise.all(
-        newIngredients.map(async (extracted) => {
-          if (!creatingIngredients[extracted.name]) {
-            creatingIngredients[extracted.name] = addIngredient(
-              extracted.name,
-              (extracted.type as IngredientType) || "Language",
-            );
-          }
-
-          const id = await creatingIngredients[extracted.name];
-          createdIds[extracted.name] = id;
-        }),
-      );
-
-      setIngredients((prev) => {
-        const ingredientNameToId: { [key: string]: string } = {};
-
-        prev.forEach((ing) => {
-          ingredientNameToId[ing.name] = ing.id;
-        });
-
-        Object.assign(ingredientNameToId, createdIds);
-
-        return prev;
-      });
-
-      setCocktails((prevCocktails) =>
-        prevCocktails.map((c) => {
-          if (c.id !== cocktailId) return c;
-
-          const ingredientMap: { [key: string]: boolean } = {};
-
-          for (const extracted of extractedIngredients) {
-            const existing = ingredients.find((i) => i.name === extracted.name);
-
-            const ingredientId = existing?.id || createdIds[extracted.name];
-
-            if (ingredientId) {
-              ingredientMap[ingredientId] = extracted.active;
-            }
-          }
-
-          return { ...c, ingredients: ingredientMap };
-        }),
       );
     } catch (err) {
       console.error("error generating viz or ontology to ", cocktailId, err);
