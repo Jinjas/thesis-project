@@ -37,7 +37,6 @@ type AppContextType = {
     ingredientId: string,
   ) => Promise<void>;
   updateOnto: (cocktailId: string, onto: string) => Promise<void>;
-  updateCocktailViz: (cocktailId: string, viz: string) => void;
 };
 
 function createId(prefix: string, name: string) {
@@ -47,15 +46,15 @@ function createId(prefix: string, name: string) {
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  //const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const creatingIngredients: { [name: string]: Promise<string> } = {};
 
-  const [ingredients, setIngredients] = useState<Ingredient[]>(INGREDIENTS);
+  //const [ingredients, setIngredients] = useState<Ingredient[]>(INGREDIENTS);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
   //const [cocktails, setCocktails] = useState<Cocktail[]>(COCKTAILS);
 
   useEffect(() => {
-    getInitialIngredientsCode();
+    //getInitialIngredientsCode();
     generateInitialCocktail();
   }, []);
 
@@ -554,15 +553,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  function updateCocktailViz(cocktailId: string, viz: string) {
-    setCocktails((prev) =>
-      prev.map((cocktail) => {
-        if (cocktail.id !== cocktailId) return cocktail;
-        return { ...cocktail, viz };
-      }),
-    );
-  }
-
   return (
     <AppContext.Provider
       value={{
@@ -572,7 +562,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         addIngredient,
         remIngredient,
         updateIngredient,
-        updateCocktailViz,
         addIngredientToCocktail,
         updateIngredientStatus,
         updateOnto,

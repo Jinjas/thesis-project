@@ -3,7 +3,7 @@ import { Ingredient, Cocktail } from "../types";
 
 export const INGREDIENTS: Ingredient[] = [
   {
-    id: "ts",
+    id: "ingredient-typescript",
     name: "TypeScript",
     type: "Language",
     characteristics: "",
@@ -11,7 +11,7 @@ export const INGREDIENTS: Ingredient[] = [
     code: "",
   },
   {
-    id: "js",
+    id: "ingredient-javascript",
     name: "JavaScript",
     type: "Language",
     characteristics: "",
@@ -19,7 +19,7 @@ export const INGREDIENTS: Ingredient[] = [
     code: "",
   },
   {
-    id: "react",
+    id: "ingredient-reactjs",
     name: "ReactJS",
     type: "Library",
     characteristics: "",
@@ -27,7 +27,7 @@ export const INGREDIENTS: Ingredient[] = [
     code: "",
   },
   {
-    id: "next",
+    id: "ingredient-nextjs",
     name: "NextJS",
     type: "Framework",
     characteristics: "",
@@ -35,7 +35,7 @@ export const INGREDIENTS: Ingredient[] = [
     code: "",
   },
   {
-    id: "tailwind",
+    id: "ingredient-tailwindcss",
     name: "TailwindCSS",
     type: "Tool",
     characteristics: "",
@@ -43,7 +43,7 @@ export const INGREDIENTS: Ingredient[] = [
     code: "",
   },
   {
-    id: "vite",
+    id: "ingredient-vite",
     name: "Vite",
     type: "Tool",
     characteristics: "",
@@ -51,7 +51,7 @@ export const INGREDIENTS: Ingredient[] = [
     code: "",
   },
   {
-    id: "sql",
+    id: "ingredient-sql",
     name: "SQL",
     type: "Language",
     characteristics: "",
