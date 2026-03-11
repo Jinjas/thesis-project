@@ -15,6 +15,11 @@ export const INGREDIENT_TYPES_AVAILABLE = [
 
 export type IngredientType = (typeof INGREDIENT_TYPES_AVAILABLE)[number];
 
+export type TableDict = {
+  section: string;
+  rows: string[][];
+};
+
 export type Ingredient = {
   id: string;
   name: string;
@@ -22,6 +27,7 @@ export type Ingredient = {
   characteristics: string;
   extraData: string;
   code: string;
+  table: TableDict[];
 };
 
 export type ParamMap = {

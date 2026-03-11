@@ -23,3 +23,4 @@ export { default as VizImgSideBar } from "./vizBar/VizImgSideBar";
 export { default as CodeEdit } from "./areas/CodeEdit";
 export { default as IngredientGroups } from "./areas/IngredientGroups";
 export { default as SectionTable } from "./areas/TableArea";
+export { default as TableData } from "./areas/TableData";

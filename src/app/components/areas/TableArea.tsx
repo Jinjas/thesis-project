@@ -15,7 +15,6 @@ export default function SectionTable({ data }: Props) {
   return (
     <div className=" overflow-y-auto border-y border-r">
       <table className="w-full text-sm table-fixed">
-        {/* HEADER FIXO */}
         <thead className="sticky top-0 bg-gray-300 z-10">
           <tr>
             <th className="w-[8%] px-2 py-1 text-center border-l">Num</th>

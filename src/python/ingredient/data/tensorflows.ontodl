@@ -1,0 +1,39 @@
+Ontology cognitive_model_TensorFlows
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    ingredient,
+    language,
+    library,
+    framework,
+    tool,
+    model,
+    production[condition, action, strength, probability],
+    section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    TensorFlows,
+    TensorFlows_model,
+    TensorFlow_specific_section
+}
+
+triples {
+    TensorFlows =iof=> Library;
+    TensorFlows =generates=> TensorFlows_model;
+    TensorFlows_model =iof=> model;
+
+    TensorFlow_specific_section =iof=> section;
+    TensorFlow_specific_section =pof=> TensorFlow_model;
+}
+.

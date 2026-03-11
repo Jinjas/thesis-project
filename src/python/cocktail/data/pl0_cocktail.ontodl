@@ -1,0 +1,29 @@
+Ontology PL0_Cocktail
+
+concepts {
+    Language
+%    Tool
+%    Library
+%    Framework
+}
+
+individuals {
+    PL0_Cocktail,
+    PL0_CocktailDevelopment,
+    PL0_CocktailCocktail,
+    PL0
+}
+
+relations {
+    uses,
+    requires
+}
+
+triples {
+    PL0 = iof => Language;
+    PL0_Cocktail = requires => PL0_CocktailDevelopment;
+    PL0_CocktailDevelopment = uses => PL0_CocktailCocktail;
+    PL0 = pof => PL0_CocktailCocktail;
+}
+
+.

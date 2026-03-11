@@ -1,7 +1,13 @@
 "use client";
 
 import { createContext, useContext, useRef, useState, useEffect } from "react";
-import { Cocktail, Ingredient, IngredientType, ParamMap } from "../types";
+import {
+  Cocktail,
+  Ingredient,
+  IngredientType,
+  ParamMap,
+  TableDict,
+} from "../types";
 import { INGREDIENTS } from "./data";
 import { enqueueCocktailUpdate } from "@/lib/updateQueue";
 
@@ -58,7 +64,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   //const [ingredients, setIngredients] = useState<Ingredient[]>(INGREDIENTS);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
-  //const [cocktails, setCocktails] = useState<Cocktail[]>(COCKTAILS);
 
   useEffect(() => {
     //getInitialIngredientsCode();
@@ -80,6 +85,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                   code: data.updatedCode,
                   characteristics: data.updatedCharacteristics,
                   extraData: data.updatedExtraData,
+                  table: data.table,
                 }
               : c,
           ),
@@ -105,7 +111,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const data = await getIngredientCode(name, type);
-
       setIngredients((prev) => [
         ...prev,
         {
@@ -115,6 +120,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           characteristics: data.updatedCharacteristics,
           extraData: data.updatedExtraData,
           code: data.updatedCode,
+          table: data.table,
         },
       ]);
     } catch (err) {
@@ -143,6 +149,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 characteristics: newCode,
                 extraData: data.extraData,
                 code: data.onto,
+                table: data.table,
               }
             : ing,
         ),

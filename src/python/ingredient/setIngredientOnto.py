@@ -22,7 +22,64 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
         individualName = match.group(1)
         individualsList += f",\n    {individualName}"
 
-    
+    patternTriple = re.compile(
+        r'''
+        ^\s*(\w+)              # sujeito
+        \s*=\s*(\w+)\s*=>\s*   # predicado
+        (\w+)                  # objeto
+        (?:\[\s*(.*?)\s*\])?   # atributos opcionais
+        \s*;
+        ''',
+        re.MULTILINE | re.DOTALL | re.VERBOSE
+    )
+
+    patternAttr = re.compile(
+        r'(\w+)\s*=\s*("(?:[^"]*)"|[\d.]+)'
+    )
+
+    table = {}
+    productions = {}
+    pof = {}
+
+    prod_id = 1
+
+    for m in patternTriple.finditer(newCode):
+
+        subject = m.group(1)
+        predicate = m.group(2)
+        obj = m.group(3)
+        attrs_block = m.group(4)
+
+        if predicate == "iof" and obj == "section":
+            table[subject] = []
+
+        elif predicate == "iof" and obj == "production":
+
+            attrs = {}
+            if attrs_block:
+                attrs = {k: v.strip('"') for k, v in patternAttr.findall(attrs_block)}
+
+            productions[subject] = attrs
+
+        elif predicate == "pof":
+            pof[subject] = obj
+
+
+    for prod, attrs in productions.items():
+
+        section = pof.get(prod)
+        if section in table:
+
+            row = [
+                str(prod_id),
+                attrs.get("condition", ""),
+                attrs.get("action", ""),
+                attrs.get("strength", "")
+            ]
+
+            table[section].append(row)
+            prod_id += 1    
+
 
 
     data = [
@@ -44,7 +101,7 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
     newOnto = "\n".join(data)
     extraData = "\n".join(data[:10])
     data_path.write_text(newOnto, encoding="utf-8") 
-    return newOnto, extraData
+    return newOnto, extraData, table
 
 def main():
     input_data = json.loads(sys.stdin.read())
@@ -53,11 +110,17 @@ def main():
     ingredient_type = input_data["ingredient_type"]
     newCode = input_data["newCode"]
     
-    newOnto,extraData = setOntology(ingredient_name,ingredient_type, newCode)
+    newOnto,extraData,table = setOntology(ingredient_name,ingredient_type, newCode)
+    
+    table_list = [
+        {"section": section, "rows": rows}
+        for section, rows in table.items()
+    ]
     
     print(json.dumps({
         "onto": newOnto,
         "extraData":extraData,
+        "table":table_list
     }))
 
 

@@ -20,6 +20,7 @@ def getOntology(ingredient_name:str,ingredient_type:str):
         s_index = 0
         f_index = 0
         in_zone=False
+        
         for i, line in enumerate(lines):
             if line.startswith("triples {"):
                 s_index = i+5
@@ -29,10 +30,68 @@ def getOntology(ingredient_name:str,ingredient_type:str):
                 in_zone = False
                 f_index = i
                 break
+                
+        patternTriple = re.compile(
+            r'''
+            ^\s*(\w+)              # sujeito
+            \s*=\s*(\w+)\s*=>\s*   # predicado
+            (\w+)                  # objeto
+            (?:\[\s*(.*?)\s*\])?   # atributos opcionais
+            \s*;
+            ''',
+            re.MULTILINE | re.DOTALL | re.VERBOSE
+        )
+
+        patternAttr = re.compile(
+            r'(\w+)\s*=\s*("(?:[^"]*)"|[\d.]+)'
+        )
+
+        table = {}
+        productions = {}
+        pof = {}
+
+        prod_id = 1
+
+        for m in patternTriple.finditer(content):
+        
+            subject = m.group(1)
+            predicate = m.group(2)
+            obj = m.group(3)
+            attrs_block = m.group(4)
+
+            if predicate == "iof" and obj == "section":
+                table[subject] = []
+
+            elif predicate == "iof" and obj == "production":
+            
+                attrs = {}
+                if attrs_block:
+                    attrs = {k: v.strip('"') for k, v in patternAttr.findall(attrs_block)}
+
+                productions[subject] = attrs
+
+            elif predicate == "pof":
+                pof[subject] = obj
+
+
+        for prod, attrs in productions.items():
+        
+            section = pof.get(prod)
+            if section in table:
+            
+                row = [
+                    str(prod_id),
+                    attrs.get("condition", ""),
+                    attrs.get("action", ""),
+                    attrs.get("strength", "")
+                ]
+
+                table[section].append(row)
+                prod_id += 1
 
         characteristics = "\n".join(lines[s_index:f_index])
         extraData = "\n".join(lines[0:s_index-1])
-        return content, characteristics, extraData
+        return content, characteristics, extraData, table
     else:
         data = [
             f"Ontology cognitive_model_{ingredient_name}\n",
@@ -55,7 +114,8 @@ def getOntology(ingredient_name:str,ingredient_type:str):
         characteristics = "\n".join(data[11:13])
         extraData = "\n".join(data[:10])
         data_path.write_text(content, encoding="utf-8")
-        return content, characteristics, extraData
+        table = {f"{ingredient_name}_specific_section": [],}
+        return content, characteristics, extraData, table
 
 
 def main():
@@ -64,12 +124,18 @@ def main():
     ingredient_name = input_data["ingredient_name"]
     ingredient_type = input_data["ingredient_type"]
     
-    ingredient_Data, characteristics, extraData = getOntology(ingredient_name,ingredient_type)
+    ingredient_Data, characteristics, extraData,table = getOntology(ingredient_name,ingredient_type)
     
+    table_list = [
+        {"section": section, "rows": rows}
+        for section, rows in table.items()
+    ]
+
     print(json.dumps({
         "updatedCode": ingredient_Data,
         "updatedCharacteristics": characteristics,
         "updatedExtraData": extraData,
+        "table": table_list,
     }))
 
 if __name__ == "__main__":

@@ -8,6 +8,10 @@ export async function getIngredientCode(
   updatedCode: string;
   updatedCharacteristics: string;
   updatedExtraData: string;
+  table: {
+    section: string;
+    rows: string[][];
+  }[];
 }> {
   const scriptPath = path.join(
     process.cwd(),
@@ -53,5 +57,6 @@ export async function getIngredientCode(
     updatedCode: parsed.updatedCode,
     updatedCharacteristics: parsed.updatedCharacteristics,
     updatedExtraData: parsed.updatedExtraData,
+    table: parsed.table,
   };
 }
