@@ -9,7 +9,7 @@ usage:
 import { useAppContext } from "../../context/AppContext";
 import { useParams } from "next/navigation";
 import SectionTable from "./TableArea";
-import { TableDict } from "../../types";
+import { TableDict, Ingredient } from "../../types";
 
 type Props = {
   type: number;
@@ -103,6 +103,58 @@ export default function TableData({ type, selectedId }: Props) {
       break;
     }
 
+    case 4: {
+      const cocktail = cocktails.find((c) => c.id === id);
+      if (!cocktail) break;
+
+      let counter = 1;
+
+      const activeIngredients: Ingredient[] = Object.entries(
+        cocktail.ingredients,
+      )
+        .filter(([_, v]) => v)
+        .map(([ingId]) => ingredients.find((i) => i.id === ingId))
+        .filter((i): i is (typeof ingredients)[number] => !!i);
+
+      if (activeIngredients.length)
+        return (
+          <div className="overflow-auto">
+            {activeIngredients.map((ing) => (
+              <div key={ing.id}>
+                <h2 className="py-2 text-md font-bold">{ing.name}</h2>
+                <SectionTable data={ing.table} />
+              </div>
+            ))}
+          </div>
+        );
+      break;
+    }
+    case 5: {
+      const cocktail = cocktails.find((c) => c.id === selectedId);
+      if (!cocktail) break;
+
+      let counter = 1;
+
+      const activeIngredients: Ingredient[] = Object.entries(
+        cocktail.ingredients,
+      )
+        .filter(([_, v]) => v)
+        .map(([ingId]) => ingredients.find((i) => i.id === ingId))
+        .filter((i): i is (typeof ingredients)[number] => !!i);
+
+      if (activeIngredients.length)
+        return (
+          <div className="overflow-auto">
+            {activeIngredients.map((ing) => (
+              <div key={ing.id}>
+                <h2 className="py-2 text-md font-bold">{ing.name}</h2>
+                <SectionTable data={ing.table} />
+              </div>
+            ))}
+          </div>
+        );
+      break;
+    }
     default:
       data = tableDict;
       return <SectionTable data={data} />;

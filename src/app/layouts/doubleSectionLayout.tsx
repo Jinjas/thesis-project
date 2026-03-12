@@ -21,18 +21,6 @@ export default function DoubleSectionLayout({
 }: Props) {
   let children2 = <div></div>;
   switch (typeOf2) {
-    case "cocktailList":
-      children2 = (
-        <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
-          <h2 className="text-2xl font-semibold pb-4">
-            Cognitive Production Table
-          </h2>
-
-          <TableData type={3} selectedId={id} />
-        </section>
-      );
-      break;
-
     case "ingredientDetail":
       children2 = (
         <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
@@ -44,17 +32,7 @@ export default function DoubleSectionLayout({
         </section>
       );
       break;
-    case "cocktailDetail":
-      children2 = (
-        <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
-          <h2 className="text-2xl font-semibold pb-4">
-            Cognitive Production Table
-          </h2>
 
-          <TableData type={1} />
-        </section>
-      );
-      break;
     case "ingredientList":
       children2 = (
         <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
@@ -66,6 +44,37 @@ export default function DoubleSectionLayout({
         </section>
       );
       break;
+
+    case "cocktailDetail":
+      children2 = (
+        <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
+          <h2 className="text-2xl font-semibold pb-4">
+            {true
+              ? "Cognitive Production Table"
+              : "Ingredients Cognitive Tables"}
+          </h2>
+          {true ? <TableData type={1} /> : <TableData type={4} />}
+        </section>
+      );
+      break;
+
+    case "cocktailList":
+      children2 = (
+        <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
+          <h2 className="text-2xl font-semibold pb-4">
+            {false
+              ? "Cognitive Production Table"
+              : "Ingredients Cognitive Tables"}
+          </h2>
+          {false ? (
+            <TableData type={3} selectedId={id} />
+          ) : (
+            <TableData type={5} selectedId={id} />
+          )}
+        </section>
+      );
+      break;
+
     default:
       children2 = (
         <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
@@ -83,7 +92,9 @@ export default function DoubleSectionLayout({
       <section
         className={`flex-1 p-9 bg-gray-100 text-black flex flex-col w-full ${extraFlag != "" ? extraFlag : "h-screen"}`}
       >
-        <h1 className="text-2xl font-bold ">{title}</h1>
+        <h1 className="text-2xl font-bold min-h-[32px] overflow-hidden text-ellipsis">
+          {title}
+        </h1>
         {children}
       </section>
 
