@@ -15,6 +15,8 @@ export default function IngredientsPage() {
   const [type, setType] = useState<IngredientType>("Tool");
   const [temporaryType, setTemporaryType] = useState("");
 
+  const [selectedID, setSelectedID] = useState("");
+
   function setTypeFromString(value: string) {
     if (INGREDIENT_TYPES_AVAILABLE.includes(value as IngredientType)) {
       setType(value as IngredientType);
@@ -24,7 +26,11 @@ export default function IngredientsPage() {
   }
 
   return (
-    <DoubleSectionLayout title="Ingredients" typeOf2="ingredientList">
+    <DoubleSectionLayout
+      title="Ingredients"
+      typeOf2="ingredientList"
+      id={selectedID}
+    >
       <AddItemForm
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -45,7 +51,11 @@ export default function IngredientsPage() {
         elements={INGREDIENT_TYPES.map((t) => t.toString())}
       />
 
-      <IngredientList ingredients={ingredients} />
+      <IngredientList
+        ingredients={ingredients}
+        selectedId={selectedID}
+        setId={setSelectedID}
+      />
     </DoubleSectionLayout>
   );
 }

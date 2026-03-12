@@ -8,6 +8,7 @@ type Props = {
   typeOf2: string;
   withViz?: boolean;
   extraFlag?: string;
+  id?: string;
 };
 
 export default function DoubleSectionLayout({
@@ -16,17 +17,18 @@ export default function DoubleSectionLayout({
   typeOf2,
   withViz = false,
   extraFlag = "",
+  id = "",
 }: Props) {
   let children2 = <div></div>;
   switch (typeOf2) {
-    case "ingredientList":
+    case "cocktailList":
       children2 = (
-        <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen justify-center">
-          <h2 className="text-2xl font-semibold pb-4">Conteúdo</h2>
+        <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
+          <h2 className="text-2xl font-semibold pb-4">
+            Cognitive Production Table
+          </h2>
 
-          <p className="text-gray-600 max-w-md">
-            Resultados, visualizações, ferramentas.
-          </p>
+          <TableData type={3} selectedId={id} />
         </section>
       );
       break;
@@ -50,6 +52,17 @@ export default function DoubleSectionLayout({
           </h2>
 
           <TableData type={1} />
+        </section>
+      );
+      break;
+    case "ingredientList":
+      children2 = (
+        <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
+          <h2 className="text-2xl font-semibold pb-4">
+            Cognitive Production Table
+          </h2>
+
+          <TableData type={2} selectedId={id} />
         </section>
       );
       break;

@@ -13,6 +13,7 @@ import { TableDict } from "../../types";
 
 type Props = {
   type: number;
+  selectedId?: string;
 };
 
 const tableDict: TableDict[] = [
@@ -29,7 +30,7 @@ const tableDict: TableDict[] = [
   },
 ];
 
-export default function TableData({ type }: Props) {
+export default function TableData({ type, selectedId }: Props) {
   const { ingredients, cocktails } = useAppContext();
   const { id } = useParams();
 
@@ -39,12 +40,46 @@ export default function TableData({ type }: Props) {
     case 0: {
       const ingredient = ingredients.find((c) => c.id === id);
       data = ingredient?.table;
+
       if (data) return <SectionTable data={data} />;
       break;
     }
 
     case 1: {
       const cocktail = cocktails.find((c) => c.id === id);
+      if (!cocktail) break;
+
+      let counter = 1;
+
+      const data: TableDict[] = Object.entries(cocktail.ingredients)
+        .filter(([_, v]) => v)
+        .map(([ingId]) => ingredients.find((i) => i.id === ingId))
+        .filter((i): i is (typeof ingredients)[number] => !!i)
+        .flatMap((ingredient) =>
+          ingredient.table.map((section) => ({
+            section: section.section,
+            rows: section.rows.map((row) => {
+              const newRow = [...row];
+              newRow[0] = String(counter++);
+              return newRow;
+            }),
+          })),
+        );
+
+      if (data) return <SectionTable data={data} />;
+      break;
+    }
+
+    case 2: {
+      const ingredient = ingredients.find((c) => c.id === selectedId);
+      data = ingredient?.table;
+
+      if (data) return <SectionTable data={data} />;
+      break;
+    }
+
+    case 3: {
+      const cocktail = cocktails.find((c) => c.id === selectedId);
       if (!cocktail) break;
 
       let counter = 1;

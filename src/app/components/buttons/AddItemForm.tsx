@@ -28,7 +28,7 @@ export default function AddItemForm({
   elements,
 }: Props) {
   return (
-    <div className="flex gap-2 pt-4 w-full pr-2">
+    <div className="flex gap-2 py-4 w-full pr-2 ">
       <input
         value={value}
         onChange={onChange}

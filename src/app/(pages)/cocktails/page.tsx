@@ -3,7 +3,6 @@
 import { CocktailList, AddItemForm } from "../../components";
 import { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { redirect } from "next/navigation";
 import { DoubleSectionLayout } from "../../layouts";
 
 export default function CocktailsPage() {
@@ -16,8 +15,13 @@ export default function CocktailsPage() {
 
   const [ingredient, setIngredient] = useState("");
 
+  const [selectedID, setSelectedID] = useState("");
   return (
-    <DoubleSectionLayout title="Cocktails" typeOf2="cocktailList">
+    <DoubleSectionLayout
+      title="Cocktails"
+      typeOf2="cocktailList"
+      id={selectedID}
+    >
       <AddItemForm
         value={cocktailName}
         onChange={(e) => setCocktailName(e.target.value)}
@@ -37,7 +41,11 @@ export default function CocktailsPage() {
         elements={ingredientsNames}
       />
 
-      <CocktailList cocktails={cocktails} />
+      <CocktailList
+        cocktails={cocktails}
+        selectedId={selectedID}
+        setId={setSelectedID}
+      />
     </DoubleSectionLayout>
   );
 }
