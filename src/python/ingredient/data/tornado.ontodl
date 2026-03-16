@@ -26,7 +26,29 @@ individuals {
     Tornado,
     Tornado_model,
     Tornado_specific_section,
-    program_production
+    program_production2,
+    program_production3,
+    program_production4,
+    program_production5,
+    program_production6,
+    program_production7,
+    program_production8,
+    program_production9,
+    program_production10,
+    program_production11,
+    program_production12,
+    program_production13,
+    program_production14,
+    program_production15,
+    program_production16,
+    program_production17,
+    program_production18,
+    program_production19,
+    program_production20,
+    program_production21,
+    program_production22,
+    program_production23,
+    program_production24
 }
 
 triples {
@@ -37,8 +59,75 @@ triples {
   Tornado_specific_section =iof=> section;
   Tornado_specific_section =pof=> Tornado_model;
 
+  program_production2 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production2 =pof=> Tornado_specific_section ;
 
-  program_production =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
-  program_production =pof=> Tornado_specific_section ;
+  program_production3 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production3 =pof=> Tornado_specific_section ;
+
+  program_production4 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production4 =pof=> Tornado_specific_section ;
+
+  program_production5 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production5 =pof=> Tornado_specific_section ;
+
+program_production6 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production6 =pof=> Tornado_specific_section ;
+
+program_production7 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production7 =pof=> Tornado_specific_section ;
+
+program_production8 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production8 =pof=> Tornado_specific_section ;
+
+program_production9 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production9 =pof=> Tornado_specific_section ;
+
+program_production10 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production10 =pof=> Tornado_specific_section ;
+
+program_production11 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production11 =pof=> Tornado_specific_section ;
+
+program_production12 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production12 =pof=> Tornado_specific_section ;
+
+program_production13 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production13 =pof=> Tornado_specific_section ;
+
+program_production14 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production14 =pof=> Tornado_specific_section ;
+
+program_production15 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production15 =pof=> Tornado_specific_section ;
+
+program_production16 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production16 =pof=> Tornado_specific_section ;
+
+program_production17 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production17 =pof=> Tornado_specific_section ;
+
+program_production18 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production18 =pof=> Tornado_specific_section ;
+
+  program_production19 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production19 =pof=> Tornado_specific_section ;
+
+  program_production20 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production20 =pof=> Tornado_specific_section ;
+
+  program_production21 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production21 =pof=> Tornado_specific_section ;
+
+  program_production22 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production22 =pof=> Tornado_specific_section ;
+
+  program_production23 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production23 =pof=> Tornado_specific_section ;
+
+  program_production24 =iof=> production[condition="If a program is a subgoal", action="the program block is...", strength=1.0, probability=1.0];
+  program_production24 =pof=> Tornado_specific_section ;
+
+
 }
 .
