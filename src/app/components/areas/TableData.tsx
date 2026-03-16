@@ -75,6 +75,7 @@ export default function TableData({ type, selectedId }: Props) {
       data = ingredient?.table;
 
       if (data) return <SectionTable data={data} />;
+      else return <></>;
       break;
     }
 

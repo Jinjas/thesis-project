@@ -91,7 +91,7 @@ export default function IngredientDetailPage() {
         <CodeEdit code={characteristics} setCode={setCharacteristics} />
       </div>
 
-      <div className="pt-2 px-2 flex gap-2 justify-end">
+      <div className="pt-2 px-2 flex gap-2 justify-between">
         <ActionButton
           onClick={() => {
             remIngredient(ingredient.id);
