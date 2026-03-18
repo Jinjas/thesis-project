@@ -10,6 +10,16 @@ base_dir = Path(__file__).resolve().parent
 data_dir = base_dir / "data"
 data_dir.mkdir(exist_ok=True)
 
+SAFE_FILE_TOKEN = re.compile(r"[^a-z0-9_-]")
+
+
+def to_safe_filename(value: str) -> str:
+    normalized = value.strip().replace(" ", "_").lower()
+    safe = SAFE_FILE_TOKEN.sub("", normalized)
+    if not safe:
+        raise ValueError("Invalid cocktail name")
+    return safe
+
 def toggle_ingredient_lines(onto_text: str, ingredient: str,ingredient_type: str, active: bool):
     lines = onto_text.splitlines()
     result = []
@@ -134,7 +144,8 @@ def main():
 
     cocktail_name, updated_onto = toggle_ingredient_lines(onto, ingredient_name,ingredient_type, active)
     
-    data_path = data_dir / f"{cocktail_name.lower()}.ontodl"
+    safe_cocktail_name = to_safe_filename(cocktail_name)
+    data_path = data_dir / f"{safe_cocktail_name}.ontodl"
     data_path.write_text(updated_onto, encoding="utf-8")
     
     updated_svg = odlc.generate_svg(updated_onto, path)

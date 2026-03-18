@@ -1,5 +1,6 @@
 # Tese App
 
+
 Web application for creating and editing OntoDL ontologies in the cocktails and ingredients domain, with SVG visualization generated from the ontology.
 
 ## Stack
@@ -12,21 +13,13 @@ Web application for creating and editing OntoDL ontologies in the cocktails and 
 ## Prerequisites
 
 - Node.js 20+
-- npm
 - Python 3.10+
-- Graphviz (the `dot` binary available in PATH)
+- Graphviz installed at system level (`dot` available in PATH)
 
-## Python dependencies (and installation)
-
-The Python scripts used by the app import:
-
-- `lark`
-- `graphviz` (Python package)
-- `matplotlib`
-
-Recommended setup (from the `thesis-project` folder):
+## Local setup
 
 ```bash
+npm install
 python -m venv .venv
 ```
 
@@ -34,96 +27,111 @@ python -m venv .venv
 
 ```bash
 .\.venv\Scripts\Activate.ps1
-pip install lark graphviz matplotlib
+pip install -r requirements.txt
 ```
 
 ### macOS/Linux
 
 ```bash
 source .venv/bin/activate
-pip install lark graphviz matplotlib
+pip install -r requirements.txt
 ```
 
-Install Graphviz at system level (required to generate SVG):
-
-- Windows (winget): `winget install Graphviz.Graphviz`
-- macOS (brew): `brew install graphviz`
-- Ubuntu/Debian: `sudo apt-get install graphviz`
-
-Quick checks:
-
-```bash
-python --version
-dot -V
-```
-
-## Running the project
-
-1. Install Node dependencies:
-
-```bash
-npm install
-```
-
-2. Ensure the Python environment is active and dependencies are installed (previous section).
-
-3. Start in development mode:
+Run the app:
 
 ```bash
 npm run dev
 ```
 
-4. Open `http://localhost:3000`.
+Open `http://localhost:3000`.
 
-## Brief summary of implemented features
+## Security hardening included
 
-- Cocktail management:
-  - List existing cocktails
-  - Create a cocktail with an initial ingredient
-  - Open cocktail detail view
-- Cocktail detail view:
-  - Add ingredient to a cocktail
-  - Enable/disable ingredients in a cocktail (with ontology update)
-  - Import and export OntoDL
+- API payload validation (names, types, ontology/code max size)
+- In-memory API rate limiting
+- Optional write API key enforcement through `API_WRITE_TOKEN`
+- Python process timeout/output limits through env vars
+- Safer Python file writes with filename sanitization
 
-- Ingredient management:
-  - List ingredients
-  - Create ingredient with type (`Language`, `Library`, `Framework`, `Tool`)
-- Ingredient detail view:
-  - Edit name, type, and OntoDL blocks
-  - Remove ingredient
-  - Import and export OntoDL Blocks
+## Docker
 
-- Processing and visualization:
-  - Initial ontology generation for cocktails
-  - Ontology update when ingredient changes occur
-  - Preparation/normalization of imported ontology
-  - SVG visualization generation via Graphviz
-  - Cognitive production tables for cocktails and ingredients
+Build and run with Docker Compose:
 
-- Frontend-backend integration:
-  - Next.js API routes connecting UI and Python scripts
-  - State synchronization in `AppContext`
-  - Per-cocktail update queue to avoid write conflicts
+```bash
+docker compose up --build
+```
 
-## Relevant structure
+The service is available on `http://localhost:50811` (HTTP) and `https://localhost:50812` (HTTPS).
 
-- `src/app`: pages, layouts, components, and API routes
-- `src/python/cocktail`: cocktail and visualization scripts
-- `src/python/ingredient`: ingredient ontology scripts
+### Local Development
 
-## Important notes
+For local development with port 50811:
 
-- The app runs Python with `spawn("python", ...)`. The `python` command must be available in the Node process terminal.
-- Without Graphviz installed at system level, SVG generation fails.
-- OntoDL data is stored in:
-  - `src/python/cocktail/data`
-  - `src/python/ingredient/data`
-- The parser depends on the `ontodl.lark` file inside the Python folders.
+```bash
+$env:PORT=50811
+npm run dev
+```
 
-## Production build
+### Production Deployment
+
+For deploying to a remote server with HTTPS support, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
+The production setup includes:
+
+- Nginx reverse proxy with SSL/TLS
+- Rate limiting at proxy level
+- Security headers (HSTS, X-Frame-Options, etc.)
+- Automatic HTTP to HTTPS redirect
+- Support for Let's Encrypt certificates
+
+Example production URL with constrained ports: `https://cosmo.epl.di.uminho.pt:50812`
+
+**Quick start on remote server:**
+
+```bash
+# Clone and setup
+git clone <repo> && cd <repo>
+git checkout 9-code-and-security-hardening
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your domain and API token
+# Keep host ports inside your allowed range (default 50811/50812)
+
+# Create SSL directory and copy certificates
+mkdir -p ssl
+cp /etc/letsencrypt/live/cosmo.epl.di.uminho.pt/fullchain.pem ./ssl/cert.pem
+cp /etc/letsencrypt/live/cosmo.epl.di.uminho.pt/privkey.pem ./ssl/key.pem
+
+# Deploy
+docker compose build
+docker compose up -d
+
+# Verify
+curl -vk https://cosmo.epl.di.uminho.pt:50812
+```
+
+If your infrastructure maps external `443` to your host `50812`, then the app can still be accessed as `https://cosmo.epl.di.uminho.pt` without explicitly writing the port.
+
+Configured environment variables in `docker-compose.yml`:
+
+- `API_WRITE_TOKEN`
+- `API_RATE_LIMIT`
+- `API_RATE_WINDOW_MS`
+- `PYTHON_EXEC_TIMEOUT_MS`
+- `PYTHON_MAX_STDOUT_BYTES`
+- `DOMAIN`
+- `HOST_HTTP_PORT`
+- `HOST_HTTPS_PORT`
+
+Persistent data is mounted to Docker volumes:
+
+- `/app/src/python/cocktail/data`
+- `/app/src/python/ingredient/data`
+
+## Production build without Docker
 
 ```bash
 npm run build
-npm start
+npm run start
 ```

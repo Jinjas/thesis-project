@@ -1,0 +1,44 @@
+services:
+  tese-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    environment:
+      NODE_ENV: production
+      API_WRITE_TOKEN: ${API_WRITE_TOKEN:-change-me}
+      API_RATE_LIMIT: ${API_RATE_LIMIT:-120}
+      API_RATE_WINDOW_MS: ${API_RATE_WINDOW_MS:-60000}
+      PYTHON_EXEC_TIMEOUT_MS: ${PYTHON_EXEC_TIMEOUT_MS:-15000}
+      PYTHON_MAX_STDOUT_BYTES: ${PYTHON_MAX_STDOUT_BYTES:-2000000}
+    volumes:
+      - cocktail_data:/app/src/python/cocktail/data
+      - ingredient_data:/app/src/python/ingredient/data
+    restart: unless-stopped
+    networks:
+      - tese-network
+
+  nginx:
+    image: nginx:latest-alpine
+    ports:
+      - "${HOST_HTTP_PORT:-50811}:80"
+      - "${HOST_HTTPS_PORT:-50812}:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    environment:
+      DOMAIN: ${DOMAIN:-cosmo.epl.di.uminho.pt}
+    depends_on:
+      - tese-app
+    restart: unless-stopped
+    networks:
+      - tese-network
+
+networks:
+  tese-network:
+    driver: bridge
+
+volumes:
+  cocktail_data:
+  ingredient_data:

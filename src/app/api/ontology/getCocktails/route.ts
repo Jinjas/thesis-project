@@ -1,7 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { get_cocktails } from "@/lib/getCocktailsService";
+import { enforceRateLimit } from "@/lib/apiSecurity";
 
-export async function GET() {
+export const runtime = "nodejs";
+
+export async function GET(req: NextRequest) {
+  const rateLimited = enforceRateLimit(req, "ontology-get-cocktails");
+  if (rateLimited) return rateLimited;
+
   try {
     const result = await get_cocktails();
 

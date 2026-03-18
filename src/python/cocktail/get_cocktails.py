@@ -9,6 +9,16 @@ base_dir = Path(__file__).resolve().parent
 data_dir = base_dir / "data"
 data_dir.mkdir(exist_ok=True)
 
+SAFE_FILE_TOKEN = re.compile(r"[^a-z0-9_-]")
+
+
+def to_safe_filename(value: str) -> str:
+    normalized = value.strip().replace(" ", "_").lower()
+    safe = SAFE_FILE_TOKEN.sub("", normalized)
+    if not safe:
+        raise ValueError("Invalid cocktail name")
+    return safe
+
 def extract_ingredients_from_ontology(onto_text: str, types:set):
     lines = onto_text.strip().split('\n')
     ingredient_types = {}
@@ -48,7 +58,18 @@ def main():
     result = []
 
     for line in lines:
-        data_path = data_dir / f"{line.replace(" ","_").lower()}.ontodl"
+        if not line.strip():
+            continue
+
+        try:
+            safe_name = to_safe_filename(line)
+        except ValueError:
+            continue
+
+        data_path = data_dir / f"{safe_name}.ontodl"
+
+        if not data_path.exists():
+            continue
 
         onto = data_path.read_text(encoding="utf-8")
 

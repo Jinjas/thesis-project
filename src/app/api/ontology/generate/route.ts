@@ -1,25 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { generateCocktail } from "@/lib/generatingCocktailService";
+import {
+  enforceRateLimit,
+  enforceWriteApiKey,
+  parseJsonBody,
+  validateIngredientType,
+  validateName,
+} from "@/lib/apiSecurity";
+
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
+  const rateLimited = enforceRateLimit(req, "ontology-generate");
+  if (rateLimited) return rateLimited;
 
-    const { cocktailName, ingredientName, ingredientType } = body;
+  const unauthorized = enforceWriteApiKey(req);
+  if (unauthorized) return unauthorized;
+
+  try {
+    const parsedBody = await parseJsonBody(req);
+    if ("response" in parsedBody) return parsedBody.response;
+
+    const { cocktailName, ingredientName, ingredientType } = parsedBody.data;
+    const validatedCocktailName = validateName(cocktailName);
+    const validatedIngredientName = validateName(ingredientName);
+    const validatedIngredientType = validateIngredientType(ingredientType);
 
     if (
-      cocktailName === "undefined" ||
-      ingredientName === "undefined" ||
-      ingredientType === "undefined"
+      !validatedCocktailName ||
+      !validatedIngredientName ||
+      !validatedIngredientType
     ) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
     const result = await generateCocktail(
-      cocktailName,
-      ingredientName,
-      ingredientType,
+      validatedCocktailName,
+      validatedIngredientName,
+      validatedIngredientType,
     );
 
     return NextResponse.json(result);

@@ -7,9 +7,20 @@ base_dir = Path(__file__).resolve().parent
 data_dir = base_dir / "data"
 data_dir.mkdir(exist_ok=True)
 
+SAFE_FILE_TOKEN = re.compile(r"[^a-z0-9_-]")
+
+
+def to_safe_filename(value: str) -> str:
+    normalized = value.strip().replace(" ", "_").lower()
+    safe = SAFE_FILE_TOKEN.sub("", normalized)
+    if not safe:
+        raise ValueError("Invalid ingredient name")
+    return safe
+
 
 def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
-    data_path = data_dir / f"{ingredient_name.lower()}.ontodl"
+    safe_name = to_safe_filename(ingredient_name)
+    data_path = data_dir / f"{safe_name}.ontodl"
 
     # get list necessary individuals:
     individualsList = f"    {ingredient_name},\n    {ingredient_name}_model"

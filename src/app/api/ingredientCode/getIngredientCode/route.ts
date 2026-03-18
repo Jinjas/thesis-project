@@ -1,18 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getIngredientCode } from "@/lib/getIngredientCode";
+import {
+  enforceRateLimit,
+  enforceWriteApiKey,
+  parseJsonBody,
+  validateIngredientType,
+  validateName,
+} from "@/lib/apiSecurity";
+
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
+  const rateLimited = enforceRateLimit(req, "ingredient-get-code");
+  if (rateLimited) return rateLimited;
+
+  const unauthorized = enforceWriteApiKey(req);
+  if (unauthorized) return unauthorized;
+
   try {
-    const body = await req.json();
+    const parsedBody = await parseJsonBody(req);
+    if ("response" in parsedBody) return parsedBody.response;
 
-    const { ingredientName, ingredientType } = body;
+    const { ingredientName, ingredientType } = parsedBody.data;
+    const validatedIngredientName = validateName(ingredientName);
+    const validatedIngredientType = validateIngredientType(ingredientType);
 
-    if (ingredientName === "undefined" || ingredientType === "undefined") {
+    if (!validatedIngredientName || !validatedIngredientType) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
-    const result = await getIngredientCode(ingredientName, ingredientType);
+    const result = await getIngredientCode(
+      validatedIngredientName,
+      validatedIngredientType,
+    );
 
     return NextResponse.json(result);
   } catch (error) {
