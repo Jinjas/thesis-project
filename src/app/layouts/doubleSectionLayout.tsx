@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import BaseLayout from "./baseLayout";
-import { Sidebar, VizBar, TableData } from "../components";
+import { ActionButton, TableData } from "../components";
 
 type Props = {
   title: string;
@@ -19,6 +19,8 @@ export default function DoubleSectionLayout({
   extraFlag = "",
   id = "",
 }: Props) {
+  const [selectedButton, setSelectedButton] = useState(true);
+
   let children2 = <div></div>;
   switch (typeOf2) {
     case "ingredientDetail":
@@ -48,12 +50,24 @@ export default function DoubleSectionLayout({
     case "cocktailDetail":
       children2 = (
         <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
-          <h2 className="text-2xl font-semibold pb-4">
-            {true
-              ? "Cognitive Production Table"
-              : "Ingredients Cognitive Tables"}
-          </h2>
-          {true ? <TableData type={1} /> : <TableData type={4} />}
+          <div className={` ${selectedButton ? "pb-4" : "pb-2"}`}>
+            <div className="border-b-2 border-gray-500 flex justify-center w-full">
+              <ActionButton
+                onClick={() => setSelectedButton(true)}
+                label="Cocktail View"
+                variant="double"
+                disabled={selectedButton}
+              />
+              <ActionButton
+                onClick={() => setSelectedButton(false)}
+                label="Ingredients View"
+                variant="double"
+                disabled={!selectedButton}
+              />
+            </div>
+          </div>
+
+          {selectedButton ? <TableData type={1} /> : <TableData type={4} />}
         </section>
       );
       break;
@@ -61,12 +75,24 @@ export default function DoubleSectionLayout({
     case "cocktailList":
       children2 = (
         <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
-          <h2 className="text-2xl font-semibold pb-4">
-            {false
-              ? "Cognitive Production Table"
-              : "Ingredients Cognitive Tables"}
-          </h2>
-          {false ? (
+          <div className={` ${selectedButton ? "pb-4" : "pb-2"}`}>
+            <div className="border-b-2 border-gray-500 flex justify-center w-full">
+              <ActionButton
+                onClick={() => setSelectedButton(true)}
+                label="Cocktail View"
+                variant="double"
+                disabled={selectedButton}
+              />
+              <ActionButton
+                onClick={() => setSelectedButton(false)}
+                label="Ingredients View"
+                variant="double"
+                disabled={!selectedButton}
+              />
+            </div>
+          </div>
+
+          {selectedButton ? (
             <TableData type={3} selectedId={id} />
           ) : (
             <TableData type={5} selectedId={id} />
