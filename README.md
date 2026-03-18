@@ -1,12 +1,13 @@
 # Tese App
 
-Web application for creating and editing OntoDL ontologies in the cocktails and ingredients domain, with SVG visualization generated through Graphviz.
+
+Web application for creating and editing OntoDL ontologies in the cocktails and ingredients domain, with SVG visualization generated from the ontology.
 
 ## Stack
 
 - Next.js 16 + React 19 + TypeScript
 - Tailwind CSS
-- Python scripts for ontology processing
+- Python scripts for OntoDL processing
 - Graphviz for SVG generation
 
 ## Prerequisites
