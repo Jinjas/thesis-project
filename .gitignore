@@ -24,10 +24,25 @@
 .DS_Store
 *.pem
 
+# SSL and certificates
+/ssl/
+ssl/*
+!ssl/.gitkeep
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Backups
+*.backup
+*.tar.gz
+backup-*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)

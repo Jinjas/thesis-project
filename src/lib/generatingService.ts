@@ -1,5 +1,5 @@
-import { spawn } from "child_process";
 import path from "path";
+import { runPythonJson } from "@/lib/runPythonJson";
 
 export async function generateDataFromOntology(
   onto: string,
@@ -20,32 +20,11 @@ export async function generateDataFromOntology(
     name,
   };
 
-  const result = await new Promise<string>((resolve, reject) => {
-    const python = spawn("python", [scriptPath]);
-    let stdout = "";
-    let stderr = "";
-
-    python.stdout?.on("data", (data) => {
-      stdout += data.toString();
-    });
-
-    python.stderr?.on("data", (data) => {
-      stderr += data.toString();
-    });
-
-    python.on("close", (code) => {
-      if (code !== 0) {
-        reject(new Error(`Python script failed: ${stderr}`));
-      } else {
-        resolve(stdout);
-      }
-    });
-
-    python.stdin?.write(JSON.stringify(input));
-    python.stdin?.end();
-  });
-
-  const parsed = JSON.parse(result);
+  const parsed = await runPythonJson<{
+    updatedOnto: string;
+    updatedSvg: string;
+    ingredients: string;
+  }>(scriptPath, input);
 
   return {
     updatedOnto: parsed.updatedOnto,

@@ -10,6 +10,16 @@ base_dir = Path(__file__).resolve().parent
 data_dir = base_dir / "data"
 data_dir.mkdir(exist_ok=True)
 
+SAFE_FILE_TOKEN = re.compile(r"[^a-z0-9_-]")
+
+
+def to_safe_filename(value: str) -> str:
+    normalized = value.strip().replace(" ", "_").lower()
+    safe = SAFE_FILE_TOKEN.sub("", normalized)
+    if not safe:
+        raise ValueError("Invalid cocktail name")
+    return safe
+
 def create_Ontology(cocktail_name: str, ingredient_name: str, ingredient_type: str) -> str:
     types={"Framework", "Language", "Library", "Tool"}
 
@@ -49,7 +59,8 @@ def main():
     ingredient_name = input_data["ingredient_name"]
     ingredient_type = input_data["ingredient_type"]
 
-    data_path = data_dir / f"{cocktail_name.replace(" ","_").lower()}.ontodl"
+    safe_cocktail_name = to_safe_filename(cocktail_name)
+    data_path = data_dir / f"{safe_cocktail_name}.ontodl"
 
     new_onto = create_Ontology(cocktail_name, ingredient_name, ingredient_type)
     data_path.write_text(new_onto, encoding="utf-8")

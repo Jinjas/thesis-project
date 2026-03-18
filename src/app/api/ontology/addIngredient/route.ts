@@ -1,25 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { addIngredientService } from "@/lib/addIngredientService";
+import {
+  enforceRateLimit,
+  enforceWriteApiKey,
+  parseJsonBody,
+  validateIngredientType,
+  validateName,
+  validateTextField,
+} from "@/lib/apiSecurity";
+
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
+  const rateLimited = enforceRateLimit(req, "ontology-add-ingredient");
+  if (rateLimited) return rateLimited;
 
-    const { ingredientName, ingredientType, currentOnto } = body;
+  const unauthorized = enforceWriteApiKey(req);
+  if (unauthorized) return unauthorized;
+
+  try {
+    const parsedBody = await parseJsonBody(req);
+    if ("response" in parsedBody) return parsedBody.response;
+
+    const { ingredientName, ingredientType, currentOnto } = parsedBody.data;
+    const validatedIngredientName = validateName(ingredientName);
+    const validatedIngredientType = validateIngredientType(ingredientType);
+    const validatedCurrentOnto = validateTextField(currentOnto, 200_000);
 
     if (
-      ingredientName === "undefined" ||
-      ingredientType === "undefined" ||
-      typeof currentOnto !== "string"
+      !validatedIngredientName ||
+      !validatedIngredientType ||
+      !validatedCurrentOnto
     ) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
     const result = await addIngredientService(
-      ingredientName,
-      ingredientType,
-      currentOnto,
+      validatedIngredientName,
+      validatedIngredientType,
+      validatedCurrentOnto,
     );
 
     return NextResponse.json(result);

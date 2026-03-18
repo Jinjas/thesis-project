@@ -1,25 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { setIngredientCode } from "@/lib/setIngredientCode";
+import {
+  enforceRateLimit,
+  enforceWriteApiKey,
+  parseJsonBody,
+  validateIngredientType,
+  validateName,
+  validateTextField,
+} from "@/lib/apiSecurity";
+
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
+  const rateLimited = enforceRateLimit(req, "ingredient-set-code");
+  if (rateLimited) return rateLimited;
 
-    const { ingredientName, ingredientType, newCode } = body;
+  const unauthorized = enforceWriteApiKey(req);
+  if (unauthorized) return unauthorized;
+
+  try {
+    const parsedBody = await parseJsonBody(req);
+    if ("response" in parsedBody) return parsedBody.response;
+
+    const { ingredientName, ingredientType, newCode } = parsedBody.data;
+    const validatedIngredientName = validateName(ingredientName);
+    const validatedIngredientType = validateIngredientType(ingredientType);
+    const validatedNewCode = validateTextField(newCode, 120_000);
 
     if (
-      ingredientName === "undefined" ||
-      ingredientType === "undefined" ||
-      typeof newCode !== "string"
+      !validatedIngredientName ||
+      !validatedIngredientType ||
+      !validatedNewCode
     ) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
     const result = await setIngredientCode(
-      ingredientName,
-      ingredientType,
-      newCode,
+      validatedIngredientName,
+      validatedIngredientType,
+      validatedNewCode,
     );
 
     return NextResponse.json(result);

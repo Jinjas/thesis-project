@@ -11,8 +11,19 @@ base_dir = Path(__file__).resolve().parent
 data_dir = base_dir / "data"
 data_dir.mkdir(exist_ok=True)
 
+SAFE_FILE_TOKEN = re.compile(r"[^a-z0-9_-]")
+
+
+def to_safe_filename(value: str) -> str:
+    normalized = value.strip().replace(" ", "_").lower()
+    safe = SAFE_FILE_TOKEN.sub("", normalized)
+    if not safe:
+        raise ValueError("Invalid ingredient name")
+    return safe
+
 def getOntology(ingredient_name:str,ingredient_type:str):
-    data_path = data_dir / f"{ingredient_name.lower()}.ontodl" #can change
+    safe_name = to_safe_filename(ingredient_name)
+    data_path = data_dir / f"{safe_name}.ontodl" #can change
 
     if data_path.exists():
         content = data_path.read_text(encoding="utf-8")
