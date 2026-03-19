@@ -90,7 +90,6 @@ Example production URL with constrained ports: `https://cosmo.epl.di.uminho.pt:5
 ```bash
 # Clone and setup
 git clone <repo> && cd <repo>
-git checkout 9-code-and-security-hardening
 
 # Configure environment
 cp .env.example .env
