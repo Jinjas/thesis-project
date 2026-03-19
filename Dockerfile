@@ -4,6 +4,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
+    python3-venv \
     graphviz \
     && rm -rf /var/lib/apt/lists/*
 
@@ -13,7 +14,10 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY requirements.txt ./
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN python3 -m venv /opt/venv \
+    && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+
+ENV PATH="/opt/venv/bin:$PATH"
 
 COPY . .
 RUN npm run build
