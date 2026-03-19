@@ -144,3 +144,70 @@ Se a infraestrutura externa mapear `443 -> 50812`, podes usar `https://cosmo.epl
 ---
 
 Para documentação completa, consulta [DEPLOYMENT.md](DEPLOYMENT.md).
+
+# REINICIO DE SERVIÇO COM BACKUP RESTORE
+
+- limpeza:
+
+```bash
+cd ~
+docker rm -f tese-app 2>/dev/null || true
+docker volume rm cocktail_data ingredient_data 2>/dev/null || true
+docker image rm tese-app:prod 2>/dev/null || true
+rm -rf ~/thesis-project
+
+```
+
+- clone e setup:
+
+```bash
+git clone https://github.com/Jinjas/thesis-project.git
+cd ~/thesis-project
+mkdir -p backups
+make build
+make run
+
+```
+
+- get backup:
+
+- use backup:
+
+```bash
+make backup-list
+
+make restore FILE=backups/tese-data-YYYYMMDD-HHMMSS.tar.gz
+make restart
+```
+
+# Share backup a partir da minha maquina local:
+
+save:
+
+```
+ssh pg56006@cosmo.epl.di.uminho.pt "cat ~/thesis-project/backups/tese-data-20260319-154933.tar.gz" > backups/tese-data-20260319-154933.tar.gz
+```
+
+use:
+
+```
+sftp pg56006@cosmo.epl.di.uminho.pt
+```
+
+```
+mkdir thesis-project
+mkdir thesis-project/backups
+put "C:\Users\cramos\Documents\universidadeRodrigo\university\fifthyear\tese\thesis-project\backups\tese-data-20260319-154933.tar.gz" "thesis-project/backups/tese-data-20260319-154933.tar.gz"
+bye
+```
+
+Depois, no servidor:
+
+```
+cd ~/thesis-project
+ls -lh backups/tese-data-20260319-154933.tar.gz
+gzip -t backups/tese-data-20260319-154933.tar.gz && echo OK
+make restore FILE=backups/tese-data-20260319-154933.tar.gz
+make restart
+make test
+```
