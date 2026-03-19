@@ -151,9 +151,21 @@ Useful targets:
 - `make logs`
 - `make status`
 - `make test`
+- `make backup`
+- `make backup-list`
+- `make restore FILE=backups/tese-data-YYYYMMDD-HHMMSS.tar.gz`
 
 To run on a different allowed port:
 
 ```bash
 make update HOST_PORT=50812
 ```
+
+Recommended safety routine on the external machine:
+
+```bash
+make backup
+make backup-list
+```
+
+Then copy the newest file in `backups/` to another machine/storage (for example with `scp`) so you are protected even if the server disk fails.
