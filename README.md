@@ -1,6 +1,5 @@
 # Tese App
 
-
 Web application for creating and editing OntoDL ontologies in the cocktails and ingredients domain, with SVG visualization generated from the ontology.
 
 ## Stack
@@ -134,4 +133,27 @@ Persistent data is mounted to Docker volumes:
 ```bash
 npm run build
 npm run start
+```
+
+## Makefile (server workflow)
+
+For a simple server workflow (pull, rebuild, relaunch), use the provided Makefile:
+
+```bash
+make update
+```
+
+Useful targets:
+
+- `make pull`
+- `make build`
+- `make restart`
+- `make logs`
+- `make status`
+- `make test`
+
+To run on a different allowed port:
+
+```bash
+make update HOST_PORT=50812
 ```
