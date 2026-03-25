@@ -3,17 +3,20 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { Ingredient } from "../../types";
+import { ActionButton } from "../button";
 
 type Props = {
   ingredients: Ingredient[];
   selectedId: string;
   setId: (value: string) => void;
+  remIngredient: (id: string) => void;
 };
 
 export default function IngredientList({
   ingredients,
   selectedId,
   setId,
+  remIngredient,
 }: Props) {
   useEffect(() => {
     if (!selectedId && ingredients.length > 0) {
@@ -35,13 +38,23 @@ export default function IngredientList({
 
             <h3 className="text-md">{i.type}</h3>
 
-            <Link
-              href={`/ingredients/${i.id}`}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-gray-700 hover:bg-gray-800 text-white px-2 py-1 rounded border text-center"
-            >
-              Edit
-            </Link>
+            <div className="flex flex-wrap sm:flex-nowrap gap-3 sm:justify-end">
+              <div onClick={(e) => e.stopPropagation()}>
+                <ActionButton
+                  label="Rem"
+                  variant="remove2"
+                  onClick={() => remIngredient(i.id)}
+                />
+              </div>
+
+              <Link
+                href={`/ingredients/${i.id}`}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-gray-700 hover:bg-gray-800 text-white px-2 py-1 rounded border text-center"
+              >
+                Edit
+              </Link>
+            </div>
           </div>
         </li>
       ))}

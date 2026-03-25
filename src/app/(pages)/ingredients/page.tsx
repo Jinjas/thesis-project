@@ -10,7 +10,7 @@ import {
   IngredientType,
 } from "../../types";
 export default function IngredientsPage() {
-  const { ingredients, addIngredient } = useAppContext();
+  const { ingredients, addIngredient, remIngredient } = useAppContext();
   const [name, setName] = useState("");
   const [type, setType] = useState<IngredientType>("Tool");
   const [temporaryType, setTemporaryType] = useState("");
@@ -55,6 +55,7 @@ export default function IngredientsPage() {
         ingredients={ingredients}
         selectedId={selectedID}
         setId={setSelectedID}
+        remIngredient={remIngredient}
       />
     </DoubleSectionLayout>
   );
