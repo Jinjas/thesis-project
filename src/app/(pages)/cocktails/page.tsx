@@ -6,7 +6,7 @@ import { useAppContext } from "../../context/AppContext";
 import { DoubleSectionLayout } from "../../layouts";
 
 export default function CocktailsPage() {
-  const { cocktails, addCocktail } = useAppContext();
+  const { cocktails, addCocktail, remCocktail } = useAppContext();
 
   const [cocktailName, setCocktailName] = useState("");
   const { ingredients } = useAppContext();
@@ -45,6 +45,7 @@ export default function CocktailsPage() {
         cocktails={cocktails}
         selectedId={selectedID}
         setId={setSelectedID}
+        remCocktail={remCocktail}
       />
     </DoubleSectionLayout>
   );
