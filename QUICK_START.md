@@ -185,12 +185,14 @@ make restart
 save:
 
 ```
+cd .\thesis-project\
 ssh pg56006@cosmo.epl.di.uminho.pt "cat ~/thesis-project/backups/tese-data-20260319-154933.tar.gz" > backups/tese-data-20260319-154933.tar.gz
 ```
 
 use:
 
 ```
+cd .\thesis-project\
 sftp pg56006@cosmo.epl.di.uminho.pt
 ```
 
