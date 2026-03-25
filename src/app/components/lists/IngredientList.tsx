@@ -44,8 +44,6 @@ export default function IngredientList({
             >
               <Link
                 href={`/ingredients/${i.id}`}
-                onClick={(e) => e.stopPropagation()}
-                aria-label={`Edit ${i.name}`}
                 title={`Edit ${i.name}`}
                 className="bg-gray-700 hover:bg-gray-800 text-white p-2 rounded border text-center inline-flex items-center justify-center"
               >
@@ -53,7 +51,6 @@ export default function IngredientList({
               </Link>
               <button
                 onClick={() => remIngredient(i.id)}
-                aria-label={`Remove ${i.name}`}
                 title={`Remove ${i.name}`}
                 className="bg-red-800 hover:bg-red-950 text-white p-2 rounded border cursor-pointer inline-flex items-center justify-center"
               >
