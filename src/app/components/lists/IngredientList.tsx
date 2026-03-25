@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Ingredient } from "../../types";
-import { ActionButton } from "../button";
 
 type Props = {
   ingredients: Ingredient[];
@@ -30,30 +30,35 @@ export default function IngredientList({
         <li key={i.id}>
           <div
             onClick={() => setId(i.id)}
-            className={`grid grid-cols-[1fr_1fr_80px] items-center gap-2 py-1 px-2 border-b cursor-pointer
+            className={`grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] items-center gap-2 py-1 px-2 border-b cursor-pointer
               ${selectedId === i.id ? "bg-gray-200" : "hover:bg-gray-100"}
             `}
           >
-            <h3 className="font-semibold">{i.name}</h3>
+            <h3 className="font-semibold min-w-0 truncate">{i.name}</h3>
 
-            <h3 className="text-md">{i.type}</h3>
+            <h3 className="text-md min-w-0 truncate">{i.type}</h3>
 
-            <div className="flex flex-wrap sm:flex-nowrap gap-3 sm:justify-end">
-              <div onClick={(e) => e.stopPropagation()}>
-                <ActionButton
-                  label="Rem"
-                  variant="remove2"
-                  onClick={() => remIngredient(i.id)}
-                />
-              </div>
-
+            <div
+              className="flex items-center gap-2"
+              onClick={(e) => e.stopPropagation()}
+            >
               <Link
                 href={`/ingredients/${i.id}`}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-gray-700 hover:bg-gray-800 text-white px-2 py-1 rounded border text-center"
+                aria-label={`Edit ${i.name}`}
+                title={`Edit ${i.name}`}
+                className="bg-gray-700 hover:bg-gray-800 text-white p-2 rounded border text-center inline-flex items-center justify-center"
               >
-                Edit
+                <Pencil size={16} />
               </Link>
+              <button
+                onClick={() => remIngredient(i.id)}
+                aria-label={`Remove ${i.name}`}
+                title={`Remove ${i.name}`}
+                className="bg-red-800 hover:bg-red-950 text-white p-2 rounded border cursor-pointer inline-flex items-center justify-center"
+              >
+                <Trash2 size={16} />
+              </button>
             </div>
           </div>
         </li>

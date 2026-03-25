@@ -3,7 +3,7 @@
 type Props = {
   onClick: () => void;
   label: string;
-  variant?: "save" | "remove" | "remove2" | "expand" | "double";
+  variant?: "save" | "remove" | "expand" | "double";
   disabled?: boolean;
 };
 
@@ -23,8 +23,6 @@ export default function ActionButton({
       "disabled:bg-gray-400 text-white rounded w-min px-1 py-1 bg-gray-700 hover:bg-gray-800 text-xs",
     double:
       " disabled:bg-gray-200 rounded w-full px-2 text-2xl font-semibold hover:bg-gray-100 bg-transparent ",
-    remove2:
-      "disabled:bg-gray-400 text-white px-2 py-1 rounded border text-center bg-red-800 hover:bg-red-950",
   };
 
   return (
