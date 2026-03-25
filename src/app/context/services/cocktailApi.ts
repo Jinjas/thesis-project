@@ -47,3 +47,13 @@ export async function prepare(data: any) {
   if (!res.ok) throw new Error("Preparing ontology failed");
   return res.json();
 }
+
+export async function remove(data: any) {
+  const res = await fetch("/api/ontology/remCocktail", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) throw new Error("Removing cocktail failed");
+}

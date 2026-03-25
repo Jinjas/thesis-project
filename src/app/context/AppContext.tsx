@@ -22,6 +22,7 @@ import {
   getCocktails,
   update,
   prepare,
+  remove,
 } from "./services/cocktailApi";
 
 type ExtractedIngredient = {
@@ -34,10 +35,8 @@ type AppContextType = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
 
-  addCocktail: (name: string, firstIngredient: string) => Promise<string>;
   addIngredient: (name: string, type: IngredientType) => Promise<string>;
   remIngredient(id: string): void;
-
   updateIngredient: (
     id: string,
     newName: string,
@@ -45,6 +44,7 @@ type AppContextType = {
     newCode: string,
   ) => Promise<void>;
 
+  addCocktail: (name: string, firstIngredient: string) => Promise<string>;
   addIngredientToCocktail: (
     cocktailId: string,
     ingredientId: string,
@@ -54,6 +54,7 @@ type AppContextType = {
     ingredientId: string,
   ) => Promise<void>;
   updateOnto: (cocktailId: string, onto: string) => Promise<void>;
+  remCocktail(id: string): Promise<void>;
 };
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -405,6 +406,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  async function remCocktail(id: string) {
+    const cocktailToRemove = cocktails.find((c) => c.id === id);
+    if (!cocktailToRemove) return;
+
+    setCocktails((prev) => prev.filter((c) => c.id !== id));
+
+    try {
+      await remove({ cocktailName: cocktailToRemove.name });
+    } catch (err) {
+      console.error("Error removing cocktail with id: ", id, err);
+    }
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -417,6 +431,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         addIngredientToCocktail,
         updateIngredientStatus,
         updateOnto,
+        remCocktail,
       }}
     >
       {children}
