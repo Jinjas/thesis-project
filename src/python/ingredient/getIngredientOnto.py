@@ -102,6 +102,11 @@ def getOntology(ingredient_name:str,ingredient_type:str):
                 table[section].append(row)
                 prod_id += 1
 
+        names_file = data_dir / "NAMES.txt"
+        with open(names_file, "a", encoding="utf-8") as f:
+            if ingredient_name not in names_file.read_text(encoding="utf-8").splitlines():
+                f.write(f"\n{ingredient_name}")
+            
         characteristics = "\n".join(lines[s_index:f_index])
         extraData = "\n".join(lines[0:s_index-1])
         return content, characteristics, extraData, table
@@ -127,7 +132,7 @@ def getOntology(ingredient_name:str,ingredient_type:str):
         with open(names_file, "a", encoding="utf-8") as f:
             f.write(f"\n{ingredient_name}")
 
-            
+
         content = "\n".join(data)
         characteristics = "\n".join(data[11:13])
         extraData = "\n".join(data[:10])
