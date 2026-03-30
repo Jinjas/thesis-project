@@ -8,14 +8,13 @@ attributes {
 }
 
 concepts {
-    ingredient,
-    language,
-    library,
-    framework,
-    tool,
-    model,
-    production[condition, action, strength, probability],
-    section
+    Language,
+    Library,
+    Framework,
+    Tool,
+    Model,
+    Production[condition, action, strength, probability],
+    Section
 }
 
 relations {
@@ -31,9 +30,9 @@ individuals {
 triples {
     PyTorch =iof=> Framework;
     PyTorch =generates=> PyTorch_model;
-    PyTorch_model =iof=> model;
+    PyTorch_model =iof=> Model;
 
-    PyTorch_specific_section =iof=> section;
+    PyTorch_specific_section =iof=> Section;
     PyTorch_specific_section =pof=> PyTorch_model;
 }
 .

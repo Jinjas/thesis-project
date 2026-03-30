@@ -70,10 +70,10 @@ def getOntology(ingredient_name:str,ingredient_type:str):
             obj = m.group(3)
             attrs_block = m.group(4)
 
-            if predicate == "iof" and obj == "section":
+            if predicate == "iof" and obj == "Section":
                 table[subject] = []
 
-            elif predicate == "iof" and obj == "production":
+            elif predicate == "iof" and obj == "Production":
             
                 attrs = {}
                 if attrs_block:
@@ -107,7 +107,7 @@ def getOntology(ingredient_name:str,ingredient_type:str):
         data = [
             f"Ontology cognitive_model_{ingredient_name}\n",
             "attributes {\n    condition: string,\n    action: string,\n    strength: float,\n    probability: float\n}\n",
-            "concepts {\n    ingredient,\n    language,\n    library,\n    framework,\n    tool,\n    model,\n    production[condition, action, strength, probability],\n    section\n}\n",
+            "concepts {\n    Language,\n    Library,\n    Framework,\n    Tool,\n    Model,\n    Production[condition, action, strength, probability],\n    Section\n}\n",
             "relations {\n    generates\n}\n",
             "individuals {",
             f"    {ingredient_name},\n    {ingredient_name}_model,\n    {ingredient_name}_specific_section",
@@ -115,8 +115,8 @@ def getOntology(ingredient_name:str,ingredient_type:str):
             "triples {",
             f'    {ingredient_name} =iof=> {ingredient_type};',
             f'    {ingredient_name} =generates=> {ingredient_name}_model;',
-            f'    {ingredient_name}_model =iof=> model;\n',
-            f'    {ingredient_name}_specific_section =iof=> section;',
+            f'    {ingredient_name}_model =iof=> Model;\n',
+            f'    {ingredient_name}_specific_section =iof=> Section;',
             f'    {ingredient_name}_specific_section =pof=> {ingredient_name}_model;',
             "}\n."
         ]

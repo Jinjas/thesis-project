@@ -8,14 +8,13 @@ attributes {
 }
 
 concepts {
-    ingredient,
-    language,
-    library,
-    framework,
-    tool,
-    model,
-    production[condition, action, strength, probability],
-    section
+    Language,
+    Library,
+    Framework,
+    Tool,
+    Model,
+    Production[condition, action, strength, probability],
+    Section
 }
 
 relations {
@@ -31,9 +30,9 @@ individuals {
 triples {
     VisualStudio =iof=> Tool;
     VisualStudio =generates=> VisualStudio_model;
-    VisualStudio_model =iof=> model;
+    VisualStudio_model =iof=> Model;
 
-    VisualStudio_specific_section =iof=> section;
+    VisualStudio_specific_section =iof=> Section;
     VisualStudio_specific_section =pof=> VisualStudio_model;
 }
 .

@@ -25,7 +25,7 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
     # get list necessary individuals:
     individualsList = f"    {ingredient_name},\n    {ingredient_name}_model"
     pattern = re.compile(
-    r"^\s*(\w+)\s*=\s*iof\s*=>\s*(section|production)"
+    r"^\s*(\w+)\s*=\s*iof\s*=>\s*(Section|Production)"
     r"(?:\[(.*?)\])?\s*;",
     re.MULTILINE | re.DOTALL
 )
@@ -61,10 +61,10 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
         obj = m.group(3)
         attrs_block = m.group(4)
 
-        if predicate == "iof" and obj == "section":
+        if predicate == "iof" and obj == "Section":
             table[subject] = []
 
-        elif predicate == "iof" and obj == "production":
+        elif predicate == "iof" and obj == "Production":
 
             attrs = {}
             if attrs_block:
@@ -96,7 +96,7 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
     data = [
             f"Ontology cognitive_model_{ingredient_name}\n",
             "attributes {\n    condition: string,\n    action: string,\n    strength: float,\n    probability: float\n}\n",
-            "concepts {\n    ingredient,\n    language,\n    library,\n    framework,\n    tool,\n    model,\n    production[condition, action, strength, probability],\n    section\n}\n",
+            "concepts {\n    Language,\n    Library,\n    Framework,\n    Tool,\n    Model,\n    Production[condition, action, strength, probability],\n    Section\n}\n",
             "relations {\n    generates\n}\n",
             "individuals {",
             individualsList,
@@ -104,7 +104,7 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
             "triples {",
             f'    {ingredient_name} =iof=> {ingredient_type};',
             f'    {ingredient_name} =generates=> {ingredient_name}_model;',
-            f'    {ingredient_name}_model =iof=> model;',
+            f'    {ingredient_name}_model =iof=> Model;',
             f'\n{newCode}\n'
             "}\n."
         ]

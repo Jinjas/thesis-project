@@ -8,14 +8,13 @@ attributes {
 }
 
 concepts {
-    ingredient,
-    language,
-    library,
-    framework,
-    tool,
-    model,
-    production[condition, action, strength, probability],
-    section
+    Language,
+    Library,
+    Framework,
+    Tool,
+    Model,
+    Production[condition, action, strength, probability],
+    Section
 }
 
 relations {
@@ -31,9 +30,9 @@ individuals {
 triples {
     TailwindCSS =iof=> Tool;
     TailwindCSS =generates=> TailwindCSS_model;
-    TailwindCSS_model =iof=> model;
+    TailwindCSS_model =iof=> Model;
 
-    TailwindCSS_specific_section =iof=> section;
+    TailwindCSS_specific_section =iof=> Section;
     TailwindCSS_specific_section =pof=> TailwindCSS_model;
 }
 .

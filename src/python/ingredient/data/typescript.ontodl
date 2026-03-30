@@ -8,14 +8,13 @@ attributes {
 }
 
 concepts {
-    ingredient,
-    language,
-    library,
-    framework,
-    tool,
-    model,
-    production[condition, action, strength, probability],
-    section
+    Language,
+    Library,
+    Framework,
+    Tool,
+    Model,
+    Production[condition, action, strength, probability],
+    Section
 }
 
 relations {
@@ -31,9 +30,9 @@ individuals {
 triples {
     TypeScript =iof=> Language;
     TypeScript =generates=> TypeScript_model;
-    TypeScript_model =iof=> model;
+    TypeScript_model =iof=> Model;
 
-    TypeScript_specific_section =iof=> section;
+    TypeScript_specific_section =iof=> Section;
     TypeScript_specific_section =pof=> TypeScript_model;
 }
 .

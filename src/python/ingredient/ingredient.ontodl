@@ -8,19 +8,19 @@ attributes {
 }
 
 concepts { 
-   ingredient,
-   language,
-   library,
-   framework,
-   tool,
-   model,
-   production[
+   Ingredient,
+   Language,
+   Library,
+   Framework,
+   Tool,
+   Model,
+   Production[
           condition,
           action,
           strength,
           probability
     ],
-   section 
+   Section 
   }
 
 relations { generates }

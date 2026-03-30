@@ -8,14 +8,13 @@ attributes {
 }
 
 concepts {
-    ingredient,
-    language,
-    library,
-    framework,
-    tool,
-    model,
-    production[condition, action, strength, probability],
-    section
+    Language,
+    Library,
+    Framework,
+    Tool,
+    Model,
+    Production[condition, action, strength, probability],
+    Section
 }
 
 relations {
@@ -31,9 +30,9 @@ individuals {
 triples {
     TSQL =iof=> Language;
     TSQL =generates=> TSQL_model;
-    TSQL_model =iof=> model;
+    TSQL_model =iof=> Model;
 
-    TSQL_specific_section =iof=> section;
+    TSQL_specific_section =iof=> Section;
     TSQL_specific_section =pof=> TSQL_model;
 }
 .

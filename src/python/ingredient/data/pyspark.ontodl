@@ -8,14 +8,13 @@ attributes {
 }
 
 concepts {
-    ingredient,
-    language,
-    library,
-    framework,
-    tool,
-    model,
-    production[condition, action, strength, probability],
-    section
+    Language,
+    Library,
+    Framework,
+    Tool,
+    Model,
+    Production[condition, action, strength, probability],
+    Section
 }
 
 relations {
@@ -31,9 +30,9 @@ individuals {
 triples {
     PySpark =iof=> Library;
     PySpark =generates=> PySpark_model;
-    PySpark_model =iof=> model;
+    PySpark_model =iof=> Model;
 
-    PySpark_specific_section =iof=> section;
+    PySpark_specific_section =iof=> Section;
     PySpark_specific_section =pof=> PySpark_model;
 }
 .

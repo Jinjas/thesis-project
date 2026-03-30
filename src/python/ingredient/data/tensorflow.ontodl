@@ -8,14 +8,13 @@ attributes {
 }
 
 concepts {
-    ingredient,
-    language,
-    library,
-    framework,
-    tool,
-    model,
-    production[condition, action, strength, probability],
-    section
+    Language,
+    Library,
+    Framework,
+    Tool,
+    Model,
+    Production[condition, action, strength, probability],
+    Section
 }
 
 relations {
@@ -31,9 +30,9 @@ individuals {
 triples {
     TensorFlow =iof=> Library;
     TensorFlow =generates=> TensorFlow_model;
-    TensorFlow_model =iof=> model;
+    TensorFlow_model =iof=> Model;
 
-    TensorFlow_specific_section =iof=> section;
+    TensorFlow_specific_section =iof=> Section;
     TensorFlow_specific_section =pof=> TensorFlow_model;
 }
 .

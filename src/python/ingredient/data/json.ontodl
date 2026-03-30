@@ -8,14 +8,13 @@ attributes {
 }
 
 concepts {
-    ingredient,
-    language,
-    library,
-    framework,
-    tool,
-    model,
-    production[condition, action, strength, probability],
-    section
+    Language,
+    Library,
+    Framework,
+    Tool,
+    Model,
+    Production[condition, action, strength, probability],
+    Section
 }
 
 relations {
@@ -31,9 +30,9 @@ individuals {
 triples {
     JSON =iof=> Language;
     JSON =generates=> JSON_model;
-    JSON_model =iof=> model;
+    JSON_model =iof=> Model;
 
-    JSON_specific_section =iof=> section;
+    JSON_specific_section =iof=> Section;
     JSON_specific_section =pof=> JSON_model;
 }
 .

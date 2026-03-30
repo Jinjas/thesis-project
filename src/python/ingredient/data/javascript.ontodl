@@ -8,14 +8,13 @@ attributes {
 }
 
 concepts {
-    ingredient,
-    language,
-    library,
-    framework,
-    tool,
-    model,
-    production[condition, action, strength, probability],
-    section
+    Language,
+    Library,
+    Framework,
+    Tool,
+    Model,
+    Production[condition, action, strength, probability],
+    Section
 }
 
 relations {
@@ -31,9 +30,9 @@ individuals {
 triples {
     JavaScript =iof=> Language;
     JavaScript =generates=> JavaScript_model;
-    JavaScript_model =iof=> model;
+    JavaScript_model =iof=> Model;
 
-    JavaScript_specific_section =iof=> section;
+    JavaScript_specific_section =iof=> Section;
     JavaScript_specific_section =pof=> JavaScript_model;
 }
 .
