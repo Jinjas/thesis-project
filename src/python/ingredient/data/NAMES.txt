@@ -15,5 +15,3 @@ PySpark
 TSQL
 VisualStudio
 PL0
-P1
-P3

@@ -1,11 +1,7 @@
 "use client";
 
 import { createContext, useContext, useRef, useState, useEffect } from "react";
-import {
-  Cocktail,
-  Ingredient,
-  IngredientType,
-} from "../types";
+import { Cocktail, Ingredient, IngredientType } from "../types";
 import { enqueueCocktailUpdate } from "@/lib/updateQueue";
 
 import { createId } from "./utils/createId";
@@ -16,6 +12,7 @@ import {
   setIngredientCode,
   getIngredientCode,
   getRemainingIngredients,
+  removeIngredient,
 } from "./services/ingredientApi";
 import {
   addIngredientToOntology,
@@ -37,7 +34,7 @@ type AppContextType = {
   ingredients: Ingredient[];
 
   addIngredient: (name: string, type: IngredientType) => Promise<string>;
-  remIngredient(id: string): void;
+  remIngredient(id: string): Promise<void>;
   updateIngredient: (
     id: string,
     newName: string,
@@ -80,11 +77,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       );
 
       setIngredients((prev) => {
-        const existingNamesSet = new Set(prev.map((ing) => ing.name.toLowerCase()));
+        const existingNamesSet = new Set(
+          prev.map((ing) => ing.name.toLowerCase()),
+        );
 
         const missing = data.ingredients
-          .filter((ingredient: { name: string }) =>
-            !existingNamesSet.has(ingredient.name.toLowerCase()),
+          .filter(
+            (ingredient: { name: string }) =>
+              !existingNamesSet.has(ingredient.name.toLowerCase()),
           )
           .map(
             (ingredient: {
@@ -98,7 +98,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
               id: createId("ingredient", ingredient.name),
               name: ingredient.name,
               type: (
-                ["Language", "Library", "Framework", "Tool", "UNDEFINED"] as const
+                [
+                  "Language",
+                  "Library",
+                  "Framework",
+                  "Tool",
+                  "UNDEFINED",
+                ] as const
               ).includes(ingredient.type as IngredientType)
                 ? (ingredient.type as IngredientType)
                 : "UNDEFINED",
@@ -180,8 +186,28 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return;
   }
 
-  function remIngredient(id: string) {
+  async function remIngredient(id: string) {
+    //only removes if cocktails don't have it as active, it flags all cocktails that have it active
+    const cocktailNamesWithIngredientActive = cocktails
+      .filter((c) => c.ingredients[id])
+      .map((c) => c.name);
+
+    if (cocktailNamesWithIngredientActive.length) {
+      console.warn(
+        `Ingredient with id ${id} is active in the following cocktails and cannot be removed: \n- ${cocktailNamesWithIngredientActive.join("\n- ")}`,
+      );
+      return;
+    }
+    const ingredientToRemove = ingredients.find((c) => c.id === id);
+    if (!ingredientToRemove) return;
+
     setIngredients((prev) => prev.filter((ing) => ing.id !== id));
+
+    try {
+      await removeIngredient({ ingredientName: ingredientToRemove.name });
+    } catch (err) {
+      console.error("Error removing ingredient with id: ", id, err);
+    }
 
     setCocktails((prev) =>
       prev.map((c) => ({

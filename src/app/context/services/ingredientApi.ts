@@ -13,7 +13,9 @@ export async function getIngredientCode(name: string, type: string) {
   return res.json();
 }
 
-export async function getRemainingIngredients(existingIngredientNames: string[]) {
+export async function getRemainingIngredients(
+  existingIngredientNames: string[],
+) {
   const res = await fetch("/api/ingredientCode/getRemainingIngredients", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -45,4 +47,14 @@ export async function setIngredientCode(
   if (!res.ok) throw new Error("Failed to update ingredient");
 
   return res.json();
+}
+
+export async function removeIngredient(data: any) {
+  const res = await fetch("/api/ingredientCode/remIngredient", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) throw new Error("Removing ingredient failed");
 }
