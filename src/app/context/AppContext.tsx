@@ -1,21 +1,19 @@
 "use client";
 
 import { createContext, useContext, useRef, useState, useEffect } from "react";
-import {
-  Cocktail,
-  Ingredient,
-  IngredientType,
-  ParamMap,
-  TableDict,
-} from "../types";
-import { INGREDIENTS } from "./data";
+import { Cocktail, Ingredient, IngredientType } from "../types";
 import { enqueueCocktailUpdate } from "@/lib/updateQueue";
 
 import { createId } from "./utils/createId";
 import { normalizeSvg } from "./utils/svgUtils";
 import { resolveIngredients } from "./utils/resolveIngredients";
 
-import { setIngredientCode, getIngredientCode } from "./services/ingredientApi";
+import {
+  setIngredientCode,
+  getIngredientCode,
+  getRemainingIngredients,
+  removeIngredient,
+} from "./services/ingredientApi";
 import {
   addIngredientToOntology,
   generate,
@@ -36,7 +34,7 @@ type AppContextType = {
   ingredients: Ingredient[];
 
   addIngredient: (name: string, type: IngredientType) => Promise<string>;
-  remIngredient(id: string): void;
+  remIngredient(id: string): Promise<void>;
   updateIngredient: (
     id: string,
     newName: string,
@@ -67,33 +65,60 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
 
   useEffect(() => {
-    //getInitialIngredientsCode();
     generateInitialCocktail();
   }, []);
 
   /* --------------------  INGREDIENT BASED FUNCTIONS  ----------------------*/
 
-  async function getInitialIngredientsCode() {
-    for (const ingredient of ingredients) {
-      try {
-        const data = await getIngredientCode(ingredient.name, ingredient.type);
+  async function getRemainingIngredientsCode(existingNames: string[] = []) {
+    try {
+      const data = await getRemainingIngredients(
+        existingNames.length ? existingNames : ingredients.map((i) => i.name),
+      );
 
-        setIngredients((prev) =>
-          prev.map((c) =>
-            c.id === ingredient.id
-              ? {
-                  ...c,
-                  code: data.updatedCode,
-                  characteristics: data.updatedCharacteristics,
-                  extraData: data.updatedExtraData,
-                  table: data.table,
-                }
-              : c,
-          ),
+      setIngredients((prev) => {
+        const existingNamesSet = new Set(
+          prev.map((ing) => ing.name.toLowerCase()),
         );
-      } catch (err) {
-        console.error("error generating onto to", ingredient.id, err);
-      }
+
+        const missing = data.ingredients
+          .filter(
+            (ingredient: { name: string }) =>
+              !existingNamesSet.has(ingredient.name.toLowerCase()),
+          )
+          .map(
+            (ingredient: {
+              name: string;
+              type: string;
+              updatedCode: string;
+              updatedCharacteristics: string;
+              updatedExtraData: string;
+              table: { section: string; rows: string[][] }[];
+            }) => ({
+              id: createId("ingredient", ingredient.name),
+              name: ingredient.name,
+              type: (
+                [
+                  "Language",
+                  "Library",
+                  "Framework",
+                  "Tool",
+                  "UNDEFINED",
+                ] as const
+              ).includes(ingredient.type as IngredientType)
+                ? (ingredient.type as IngredientType)
+                : "UNDEFINED",
+              characteristics: ingredient.updatedCharacteristics,
+              extraData: ingredient.updatedExtraData,
+              code: ingredient.updatedCode,
+              table: ingredient.table,
+            }),
+          );
+
+        return missing.length ? [...prev, ...missing] : prev;
+      });
+    } catch (err) {
+      console.error("error generating remaining ingredient ontologies", err);
     }
   }
 
@@ -161,8 +186,28 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return;
   }
 
-  function remIngredient(id: string) {
+  async function remIngredient(id: string) {
+    //only removes if cocktails don't have it as active, it flags all cocktails that have it active
+    const cocktailNamesWithIngredientActive = cocktails
+      .filter((c) => c.ingredients[id])
+      .map((c) => c.name);
+
+    if (cocktailNamesWithIngredientActive.length) {
+      console.warn(
+        `Ingredient with id ${id} is active in the following cocktails and cannot be removed: \n- ${cocktailNamesWithIngredientActive.join("\n- ")}`,
+      );
+      return;
+    }
+    const ingredientToRemove = ingredients.find((c) => c.id === id);
+    if (!ingredientToRemove) return;
+
     setIngredients((prev) => prev.filter((ing) => ing.id !== id));
+
+    try {
+      await removeIngredient({ ingredientName: ingredientToRemove.name });
+    } catch (err) {
+      console.error("Error removing ingredient with id: ", id, err);
+    }
 
     setCocktails((prev) =>
       prev.map((c) => ({
@@ -179,11 +224,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   async function generateInitialCocktail() {
     try {
       const data = await getCocktails();
+      const usedIngredientNames = new Set<string>();
 
       for (const cocktail of data) {
         const vizValue = normalizeSvg(cocktail.updatedSvg);
         const extractedIngredients: ExtractedIngredient[] =
           cocktail?.ingredients || [];
+
+        for (const ingredient of extractedIngredients) {
+          usedIngredientNames.add(ingredient.name);
+        }
 
         const ingredientMap = await resolveIngredients(
           extractedIngredients,
@@ -203,6 +253,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           },
         ]);
       }
+
+      await getRemainingIngredientsCode([...usedIngredientNames]);
     } catch (err) {
       console.error("Error loading cocktails", err);
     }

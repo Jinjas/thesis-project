@@ -1,0 +1,17 @@
+ESLint
+ReactJS
+JavaScript
+TailwindCSS
+SQL
+NextJS
+TensorFlow
+TypeScript
+PyTorch
+Python
+Tornado
+VisualStudioCode
+JSON
+PySpark
+TSQL
+VisualStudio
+PL0
