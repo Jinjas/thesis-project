@@ -22,6 +22,8 @@ def to_safe_filename(value: str) -> str:
     return safe
 
 def getOntology(ingredient_name:str,ingredient_type:str):
+    
+
     safe_name = to_safe_filename(ingredient_name)
     data_path = data_dir / f"{safe_name}.ontodl" #can change
 
@@ -121,6 +123,11 @@ def getOntology(ingredient_name:str,ingredient_type:str):
             "}\n."
         ]
 
+        names_file = data_dir / "NAMES.txt"
+        with open(names_file, "a", encoding="utf-8") as f:
+            f.write(f"\n{ingredient_name}")
+
+            
         content = "\n".join(data)
         characteristics = "\n".join(data[11:13])
         extraData = "\n".join(data[:10])

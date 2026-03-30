@@ -1,0 +1,38 @@
+Ontology cognitive_model_P1
+
+attributes {
+    condition: string,
+    action: string,
+    strength: float,
+    probability: float
+}
+
+concepts {
+    Language,
+    Library,
+    Framework,
+    Tool,
+    Model,
+    Production[condition, action, strength, probability],
+    Section
+}
+
+relations {
+    generates
+}
+
+individuals {
+    P1,
+    P1_model,
+    P1_specific_section
+}
+
+triples {
+    P1 =iof=> Library;
+    P1 =generates=> P1_model;
+    P1_model =iof=> Model;
+
+    P1_specific_section =iof=> Section;
+    P1_specific_section =pof=> P1_model;
+}
+.

@@ -13,6 +13,20 @@ export async function getIngredientCode(name: string, type: string) {
   return res.json();
 }
 
+export async function getRemainingIngredients(existingIngredientNames: string[]) {
+  const res = await fetch("/api/ingredientCode/getRemainingIngredients", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      existingIngredientNames,
+    }),
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch remaining ingredients");
+
+  return res.json();
+}
+
 export async function setIngredientCode(
   newName: string,
   newType: string,

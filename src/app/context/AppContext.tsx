@@ -5,17 +5,18 @@ import {
   Cocktail,
   Ingredient,
   IngredientType,
-  ParamMap,
-  TableDict,
 } from "../types";
-import { INGREDIENTS } from "./data";
 import { enqueueCocktailUpdate } from "@/lib/updateQueue";
 
 import { createId } from "./utils/createId";
 import { normalizeSvg } from "./utils/svgUtils";
 import { resolveIngredients } from "./utils/resolveIngredients";
 
-import { setIngredientCode, getIngredientCode } from "./services/ingredientApi";
+import {
+  setIngredientCode,
+  getIngredientCode,
+  getRemainingIngredients,
+} from "./services/ingredientApi";
 import {
   addIngredientToOntology,
   generate,
@@ -67,33 +68,51 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
 
   useEffect(() => {
-    //getInitialIngredientsCode();
     generateInitialCocktail();
   }, []);
 
   /* --------------------  INGREDIENT BASED FUNCTIONS  ----------------------*/
 
-  async function getInitialIngredientsCode() {
-    for (const ingredient of ingredients) {
-      try {
-        const data = await getIngredientCode(ingredient.name, ingredient.type);
+  async function getRemainingIngredientsCode(existingNames: string[] = []) {
+    try {
+      const data = await getRemainingIngredients(
+        existingNames.length ? existingNames : ingredients.map((i) => i.name),
+      );
 
-        setIngredients((prev) =>
-          prev.map((c) =>
-            c.id === ingredient.id
-              ? {
-                  ...c,
-                  code: data.updatedCode,
-                  characteristics: data.updatedCharacteristics,
-                  extraData: data.updatedExtraData,
-                  table: data.table,
-                }
-              : c,
-          ),
-        );
-      } catch (err) {
-        console.error("error generating onto to", ingredient.id, err);
-      }
+      setIngredients((prev) => {
+        const existingNamesSet = new Set(prev.map((ing) => ing.name.toLowerCase()));
+
+        const missing = data.ingredients
+          .filter((ingredient: { name: string }) =>
+            !existingNamesSet.has(ingredient.name.toLowerCase()),
+          )
+          .map(
+            (ingredient: {
+              name: string;
+              type: string;
+              updatedCode: string;
+              updatedCharacteristics: string;
+              updatedExtraData: string;
+              table: { section: string; rows: string[][] }[];
+            }) => ({
+              id: createId("ingredient", ingredient.name),
+              name: ingredient.name,
+              type: (
+                ["Language", "Library", "Framework", "Tool", "UNDEFINED"] as const
+              ).includes(ingredient.type as IngredientType)
+                ? (ingredient.type as IngredientType)
+                : "UNDEFINED",
+              characteristics: ingredient.updatedCharacteristics,
+              extraData: ingredient.updatedExtraData,
+              code: ingredient.updatedCode,
+              table: ingredient.table,
+            }),
+          );
+
+        return missing.length ? [...prev, ...missing] : prev;
+      });
+    } catch (err) {
+      console.error("error generating remaining ingredient ontologies", err);
     }
   }
 
@@ -179,11 +198,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   async function generateInitialCocktail() {
     try {
       const data = await getCocktails();
+      const usedIngredientNames = new Set<string>();
 
       for (const cocktail of data) {
         const vizValue = normalizeSvg(cocktail.updatedSvg);
         const extractedIngredients: ExtractedIngredient[] =
           cocktail?.ingredients || [];
+
+        for (const ingredient of extractedIngredients) {
+          usedIngredientNames.add(ingredient.name);
+        }
 
         const ingredientMap = await resolveIngredients(
           extractedIngredients,
@@ -203,6 +227,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           },
         ]);
       }
+
+      await getRemainingIngredientsCode([...usedIngredientNames]);
     } catch (err) {
       console.error("Error loading cocktails", err);
     }
