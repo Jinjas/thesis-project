@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../../context/AppContext";
 import { useState, useEffect } from "react";
 import { useIngredientRemovalFlow } from "../../../context/utils/useIngredientRemovalFlow";
+import { useUnsavedChanges } from "../../../context/UnsavedChangesContext";
 import { IngredientType, INGREDIENT_TYPES } from "../../../types";
 import {
   TypeSelector,
@@ -21,6 +22,7 @@ export default function IngredientDetailPage() {
   const { ingredients, cocktails, updateIngredient, remIngredient } =
     useAppContext();
   const router = useRouter();
+  const { setHasUnsavedChanges, resetUnsavedChanges } = useUnsavedChanges();
   const ingredient = ingredients.find((i) => i.id === id);
 
   const [name, setName] = useState("");
@@ -64,6 +66,26 @@ export default function IngredientDetailPage() {
     }
   }, [ingredient, router]);
 
+  useEffect(() => {
+    if (!ingredient) {
+      setHasUnsavedChanges(false);
+      return;
+    }
+
+    const hasChanges =
+      name !== ingredient.name ||
+      type !== ingredient.type ||
+      characteristics !== ingredient.characteristics;
+
+    setHasUnsavedChanges(hasChanges);
+  }, [ingredient, name, type, characteristics, setHasUnsavedChanges]);
+
+  useEffect(() => {
+    return () => {
+      setHasUnsavedChanges(false);
+    };
+  }, [setHasUnsavedChanges]);
+
   if (!ingredient) return <p className="p-6">Redirecting…</p>;
 
   function handleRemoveClick() {
@@ -74,6 +96,7 @@ export default function IngredientDetailPage() {
   async function handleSaveIngredient() {
     if (!ingredient) return;
     await updateIngredient(ingredient.id, name, type, characteristics);
+    resetUnsavedChanges();
     setIsSavePopupOpen(false);
   }
 
@@ -140,7 +163,7 @@ export default function IngredientDetailPage() {
       <ConfirmationBox
         isOpen={isRemovePopupOpen}
         title={`Remove ingredient \"${pendingIngredient?.name ?? ingredient.name}\"?`}
-        description="You are about to delete this ingredient and all its associated data. Wish to proceed?"
+        description="You are about to delete this ingredient and all its associated data. Do you wish to proceed?"
         boldDescription="This action cannot be undone."
         confirmLabel="Remove"
         showCancel={false}
@@ -150,8 +173,8 @@ export default function IngredientDetailPage() {
       <ConfirmationBox
         isOpen={isSavePopupOpen}
         title={`Save ingredient \"${ingredient.name}\"?`}
-        description="You are about to save this ingredient and all its associated data. Wish to proceed?"
-        boldDescription="Changes will be applied immediately."
+        description="You are about to save this ingredient and all its associated data. Do you wish to proceed?"
+        //boldDescription="Changes will be applied immediately."
         confirmLabel="Save Changes"
         confirmVariant="save"
         showCancel={false}

@@ -48,7 +48,10 @@ export default function ConfirmationBox({
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex justify-between gap-2">
-          <h3 id="confirmation-box-title" className="text-lg font-semibold">
+          <h3
+            id="confirmation-box-title"
+            className="text-lg font-semibold text-black"
+          >
             {title}
           </h3>
           <ActionButton onClick={onCancel} label={"Close"} variant={"close"} />
