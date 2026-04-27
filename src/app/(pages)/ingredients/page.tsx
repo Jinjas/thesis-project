@@ -10,7 +10,8 @@ import {
   IngredientType,
 } from "../../types";
 export default function IngredientsPage() {
-  const { ingredients, addIngredient, remIngredient } = useAppContext();
+  const { ingredients, cocktails, addIngredient, remIngredient } =
+    useAppContext();
   const [name, setName] = useState("");
   const [type, setType] = useState<IngredientType>("Tool");
   const [temporaryType, setTemporaryType] = useState("");
@@ -53,6 +54,7 @@ export default function IngredientsPage() {
 
       <IngredientList
         ingredients={ingredients}
+        cocktails={cocktails}
         selectedId={selectedID}
         setId={setSelectedID}
         remIngredient={remIngredient}

@@ -2,11 +2,8 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../../context/AppContext";
-import {
-  buildIngredientRemovalBlockedMessage,
-  getActiveCocktailsUsingIngredient,
-} from "../../../context/utils/ingredientRemoval";
 import { useState, useEffect } from "react";
+import { useIngredientRemovalFlow } from "../../../context/utils/useIngredientRemovalFlow";
 import { IngredientType, INGREDIENT_TYPES } from "../../../types";
 import {
   TypeSelector,
@@ -32,14 +29,24 @@ export default function IngredientDetailPage() {
   const [characteristics, setCharacteristics] = useState("");
   const [extraDataHidden, setExtraDataHidden] = useState(true);
   const [extraData, setExtraData] = useState("");
-  const [isRemovePopupOpen, setIsRemovePopupOpen] = useState(false);
   const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
-  const [isRemoveInfoPopupOpen, setIsRemoveInfoPopupOpen] = useState(false);
-  const [removeInfoTitle, setRemoveInfoTitle] = useState(
-    "Cannot remove ingredient",
-  );
-  const [removeInfoDescription, setRemoveInfoDescription] = useState("");
-  const [removeInfoDetails, setRemoveInfoDetails] = useState<string[]>([]);
+
+  const {
+    pendingIngredient,
+    isRemovePopupOpen,
+    isRemoveInfoPopupOpen,
+    removeInfoTitle,
+    removeInfoDescription,
+    removeInfoDetails,
+    requestRemove,
+    confirmRemove,
+    closeRemovePopup,
+    closeRemoveInfoPopup,
+  } = useIngredientRemovalFlow({
+    cocktails,
+    remIngredient,
+    onRemoveSuccess: () => router.push("/ingredients"),
+  });
 
   useEffect(() => {
     if (ingredient) {
@@ -59,53 +66,15 @@ export default function IngredientDetailPage() {
 
   if (!ingredient) return <p className="p-6">Redirecting…</p>;
 
-  async function handleRemoveIngredient() {
-    if (!ingredient) return;
-    setIsRemovePopupOpen(false);
-
-    const result = await remIngredient(ingredient.id);
-
-    if (result.success) {
-      router.push("/ingredients");
-      return;
-    }
-
-    setRemoveInfoTitle(`Cannot remove ingredient \"${ingredient.name}\"`);
-    setRemoveInfoDescription(result.message);
-
-    if (result.reason === "ACTIVE_IN_COCKTAILS") {
-      setRemoveInfoDetails(result.cocktails);
-    } else {
-      setRemoveInfoDetails([]);
-    }
-
-    setIsRemoveInfoPopupOpen(true);
-  }
-
   function handleRemoveClick() {
     if (!ingredient) return;
-
-    const activeCocktails = getActiveCocktailsUsingIngredient(
-      cocktails,
-      ingredient.id,
-    );
-
-    if (activeCocktails.length > 0) {
-      setRemoveInfoTitle(`Cannot remove ingredient \"${ingredient.name}\"`);
-      setRemoveInfoDescription(buildIngredientRemovalBlockedMessage());
-      setRemoveInfoDetails(activeCocktails);
-      setIsRemoveInfoPopupOpen(true);
-      return;
-    }
-
-    setIsRemovePopupOpen(true);
+    requestRemove(ingredient);
   }
 
   async function handleSaveIngredient() {
     if (!ingredient) return;
     await updateIngredient(ingredient.id, name, type, characteristics);
     setIsSavePopupOpen(false);
-    router.push("/ingredients");
   }
 
   return (
@@ -170,13 +139,13 @@ export default function IngredientDetailPage() {
 
       <ConfirmationBox
         isOpen={isRemovePopupOpen}
-        title={`Remove ingredient \"${ingredient.name}\"?`}
+        title={`Remove ingredient \"${pendingIngredient?.name ?? ingredient.name}\"?`}
         description="You are about to delete this ingredient and all its associated data. Wish to proceed?"
         boldDescription="This action cannot be undone."
         confirmLabel="Remove"
         showCancel={false}
-        onCancel={() => setIsRemovePopupOpen(false)}
-        onConfirm={handleRemoveIngredient}
+        onCancel={closeRemovePopup}
+        onConfirm={confirmRemove}
       />
       <ConfirmationBox
         isOpen={isSavePopupOpen}
@@ -203,8 +172,8 @@ export default function IngredientDetailPage() {
         confirmLabel="OK"
         confirmVariant="save"
         showCancel={false}
-        onCancel={() => setIsRemoveInfoPopupOpen(false)}
-        onConfirm={() => setIsRemoveInfoPopupOpen(false)}
+        onCancel={closeRemoveInfoPopup}
+        onConfirm={closeRemoveInfoPopup}
       />
     </DoubleSectionLayout>
   );
