@@ -5,6 +5,11 @@ import { Cocktail, Ingredient, IngredientType } from "../types";
 import { enqueueCocktailUpdate } from "@/lib/updateQueue";
 
 import { createId } from "./utils/createId";
+import {
+  buildIngredientRemovalBlockedMessage,
+  getActiveCocktailsUsingIngredient,
+  type RemoveIngredientResult,
+} from "./utils/ingredientRemoval";
 import { normalizeSvg } from "./utils/svgUtils";
 import { resolveIngredients } from "./utils/resolveIngredients";
 
@@ -34,7 +39,7 @@ type AppContextType = {
   ingredients: Ingredient[];
 
   addIngredient: (name: string, type: IngredientType) => Promise<string>;
-  remIngredient(id: string): Promise<void>;
+  remIngredient(id: string): Promise<RemoveIngredientResult>;
   updateIngredient: (
     id: string,
     newName: string,
@@ -186,20 +191,33 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return;
   }
 
-  async function remIngredient(id: string) {
-    //only removes if cocktails don't have it as active, it flags all cocktails that have it active
-    const cocktailNamesWithIngredientActive = cocktails
-      .filter((c) => c.ingredients[id])
-      .map((c) => c.name);
+  async function remIngredient(id: string): Promise<RemoveIngredientResult> {
+    const cocktailNamesWithIngredientActive = getActiveCocktailsUsingIngredient(
+      cocktails,
+      id,
+    );
 
     if (cocktailNamesWithIngredientActive.length) {
+      const message = buildIngredientRemovalBlockedMessage();
       console.warn(
-        `Ingredient with id ${id} is active in the following cocktails and cannot be removed: \n- ${cocktailNamesWithIngredientActive.join("\n- ")}`,
+        `${message}\n- ${cocktailNamesWithIngredientActive.join("\n- ")}`,
       );
-      return;
+      return {
+        success: false,
+        reason: "ACTIVE_IN_COCKTAILS",
+        message,
+        cocktails: cocktailNamesWithIngredientActive,
+      };
     }
+
     const ingredientToRemove = ingredients.find((c) => c.id === id);
-    if (!ingredientToRemove) return;
+    if (!ingredientToRemove) {
+      return {
+        success: false,
+        reason: "NOT_FOUND",
+        message: "Ingredient not found.",
+      };
+    }
 
     setIngredients((prev) => prev.filter((ing) => ing.id !== id));
 
@@ -207,6 +225,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       await removeIngredient({ ingredientName: ingredientToRemove.name });
     } catch (err) {
       console.error("Error removing ingredient with id: ", id, err);
+      return {
+        success: false,
+        reason: "REMOVE_FAILED",
+        message: "Could not remove ingredient due to a server error.",
+      };
     }
 
     setCocktails((prev) =>
@@ -217,6 +240,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         ),
       })),
     );
+
+    return {
+      success: true,
+      ingredientName: ingredientToRemove.name,
+    };
   }
 
   /* --------------------  COCKTAIL BASED FUNCTIONS  ----------------------*/

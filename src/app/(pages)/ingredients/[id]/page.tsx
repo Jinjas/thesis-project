@@ -2,7 +2,11 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../../context/AppContext";
-import { useState, useEffect, useRef } from "react";
+import {
+  buildIngredientRemovalBlockedMessage,
+  getActiveCocktailsUsingIngredient,
+} from "../../../context/utils/ingredientRemoval";
+import { useState, useEffect } from "react";
 import { IngredientType, INGREDIENT_TYPES } from "../../../types";
 import {
   TypeSelector,
@@ -17,7 +21,8 @@ import { DoubleSectionLayout } from "../../../layouts";
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
-  const { ingredients, updateIngredient, remIngredient } = useAppContext();
+  const { ingredients, cocktails, updateIngredient, remIngredient } =
+    useAppContext();
   const router = useRouter();
   const ingredient = ingredients.find((i) => i.id === id);
 
@@ -29,6 +34,12 @@ export default function IngredientDetailPage() {
   const [extraData, setExtraData] = useState("");
   const [isRemovePopupOpen, setIsRemovePopupOpen] = useState(false);
   const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
+  const [isRemoveInfoPopupOpen, setIsRemoveInfoPopupOpen] = useState(false);
+  const [removeInfoTitle, setRemoveInfoTitle] = useState(
+    "Cannot remove ingredient",
+  );
+  const [removeInfoDescription, setRemoveInfoDescription] = useState("");
+  const [removeInfoDetails, setRemoveInfoDetails] = useState<string[]>([]);
 
   useEffect(() => {
     if (ingredient) {
@@ -50,9 +61,44 @@ export default function IngredientDetailPage() {
 
   async function handleRemoveIngredient() {
     if (!ingredient) return;
-    await remIngredient(ingredient.id);
     setIsRemovePopupOpen(false);
-    router.push("/ingredients");
+
+    const result = await remIngredient(ingredient.id);
+
+    if (result.success) {
+      router.push("/ingredients");
+      return;
+    }
+
+    setRemoveInfoTitle(`Cannot remove ingredient \"${ingredient.name}\"`);
+    setRemoveInfoDescription(result.message);
+
+    if (result.reason === "ACTIVE_IN_COCKTAILS") {
+      setRemoveInfoDetails(result.cocktails);
+    } else {
+      setRemoveInfoDetails([]);
+    }
+
+    setIsRemoveInfoPopupOpen(true);
+  }
+
+  function handleRemoveClick() {
+    if (!ingredient) return;
+
+    const activeCocktails = getActiveCocktailsUsingIngredient(
+      cocktails,
+      ingredient.id,
+    );
+
+    if (activeCocktails.length > 0) {
+      setRemoveInfoTitle(`Cannot remove ingredient \"${ingredient.name}\"`);
+      setRemoveInfoDescription(buildIngredientRemovalBlockedMessage());
+      setRemoveInfoDetails(activeCocktails);
+      setIsRemoveInfoPopupOpen(true);
+      return;
+    }
+
+    setIsRemovePopupOpen(true);
   }
 
   async function handleSaveIngredient() {
@@ -110,7 +156,7 @@ export default function IngredientDetailPage() {
 
       <div className="pt-2 px-2 flex gap-2 justify-between">
         <ActionButton
-          onClick={() => setIsRemovePopupOpen(true)}
+          onClick={handleRemoveClick}
           label="Remove"
           variant="remove"
         />
@@ -125,7 +171,7 @@ export default function IngredientDetailPage() {
       <ConfirmationBox
         isOpen={isRemovePopupOpen}
         title={`Remove ingredient \"${ingredient.name}\"?`}
-        description="You are about to delete this ingredient and all its associated data. Which to proceed?"
+        description="You are about to delete this ingredient and all its associated data. Wish to proceed?"
         boldDescription="This action cannot be undone."
         confirmLabel="Remove"
         showCancel={false}
@@ -135,13 +181,30 @@ export default function IngredientDetailPage() {
       <ConfirmationBox
         isOpen={isSavePopupOpen}
         title={`Save ingredient \"${ingredient.name}\"?`}
-        description="You are about to save this ingredient and all its associated data. Which to proceed?"
-        boldDescription="This action cannot be undone."
+        description="You are about to save this ingredient and all its associated data. Wish to proceed?"
+        boldDescription="Changes will be applied immediately."
         confirmLabel="Save Changes"
         confirmVariant="save"
         showCancel={false}
         onCancel={() => setIsSavePopupOpen(false)}
         onConfirm={handleSaveIngredient}
+      />
+
+      <ConfirmationBox
+        isOpen={isRemoveInfoPopupOpen}
+        title={removeInfoTitle}
+        description={removeInfoDescription}
+        detailsTitle={
+          removeInfoDetails.length
+            ? "Deactivate this ingredient in these cocktails first:"
+            : ""
+        }
+        details={removeInfoDetails}
+        confirmLabel="OK"
+        confirmVariant="save"
+        showCancel={false}
+        onCancel={() => setIsRemoveInfoPopupOpen(false)}
+        onConfirm={() => setIsRemoveInfoPopupOpen(false)}
       />
     </DoubleSectionLayout>
   );

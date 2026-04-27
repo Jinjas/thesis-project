@@ -7,6 +7,8 @@ type ConfirmationBoxProps = {
   title: string;
   description?: string;
   boldDescription?: string;
+  details?: string[];
+  detailsTitle?: string;
   confirmLabel?: string;
   confirmVariant?: "save" | "remove";
   showCancel?: boolean;
@@ -21,6 +23,8 @@ export default function ConfirmationBox({
   title,
   description = "This action cannot be undone.",
   boldDescription = "",
+  details = [],
+  detailsTitle = "",
   confirmLabel = "Remove",
   confirmVariant = "remove",
   showCancel = true,
@@ -54,6 +58,19 @@ export default function ConfirmationBox({
         <p className="pt-2 text-sm text-gray-600 font-bold">
           {boldDescription}
         </p>
+
+        {details.length > 0 && (
+          <div className="pt-2 text-sm text-gray-700">
+            {detailsTitle && (
+              <p className="font-semibold pb-1">{detailsTitle}</p>
+            )}
+            <ul className="list-disc list-inside space-y-1 max-h-32 overflow-y-auto">
+              {details.map((detail) => (
+                <li key={detail}>{detail}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div
           className={`pt-4 flex gap-6 ${showCancel ? "justify-around" : "justify-center"}`}
