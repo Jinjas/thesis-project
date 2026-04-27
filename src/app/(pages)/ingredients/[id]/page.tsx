@@ -2,7 +2,9 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../../context/AppContext";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { useIngredientRemovalFlow } from "../../../context/utils/useIngredientRemovalFlow";
+import { useUnsavedChanges } from "../../../context/UnsavedChangesContext";
 import { IngredientType, INGREDIENT_TYPES } from "../../../types";
 import {
   TypeSelector,
@@ -11,13 +13,16 @@ import {
   ExportButton,
   TextCampEdit,
   ActionButton,
+  ConfirmationBox,
 } from "../../../components";
 import { DoubleSectionLayout } from "../../../layouts";
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
-  const { ingredients, updateIngredient, remIngredient } = useAppContext();
+  const { ingredients, cocktails, updateIngredient, remIngredient } =
+    useAppContext();
   const router = useRouter();
+  const { setHasUnsavedChanges, resetUnsavedChanges } = useUnsavedChanges();
   const ingredient = ingredients.find((i) => i.id === id);
 
   const [name, setName] = useState("");
@@ -26,6 +31,24 @@ export default function IngredientDetailPage() {
   const [characteristics, setCharacteristics] = useState("");
   const [extraDataHidden, setExtraDataHidden] = useState(true);
   const [extraData, setExtraData] = useState("");
+  const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
+
+  const {
+    pendingIngredient,
+    isRemovePopupOpen,
+    isRemoveInfoPopupOpen,
+    removeInfoTitle,
+    removeInfoDescription,
+    removeInfoDetails,
+    requestRemove,
+    confirmRemove,
+    closeRemovePopup,
+    closeRemoveInfoPopup,
+  } = useIngredientRemovalFlow({
+    cocktails,
+    remIngredient,
+    onRemoveSuccess: () => router.push("/ingredients"),
+  });
 
   useEffect(() => {
     if (ingredient) {
@@ -43,7 +66,39 @@ export default function IngredientDetailPage() {
     }
   }, [ingredient, router]);
 
+  useEffect(() => {
+    if (!ingredient) {
+      setHasUnsavedChanges(false);
+      return;
+    }
+
+    const hasChanges =
+      name !== ingredient.name ||
+      type !== ingredient.type ||
+      characteristics !== ingredient.characteristics;
+
+    setHasUnsavedChanges(hasChanges);
+  }, [ingredient, name, type, characteristics, setHasUnsavedChanges]);
+
+  useEffect(() => {
+    return () => {
+      setHasUnsavedChanges(false);
+    };
+  }, [setHasUnsavedChanges]);
+
   if (!ingredient) return <p className="p-6">Redirecting…</p>;
+
+  function handleRemoveClick() {
+    if (!ingredient) return;
+    requestRemove(ingredient);
+  }
+
+  async function handleSaveIngredient() {
+    if (!ingredient) return;
+    await updateIngredient(ingredient.id, name, type, characteristics);
+    resetUnsavedChanges();
+    setIsSavePopupOpen(false);
+  }
 
   return (
     <DoubleSectionLayout
@@ -93,22 +148,56 @@ export default function IngredientDetailPage() {
 
       <div className="pt-2 px-2 flex gap-2 justify-between">
         <ActionButton
-          onClick={() => {
-            remIngredient(ingredient.id);
-            router.push("/ingredients");
-          }}
+          onClick={handleRemoveClick}
           label="Remove"
           variant="remove"
         />
 
         <ActionButton
-          onClick={() =>
-            updateIngredient(ingredient.id, name, type, characteristics)
-          }
+          onClick={() => setIsSavePopupOpen(true)}
           label="Save"
           variant="save"
         />
       </div>
+
+      <ConfirmationBox
+        isOpen={isRemovePopupOpen}
+        title={`Remove ingredient \"${pendingIngredient?.name ?? ingredient.name}\"?`}
+        description="You are about to delete this ingredient and all its associated data. Do you wish to proceed?"
+        boldDescription="This action cannot be undone."
+        confirmLabel="Remove"
+        showCancel={false}
+        onCancel={closeRemovePopup}
+        onConfirm={confirmRemove}
+      />
+      <ConfirmationBox
+        isOpen={isSavePopupOpen}
+        title={`Save ingredient \"${ingredient.name}\"?`}
+        description="You are about to save this ingredient and all its associated data. Do you wish to proceed?"
+        //boldDescription="Changes will be applied immediately."
+        confirmLabel="Save Changes"
+        confirmVariant="save"
+        showCancel={false}
+        onCancel={() => setIsSavePopupOpen(false)}
+        onConfirm={handleSaveIngredient}
+      />
+
+      <ConfirmationBox
+        isOpen={isRemoveInfoPopupOpen}
+        title={removeInfoTitle}
+        description={removeInfoDescription}
+        detailsTitle={
+          removeInfoDetails.length
+            ? "Deactivate this ingredient in these cocktails first:"
+            : ""
+        }
+        details={removeInfoDetails}
+        confirmLabel="OK"
+        confirmVariant="save"
+        showCancel={false}
+        onCancel={closeRemoveInfoPopup}
+        onConfirm={closeRemoveInfoPopup}
+      />
     </DoubleSectionLayout>
   );
 }

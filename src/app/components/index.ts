@@ -3,6 +3,7 @@ export * from "./areas";
 export * from "./button";
 export * from "./buttons";
 export * from "./lists";
+export * from "./popups";
 export * from "./sidebar";
 export * from "./vizBar";
 
@@ -16,6 +17,7 @@ export { default as AddItemForm } from "./buttons/AddItemForm";
 export { default as TypeSelector } from "./buttons/TypeSelector";
 export { default as CocktailList } from "./lists/CocktailList";
 export { default as IngredientList } from "./lists/IngredientList";
+export { default as ConfirmationBox } from "./popups/ConfirmationBox";
 export { default as Sidebar } from "./sidebar/Sidebar";
 export { default as SidebarSection } from "./sidebar/SidebarSection";
 export { default as VizBar } from "./vizBar/visualizationBar";
