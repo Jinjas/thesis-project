@@ -18,9 +18,9 @@ export default function ActionButton({
   const variantClasses = {
     remove:
       "disabled:bg-gray-400 text-white rounded w-min px-3 py-2 bg-red-800 hover:bg-red-950",
-    save: "disabled:bg-gray-400 text-white rounded w-min px-3 py-2 bg-gray-700 hover:bg-gray-800",
+    save: "disabled:bg-gray-400 text-white rounded w-min px-3 py-2 bg-gray-700 hover:bg-gray-900",
     expand:
-      "disabled:bg-gray-400 text-white rounded w-min px-1 py-1 bg-gray-700 hover:bg-gray-800 text-xs",
+      "disabled:bg-gray-400 text-white rounded w-min px-1 py-1 bg-gray-700 hover:bg-gray-900 text-xs",
     double:
       " disabled:bg-gray-200 rounded w-full px-2 text-2xl font-semibold hover:bg-gray-100 bg-transparent ",
   };
