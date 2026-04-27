@@ -11,6 +11,7 @@ import {
   ExportButton,
   TextCampEdit,
   ActionButton,
+  ConfirmationBox,
 } from "../../../components";
 import { DoubleSectionLayout } from "../../../layouts";
 
@@ -26,6 +27,7 @@ export default function IngredientDetailPage() {
   const [characteristics, setCharacteristics] = useState("");
   const [extraDataHidden, setExtraDataHidden] = useState(true);
   const [extraData, setExtraData] = useState("");
+  const [isRemovePopupOpen, setIsRemovePopupOpen] = useState(false);
 
   useEffect(() => {
     if (ingredient) {
@@ -44,6 +46,13 @@ export default function IngredientDetailPage() {
   }, [ingredient, router]);
 
   if (!ingredient) return <p className="p-6">Redirecting…</p>;
+
+  async function handleRemoveIngredient() {
+    if (!ingredient) return;
+    await remIngredient(ingredient.id);
+    setIsRemovePopupOpen(false);
+    router.push("/ingredients");
+  }
 
   return (
     <DoubleSectionLayout
@@ -93,10 +102,7 @@ export default function IngredientDetailPage() {
 
       <div className="pt-2 px-2 flex gap-2 justify-between">
         <ActionButton
-          onClick={() => {
-            remIngredient(ingredient.id);
-            router.push("/ingredients");
-          }}
+          onClick={() => setIsRemovePopupOpen(true)}
           label="Remove"
           variant="remove"
         />
@@ -109,6 +115,19 @@ export default function IngredientDetailPage() {
           variant="save"
         />
       </div>
+
+      <ConfirmationBox
+        isOpen={isRemovePopupOpen}
+        title={`Remove ingredient \"${ingredient.name}\"?`}
+        description="You are about to delete this ingredient and all its associated data. Which to proceed?"
+        boldDescription="This action cannot be undone."
+        confirmLabel="Remove"
+        confirmVariant="remove"
+        cancelLabel="Cancel"
+        cancelVariant="save"
+        onCancel={() => setIsRemovePopupOpen(false)}
+        onConfirm={handleRemoveIngredient}
+      />
     </DoubleSectionLayout>
   );
 }
