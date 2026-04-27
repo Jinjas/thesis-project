@@ -9,6 +9,7 @@ type ConfirmationBoxProps = {
   boldDescription?: string;
   confirmLabel?: string;
   confirmVariant?: "save" | "remove";
+  showCancel?: boolean;
   cancelLabel?: string;
   cancelVariant?: "save" | "remove";
   onCancel: () => void;
@@ -22,6 +23,7 @@ export default function ConfirmationBox({
   boldDescription = "",
   confirmLabel = "Remove",
   confirmVariant = "remove",
+  showCancel = true,
   cancelLabel = "Cancel",
   cancelVariant = "save",
   onCancel,
@@ -41,27 +43,33 @@ export default function ConfirmationBox({
         className="w-full max-w-md rounded border bg-gray-200 p-5 shadow-lg"
         onClick={(event) => event.stopPropagation()}
       >
-        <h3 id="confirmation-box-title" className="text-lg font-semibold">
-          {title}
-        </h3>
+        <div className="flex justify-between gap-2">
+          <h3 id="confirmation-box-title" className="text-lg font-semibold">
+            {title}
+          </h3>
+          <ActionButton onClick={onCancel} label={"Close"} variant={"close"} />
+        </div>
 
         <p className="pt-2 text-sm text-gray-600">{description}</p>
         <p className="pt-2 text-sm text-gray-600 font-bold">
           {boldDescription}
         </p>
 
-        <div className="pt-4 flex justify-between gap-2">
-          <ActionButton
-            onClick={onCancel}
-            label={cancelLabel}
-            variant={cancelVariant}
-          />
-
+        <div
+          className={`pt-4 flex gap-6 ${showCancel ? "justify-around" : "justify-center"}`}
+        >
           <ActionButton
             onClick={onConfirm}
             label={confirmLabel}
             variant={confirmVariant}
           />
+          {showCancel && (
+            <ActionButton
+              onClick={onCancel}
+              label={cancelLabel}
+              variant={cancelVariant}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -28,6 +28,7 @@ export default function IngredientDetailPage() {
   const [extraDataHidden, setExtraDataHidden] = useState(true);
   const [extraData, setExtraData] = useState("");
   const [isRemovePopupOpen, setIsRemovePopupOpen] = useState(false);
+  const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
 
   useEffect(() => {
     if (ingredient) {
@@ -51,6 +52,13 @@ export default function IngredientDetailPage() {
     if (!ingredient) return;
     await remIngredient(ingredient.id);
     setIsRemovePopupOpen(false);
+    router.push("/ingredients");
+  }
+
+  async function handleSaveIngredient() {
+    if (!ingredient) return;
+    await updateIngredient(ingredient.id, name, type, characteristics);
+    setIsSavePopupOpen(false);
     router.push("/ingredients");
   }
 
@@ -108,9 +116,7 @@ export default function IngredientDetailPage() {
         />
 
         <ActionButton
-          onClick={() =>
-            updateIngredient(ingredient.id, name, type, characteristics)
-          }
+          onClick={() => setIsSavePopupOpen(true)}
           label="Save"
           variant="save"
         />
@@ -122,11 +128,20 @@ export default function IngredientDetailPage() {
         description="You are about to delete this ingredient and all its associated data. Which to proceed?"
         boldDescription="This action cannot be undone."
         confirmLabel="Remove"
-        confirmVariant="remove"
-        cancelLabel="Cancel"
-        cancelVariant="save"
+        showCancel={false}
         onCancel={() => setIsRemovePopupOpen(false)}
         onConfirm={handleRemoveIngredient}
+      />
+      <ConfirmationBox
+        isOpen={isSavePopupOpen}
+        title={`Save ingredient \"${ingredient.name}\"?`}
+        description="You are about to save this ingredient and all its associated data. Which to proceed?"
+        boldDescription="This action cannot be undone."
+        confirmLabel="Save Changes"
+        confirmVariant="save"
+        showCancel={false}
+        onCancel={() => setIsSavePopupOpen(false)}
+        onConfirm={handleSaveIngredient}
       />
     </DoubleSectionLayout>
   );
