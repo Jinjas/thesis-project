@@ -1,0 +1,29 @@
+start: rule*
+
+rule: name "=" expression "."
+
+?expression: item* (PIPE item*)*
+
+?item: name
+	| terminal
+	| reserved_string
+	| optional_group
+	| repeated_group
+
+optional_group: "[" expression "]"
+
+repeated_group: "{" expression "}"
+
+name: NAME
+
+terminal: TERMINAL
+
+reserved_string: STRING
+
+NAME: /[a-z][a-z0-9_]*/
+TERMINAL.2: /[A-Z][A-Z0-9_]*/
+%import common.ESCAPED_STRING -> STRING
+PIPE: "|"
+%import common.WS
+%ignore WS
+
