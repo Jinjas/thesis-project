@@ -1,38 +1,29 @@
 Ontology cognitive_model_JSON
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    JSON,
-    JSON_model,
-    JSON_specific_section
+	JSON,
+	JSON_model,
+	JSON_specific_section
 }
 
 triples {
-    JSON =iof=> Language;
-    JSON =generates=> JSON_model;
-    JSON_model =iof=> Model;
-
-    JSON_specific_section =iof=> Section;
-    JSON_specific_section =pof=> JSON_model;
+	JSON =iof=> Language;
+	JSON_model =iof=> Model;
+	JSON =has=> JSON_model;
+	JSON_specific_section =iof=> Section [ title = "Production rules" ];
+	JSON_model =[ has =>
+		JSON_specific_section
+	];
+	JSON_specific_section =[ groups =>
+	];
 }
 .

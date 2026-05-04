@@ -10,6 +10,7 @@ export async function getIngredientCode(
   updatedExtraData: string;
   table: {
     section: string;
+    title?: string;
     rows: string[][];
   }[];
 }> {
@@ -32,6 +33,7 @@ export async function getIngredientCode(
     updatedExtraData: string;
     table: {
       section: string;
+      title?: string;
       rows: string[][];
     }[];
   }>(scriptPath, input);

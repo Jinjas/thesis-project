@@ -17,6 +17,7 @@ export type IngredientType = (typeof INGREDIENT_TYPES_AVAILABLE)[number];
 
 export type TableDict = {
   section: string;
+  title?: string;
   rows: string[][];
 };
 

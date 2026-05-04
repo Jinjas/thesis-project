@@ -8,7 +8,6 @@ import sys
 import os
 import graphviz
 from lark import Lark, Transformer
-from matplotlib.pylab import randint
 
 class DotTranslator(Transformer):
     def __init__(self):
@@ -71,9 +70,6 @@ class DotTranslator(Transformer):
         return result
 
 def generate_svg(onto_text: str, path: str) -> str:
-    #debugging
-    #with open("myfile.ontodl"+str(randint(0, 10)), "w") as f:
-    #    f.write(onto_text)
     grammar_path = None
     
     candidate = os.path.join(path, 'ontodl.lark')

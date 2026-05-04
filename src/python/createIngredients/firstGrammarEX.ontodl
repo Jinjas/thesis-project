@@ -56,26 +56,18 @@ individuals {
 	function_p
 }
 
-triples {
-	% Generic ontology structure.
 	Language =isa=> Ingredient;
 	Ingredient =has=> Model;
 	Model =has=> Production;
 	Section =groups=> Production;
-
-	% Instantiation.
 	firstGrammarEX =iof=> Language;
 	firstGrammarEX_model =iof=> Model;
 	firstGrammarEX =has=> firstGrammarEX_model;
-
+	firstGrammarEX_model =has=> firstGrammarEX_sec1, firstGrammarEX_sec2;
 	firstGrammarEX_sec1 =iof=> Section [ title = "Goals and subgoals" ];
 	firstGrammarEX_sec2 =iof=> Section [ title = "Production rules" ];
 
-	firstGrammarEX_model =[ has =>
-		firstGrammarEX_sec1,
-		firstGrammarEX_sec2
-	];
-
+triples {
 	firstGrammarEX_sec1 =[ groups =>
 		goal_p,
 		subgoal_p,
@@ -120,8 +112,6 @@ triples {
 		term_function_p,
 		function_p
 	];
-
-	% Production definitions.
 	goal_p =iof=> Production[
 		condition = "If all subgoals were met" ,
 		action = "then the goal is met" ,
@@ -143,58 +133,58 @@ triples {
 		strength = 1.0
 	];
 	declaration_import_p =iof=> Production[
-		condition = "If declaration is a subgoal and the block \"import\" is needed" ,
+		condition = "If declaration is a subgoal and the block 'import' is needed" ,
 		action = "then the declaration subgoal is met and import becomes a subgoal" ,
 		strength = 1.0
 	];
 	declaration_media_p =iof=> Production[
-		condition = "If declaration is a subgoal and the block \"media\" is needed" ,
+		condition = "If declaration is a subgoal and the block 'media' is needed" ,
 		action = "then the declaration subgoal is met and media becomes a subgoal" ,
 		strength = 1.0
 	];
 	declaration_page_p =iof=> Production[
-		condition = "If declaration is a subgoal and the block \"page\" is needed" ,
+		condition = "If declaration is a subgoal and the block 'page' is needed" ,
 		action = "then the declaration subgoal is met and page becomes a subgoal" ,
 		strength = 1.0
 	];
 	declaration_ruleset_p =iof=> Production[
-		condition = "If declaration is a subgoal and the block \"ruleset\" is needed" ,
+		condition = "If declaration is a subgoal and the block 'ruleset' is needed" ,
 		action = "then the declaration subgoal is met and ruleset becomes a subgoal" ,
 		strength = 1.0
 	];
 	import_p =iof=> Production[
 		condition = "If import is a subgoal" ,
-		action = "then the import subgoal is met and \"import\", \";\" is written and source and media_list become subgoals" ,
+		action = "then the import subgoal is met and 'import', ';' is written and source and media_list become subgoals" ,
 		strength = 1.0
 	];
 	media_list_p =iof=> Production[
 		condition = "If media_list is a subgoal" ,
-		action = "then the media_list subgoal is met and ID, \",\" and ID are written" ,
+		action = "then the media_list subgoal is met and ID, ',' and ID are written" ,
 		strength = 1.0
 	];
 	source_str_p =iof=> Production[
-		condition = "If source is a subgoal and the block \"STR\" is needed" ,
+		condition = "If source is a subgoal and the block 'STR' is needed" ,
 		action = "then the source subgoal is met and STR is written" ,
 		strength = 1.0
 	];
 	source_uri_p =iof=> Production[
-		condition = "If source is a subgoal and the block \"URI\" is needed" ,
+		condition = "If source is a subgoal and the block 'URI' is needed" ,
 		action = "then the source subgoal is met and URI is written" ,
 		strength = 1.0
 	];
 	media_p =iof=> Production[
 		condition = "If media is a subgoal" ,
-		action = "then the media subgoal is met and \"media\", \"{\", \"}\" is written and media_list and ruleset become subgoals" ,
+		action = "then the media subgoal is met and 'media', '{', '}' is written and media_list and ruleset become subgoals" ,
 		strength = 1.0
 	];
 	page_p =iof=> Production[
 		condition = "If page is a subgoal" ,
-		action = "then the page subgoal is met and \"page\", \":\", ID is written and block becomes a subgoal" ,
+		action = "then the page subgoal is met and 'page', ':', ID is written and block becomes a subgoal" ,
 		strength = 1.0
 	];
 	ruleset_p =iof=> Production[
 		condition = "If ruleset is a subgoal" ,
-		action = "then the ruleset subgoal is met and \",\" is written and selector, selector and block become subgoals" ,
+		action = "then the ruleset subgoal is met and ',' is written and selector, selector and block become subgoals" ,
 		strength = 1.0
 	];
 	selector_p =iof=> Production[
@@ -208,78 +198,78 @@ triples {
 		strength = 1.0
 	];
 	path_root_element_p =iof=> Production[
-		condition = "If path_root is a subgoal and the block \"element\" is needed" ,
+		condition = "If path_root is a subgoal and the block 'element' is needed" ,
 		action = "then the path_root subgoal is met and element becomes a subgoal" ,
 		strength = 1.0
 	];
 	path_root_property_p =iof=> Production[
-		condition = "If path_root is a subgoal and the block \"property\" is needed" ,
+		condition = "If path_root is a subgoal and the block 'property' is needed" ,
 		action = "then the path_root subgoal is met and property becomes a subgoal" ,
 		strength = 1.0
 	];
 	element_id_p =iof=> Production[
-		condition = "If element is a subgoal and the block \"ID\" is needed" ,
+		condition = "If element is a subgoal and the block 'ID' is needed" ,
 		action = "then the element subgoal is met and ID is written" ,
 		strength = 1.0
 	];
 	element_block2_p =iof=> Production[
-		condition = "If element is a subgoal and the block \"\\\"*\\\"\" is needed" ,
-		action = "then the element subgoal is met and \"*\" is written" ,
+		condition = "If element is a subgoal and the block ''*'' is needed" ,
+		action = "then the element subgoal is met and '*' is written" ,
 		strength = 1.0
 	];
 	property_hex_p =iof=> Production[
-		condition = "If property is a subgoal and the block \"HEX\" is needed" ,
+		condition = "If property is a subgoal and the block 'HEX' is needed" ,
 		action = "then the property subgoal is met and HEX is written" ,
 		strength = 1.0
 	];
 	property_class_p =iof=> Production[
-		condition = "If property is a subgoal and the block \"class\" is needed" ,
+		condition = "If property is a subgoal and the block 'class' is needed" ,
 		action = "then the property subgoal is met and class becomes a subgoal" ,
 		strength = 1.0
 	];
 	property_attribute_p =iof=> Production[
-		condition = "If property is a subgoal and the block \"attribute\" is needed" ,
+		condition = "If property is a subgoal and the block 'attribute' is needed" ,
 		action = "then the property subgoal is met and attribute becomes a subgoal" ,
 		strength = 1.0
 	];
 	property_pseudo_p =iof=> Production[
-		condition = "If property is a subgoal and the block \"pseudo\" is needed" ,
+		condition = "If property is a subgoal and the block 'pseudo' is needed" ,
 		action = "then the property subgoal is met and pseudo becomes a subgoal" ,
 		strength = 1.0
 	];
 	class_p =iof=> Production[
 		condition = "If class is a subgoal" ,
-		action = "then the class subgoal is met and \".\" and ID are written" ,
+		action = "then the class subgoal is met and '.' and ID are written" ,
 		strength = 1.0
 	];
 	attribute_p =iof=> Production[
 		condition = "If attribute is a subgoal" ,
-		action = "then the attribute subgoal is met and \"[\", ID, ATTRIBUTE_OP, \"]\" is written and value becomes a subgoal" ,
+		action = "then the attribute subgoal is met and '[', ID, ATTRIBUTE_OP, ']' is written and value becomes a subgoal" ,
 		strength = 1.0
 	];
 	value_id_p =iof=> Production[
-		condition = "If value is a subgoal and the block \"ID\" is needed" ,
+		condition = "If value is a subgoal and the block 'ID' is needed" ,
 		action = "then the value subgoal is met and ID is written" ,
 		strength = 1.0
 	];
 	value_str_p =iof=> Production[
-		condition = "If value is a subgoal and the block \"STR\" is needed" ,
+		condition = "If value is a subgoal and the block 'STR' is needed" ,
 		action = "then the value subgoal is met and STR is written" ,
 		strength = 1.0
 	];
 	pseudo_p =iof=> Production[
 		condition = "If pseudo is a subgoal" ,
-		action = "then the pseudo subgoal is met and \":\", ID, \"(\", ID and \")\" are written" ,
+		action = "then the pseudo subgoal is met and ':', ID, '(', ID and ')' are written" ,
 		strength = 1.0
 	];
 	block_p =iof=> Production[
 		condition = "If block is a subgoal" ,
-		action = "then the block subgoal is met and \"{\", \";\", \"}\" is written and rule and rule become subgoals" ,
+		action = "then the block subgoal is met and '{', ';', '}' is written and rule and rule become subgoals" ,
 		strength = 1.0
 	];
 	rule_p =iof=> Production[
 		condition = "If rule is a subgoal" ,
-		action = "then the rule subgoal is met and ID, \":\", IMPORTANT_FLAG is written and expression becomes a subgoal" ,
+		action = "then the rule subgoal is met and ID, ':', IMPORTANT_FLAG is written and expression becomes a subgoal" ,
 		strength = 1.0
 	];
 	expression_p =iof=> Production[
@@ -288,38 +278,38 @@ triples {
 		strength = 1.0
 	];
 	term_unary_op_p =iof=> Production[
-		condition = "If term is a subgoal and the block \"optional group [UNARY_OP] QTY\" is needed" ,
+		condition = "If term is a subgoal and the block 'optional group [UNARY_OP] QTY' is needed" ,
 		action = "then the term subgoal is met and UNARY_OP and QTY are written" ,
 		strength = 1.0
 	];
 	term_str_p =iof=> Production[
-		condition = "If term is a subgoal and the block \"STR\" is needed" ,
+		condition = "If term is a subgoal and the block 'STR' is needed" ,
 		action = "then the term subgoal is met and STR is written" ,
 		strength = 1.0
 	];
 	term_id_p =iof=> Production[
-		condition = "If term is a subgoal and the block \"ID\" is needed" ,
+		condition = "If term is a subgoal and the block 'ID' is needed" ,
 		action = "then the term subgoal is met and ID is written" ,
 		strength = 1.0
 	];
 	term_uri_p =iof=> Production[
-		condition = "If term is a subgoal and the block \"URI\" is needed" ,
+		condition = "If term is a subgoal and the block 'URI' is needed" ,
 		action = "then the term subgoal is met and URI is written" ,
 		strength = 1.0
 	];
 	term_color_p =iof=> Production[
-		condition = "If term is a subgoal and the block \"COLOR\" is needed" ,
+		condition = "If term is a subgoal and the block 'COLOR' is needed" ,
 		action = "then the term subgoal is met and COLOR is written" ,
 		strength = 1.0
 	];
 	term_function_p =iof=> Production[
-		condition = "If term is a subgoal and the block \"function\" is needed" ,
+		condition = "If term is a subgoal and the block 'function' is needed" ,
 		action = "then the term subgoal is met and function becomes a subgoal" ,
 		strength = 1.0
 	];
 	function_p =iof=> Production[
 		condition = "If function is a subgoal" ,
-		action = "then the function subgoal is met and ID, \"(\", \")\" is written and expression becomes a subgoal" ,
+		action = "then the function subgoal is met and ID, '(', ')' is written and expression becomes a subgoal" ,
 		strength = 1.0
 	];
 }

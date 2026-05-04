@@ -1,38 +1,29 @@
 Ontology cognitive_model_JavaScript
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    JavaScript,
-    JavaScript_model,
-    JavaScript_specific_section
+	JavaScript,
+	JavaScript_model,
+	JavaScript_specific_section
 }
 
 triples {
-    JavaScript =iof=> Language;
-    JavaScript =generates=> JavaScript_model;
-    JavaScript_model =iof=> Model;
-
-    JavaScript_specific_section =iof=> Section;
-    JavaScript_specific_section =pof=> JavaScript_model;
+	JavaScript =iof=> Language;
+	JavaScript_model =iof=> Model;
+	JavaScript =has=> JavaScript_model;
+	JavaScript_specific_section =iof=> Section [ title = "Production rules" ];
+	JavaScript_model =[ has =>
+		JavaScript_specific_section
+	];
+	JavaScript_specific_section =[ groups =>
+	];
 }
 .

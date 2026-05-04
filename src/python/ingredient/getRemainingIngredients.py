@@ -53,8 +53,12 @@ def get_remaining(existing_names: list[str]):
                 "updatedCharacteristics": updated_characteristics,
                 "updatedExtraData": updated_extra_data,
                 "table": [
-                    {"section": section, "rows": rows}
-                    for section, rows in table.items()
+                    {
+                        "section": section,
+                        "title": info.get("title", section),
+                        "rows": info.get("rows", []),
+                    }
+                    for section, info in table.items()
                 ],
             }
         )

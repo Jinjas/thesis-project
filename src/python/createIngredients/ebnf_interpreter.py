@@ -79,7 +79,7 @@ def clean_literal(value: str) -> str:
 
 
 def escape_text(value: str) -> str:
-    return value.replace("\\", "\\\\").replace('"', '\\"')
+    return value.replace("\\", "\\\\")
 
 
 def split_expression(expression_node: Node) -> list[list[Node]]:
@@ -139,7 +139,7 @@ def collect_terminals(nodes: Iterable[Node]) -> list[str]:
         if node.kind == "terminal" and node.value:
             terminals.append(node.value)
         elif node.kind == "reserved_string" and node.value:
-            terminals.append(f'"{node.value}"')
+            terminals.append(f"'{node.value}'")
         elif node.children:
             terminals.extend(collect_terminals(node.children))
 
@@ -155,7 +155,7 @@ def describe_nodes(nodes: Iterable[Node]) -> str:
         elif node.kind == "terminal" and node.value:
             parts.append(node.value)
         elif node.kind == "reserved_string" and node.value:
-            parts.append(f'"{node.value}"')
+            parts.append(f"'{node.value}'")
         elif node.kind == "optional_group":
             parts.append(f"optional group [{describe_nodes(node.children)}]")
         elif node.kind == "repeated_group":
@@ -183,7 +183,7 @@ def block_slug(nodes: Iterable[Node], index: int) -> str:
 
     terminals = collect_terminals(nodes)
     if terminals:
-        candidate = terminals[0].strip('"').lower()
+        candidate = terminals[0].strip("'\"").lower()
         candidate = re.sub(r"[^a-z0-9_]+", "_", candidate)
         candidate = candidate.strip("_")
         if candidate:
@@ -196,8 +196,8 @@ def describe_block_condition(lhs: str, nodes: Iterable[Node], is_alternative: bo
     block_text = describe_nodes(nodes)
     if is_alternative:
         if block_text:
-            return f'If {lhs} is a subgoal and the block "{escape_text(block_text)}" is needed'
-        return f'If {lhs} is a subgoal and the block is needed'
+            return f"If {lhs} is a subgoal and the block '{escape_text(block_text)}' is needed"
+        return f"If {lhs} is a subgoal and the block is needed"
 
     return f"If {lhs} is a subgoal"
 
@@ -230,18 +230,18 @@ def describe_block_action(nodes: Iterable[Node]) -> str:
 
     group_text = describe_nodes(nodes)
     if group_text:
-        return f'then the block "{escape_text(group_text)}" is written'
+        return f"then the block '{escape_text(group_text)}' is written"
 
     return "then the block is written"
 
 
 def build_production(spec: ProductionSpec) -> str:
     return (
-        f'{spec.name} =iof=> Production[\n'
-        f'\t\tcondition = "{escape_text(spec.condition)}" ,\n'
-        f'\t\taction = "{escape_text(spec.action)}" ,\n'
-        f'\t\tstrength = {spec.strength:.1f}\n'
-        f'\t];'
+        f"{spec.name} =iof=> Production[\n"
+        f"\t\tcondition = \"{escape_text(spec.condition)}\" ,\n"
+        f"\t\taction = \"{escape_text(spec.action)}\" ,\n"
+        f"\t\tstrength = {spec.strength:.1f}\n"
+        f"\t];"
     )
 
 
@@ -278,54 +278,30 @@ def build_ontology(name: str, input_type: str, productions: list[ProductionSpec]
     for production in productions:
         individuals.append(production.name)
 
-    generic_triples = [
+    hidden_lines = [
         f"\t{input_type} =isa=> Ingredient;",
         f"\tIngredient =has=> Model;",
         f"\tModel =has=> Production;",
         f"\tSection =groups=> Production;",
-    ]
-    
-    triples = [
-        "\t% Generic ontology structure.",
-    ]
-    triples.extend(generic_triples)
-    triples.extend([
-        "",
-        "\t% Instantiation.",
         f"\t{name} =iof=> {input_type};",
         f"\t{name}_model =iof=> Model;",
         f"\t{name} =has=> {name}_model;",
-        "",
+        f"\t{name}_model =has=> {', '.join(section_names)};" if section_names else f"\t{name}_model =has=> ;",
     ]
-    )
 
     for section_idx, section_name in enumerate(section_names):
-        section_prods = list(partitions.values())[section_idx]
-        triples.append(f"\t{section_name} =iof=> Section [ title = \"{section_titles[section_idx]}\" ];")
-    
-    triples.append("")
-    
-    # Format has => list with section references only
-    section_list = ",\n\t\t".join(section_names)
-    triples.append(f"\t{name}_model =[ has =>\n\t\t{section_list}\n\t];")
-    triples.append("")
-    
-    # Format groups => lists for each section
+        hidden_lines.append(f"\t{section_name} =iof=> Section [ title = \"{escape_text(section_titles[section_idx])}\" ];")
+
+    editable_triples: list[str] = []
+
     for section_idx, section_name in enumerate(section_names):
         section_prods = list(partitions.values())[section_idx]
         section_prod_list = ",\n\t\t".join(p.name for p in section_prods)
-        triples.append(f"\t{section_name} =[ groups =>\n\t\t{section_prod_list}\n\t];")
-    
-    triples.append("")
-    triples.append("\t% Production definitions.")
+        editable_triples.append(f"\t{section_name} =[ groups =>\n\t\t{section_prod_list}\n\t];")
     
     for production in productions:
-        triples.append(f"\t{build_production(production)}")
+        editable_triples.append(f"\t{build_production(production)}")
 
-    if triples and triples[-1] == "":
-        triples.pop()
-
-    # Format individuals with proper line breaks
     individuals_str = ",\n\t".join(individuals)
 
     return (
@@ -339,8 +315,9 @@ def build_ontology(name: str, input_type: str, productions: list[ProductionSpec]
         "individuals {\n"
         f"\t{individuals_str}\n"
         "}\n\n"
-        "triples {\n"
-        + "\n".join(triples)
+        + "\n".join(hidden_lines)
+        + "\n\ntriples {\n"
+        + "\n".join(editable_triples)
         + "\n}\n."
     )
 

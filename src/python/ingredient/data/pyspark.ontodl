@@ -1,38 +1,29 @@
 Ontology cognitive_model_PySpark
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    PySpark,
-    PySpark_model,
-    PySpark_specific_section
+	PySpark,
+	PySpark_model,
+	PySpark_specific_section
 }
 
 triples {
-    PySpark =iof=> Library;
-    PySpark =generates=> PySpark_model;
-    PySpark_model =iof=> Model;
-
-    PySpark_specific_section =iof=> Section;
-    PySpark_specific_section =pof=> PySpark_model;
+	PySpark =iof=> Language;
+	PySpark_model =iof=> Model;
+	PySpark =has=> PySpark_model;
+	PySpark_specific_section =iof=> Section [ title = "Production rules" ];
+	PySpark_model =[ has =>
+		PySpark_specific_section
+	];
+	PySpark_specific_section =[ groups =>
+	];
 }
 .
