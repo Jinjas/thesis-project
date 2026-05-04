@@ -1,47 +1,36 @@
 Ontology cognitive_model_PL0
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    language,
-    library,
-    framework,
-    tool,
-    model,
-    production[condition, action, strength, probability],
-    section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    PL0,
-    PL0_model,
-    program_section,
-    program_production
+	PL0,
+	PL0_model,
+	program_section,
+	program_production
 }
 
 triples {
-    PL0 =iof=> Language;
-    PL0 =generates=> PL0_model;
-    PL0_model =iof=> Model;
-
-  program_section =iof=> Section;
-  program_section =pof=> model_PL0;
-
-  program_production =iof=> Production[
-        condition="If a program is a subgoal", 
-        action="the program block is...", 
-        strength=1.0, 
-        probability=1.0
-  ];
-  program_production =pof=> program_section;
+	PL0 =iof=> Language;
+	PL0_model =iof=> Model;
+	PL0 =has=> PL0_model;
+	program_section =iof=> Section [ title = "Production rules" ];
+	PL0_model =[ has =>
+		program_section
+	];
+	program_section =[ groups =>
+		program_production
+	];
+	program_production =iof=> Production[
+		condition = "If a program is a subgoal" ,
+		action = "the program block is..." ,
+		strength = 1.0
+	];
 }
 .

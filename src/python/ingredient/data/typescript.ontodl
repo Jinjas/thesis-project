@@ -1,38 +1,29 @@
 Ontology cognitive_model_TypeScript
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    TypeScript,
-    TypeScript_model,
-    TypeScript_specific_section
+	TypeScript,
+	TypeScript_model,
+	TypeScript_specific_section
 }
 
 triples {
-    TypeScript =iof=> Language;
-    TypeScript =generates=> TypeScript_model;
-    TypeScript_model =iof=> Model;
-
-    TypeScript_specific_section =iof=> Section;
-    TypeScript_specific_section =pof=> TypeScript_model;
+	TypeScript =iof=> Language;
+	TypeScript_model =iof=> Model;
+	TypeScript =has=> TypeScript_model;
+	TypeScript_specific_section =iof=> Section [ title = "Production rules" ];
+	TypeScript_model =[ has =>
+		TypeScript_specific_section
+	];
+	TypeScript_specific_section =[ groups =>
+	];
 }
 .

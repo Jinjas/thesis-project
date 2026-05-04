@@ -1,38 +1,29 @@
 Ontology cognitive_model_ESLint
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    ESLint,
-    ESLint_model,
-    ESLint_specific_section
+	ESLint,
+	ESLint_model,
+	ESLint_specific_section
 }
 
 triples {
-    ESLint =iof=> Tool;
-    ESLint =generates=> ESLint_model;
-    ESLint_model =iof=> Model;
-
-    ESLint_specific_section =iof=> Section;
-    ESLint_specific_section =pof=> ESLint_model;
+	ESLint =iof=> Language;
+	ESLint_model =iof=> Model;
+	ESLint =has=> ESLint_model;
+	ESLint_specific_section =iof=> Section [ title = "Production rules" ];
+	ESLint_model =[ has =>
+		ESLint_specific_section
+	];
+	ESLint_specific_section =[ groups =>
+	];
 }
 .

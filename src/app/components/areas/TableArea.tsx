@@ -4,6 +4,7 @@ import React from "react";
 
 type TableData = {
   section: string;
+  title?: string;
   rows: string[][];
 };
 
@@ -32,7 +33,7 @@ export default function SectionTable({ data }: Props) {
                   colSpan={4}
                   className="px-2 py-1 border border-r-0  border-b-0 text-center font-semibold"
                 >
-                  {section.section}
+                  {section.title ?? section.section}
                 </td>
               </tr>
 

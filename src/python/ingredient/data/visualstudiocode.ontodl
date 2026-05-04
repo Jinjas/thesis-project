@@ -1,38 +1,29 @@
 Ontology cognitive_model_VisualStudioCode
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    VisualStudioCode,
-    VisualStudioCode_model,
-    VisualStudioCode_specific_section
+	VisualStudioCode,
+	VisualStudioCode_model,
+	VisualStudioCode_specific_section
 }
 
 triples {
-    VisualStudioCode =iof=> Tool;
-    VisualStudioCode =generates=> VisualStudioCode_model;
-    VisualStudioCode_model =iof=> Model;
-
-    VisualStudioCode_specific_section =iof=> Section;
-    VisualStudioCode_specific_section =pof=> VisualStudioCode_model;
+	VisualStudioCode =iof=> Language;
+	VisualStudioCode_model =iof=> Model;
+	VisualStudioCode =has=> VisualStudioCode_model;
+	VisualStudioCode_specific_section =iof=> Section [ title = "Production rules" ];
+	VisualStudioCode_model =[ has =>
+		VisualStudioCode_specific_section
+	];
+	VisualStudioCode_specific_section =[ groups =>
+	];
 }
 .

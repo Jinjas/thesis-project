@@ -9,6 +9,7 @@ type RemainingIngredient = {
   updatedExtraData: string;
   table: {
     section: string;
+    title?: string;
     rows: string[][];
   }[];
 };

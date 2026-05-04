@@ -1,38 +1,29 @@
 Ontology cognitive_model_TSQL
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    TSQL,
-    TSQL_model,
-    TSQL_specific_section
+	TSQL,
+	TSQL_model,
+	TSQL_specific_section
 }
 
 triples {
-    TSQL =iof=> Language;
-    TSQL =generates=> TSQL_model;
-    TSQL_model =iof=> Model;
-
-    TSQL_specific_section =iof=> Section;
-    TSQL_specific_section =pof=> TSQL_model;
+	TSQL =iof=> Language;
+	TSQL_model =iof=> Model;
+	TSQL =has=> TSQL_model;
+	TSQL_specific_section =iof=> Section [ title = "Production rules" ];
+	TSQL_model =[ has =>
+		TSQL_specific_section
+	];
+	TSQL_specific_section =[ groups =>
+	];
 }
 .

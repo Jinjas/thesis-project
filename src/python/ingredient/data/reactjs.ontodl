@@ -1,38 +1,29 @@
 Ontology cognitive_model_ReactJS
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    ReactJS,
-    ReactJS_model,
-    ReactJS_specific_section
+	ReactJS,
+	ReactJS_model,
+	ReactJS_specific_section
 }
 
 triples {
-    ReactJS =iof=> Library;
-    ReactJS =generates=> ReactJS_model;
-    ReactJS_model =iof=> Model;
-
-    ReactJS_specific_section =iof=> Section;
-    ReactJS_specific_section =pof=> ReactJS_model;
+	ReactJS =iof=> Language;
+	ReactJS_model =iof=> Model;
+	ReactJS =has=> ReactJS_model;
+	ReactJS_specific_section =iof=> Section [ title = "Production rules" ];
+	ReactJS_model =[ has =>
+		ReactJS_specific_section
+	];
+	ReactJS_specific_section =[ groups =>
+	];
 }
 .

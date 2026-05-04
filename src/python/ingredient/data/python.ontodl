@@ -1,38 +1,29 @@
 Ontology cognitive_model_Python
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    Python,
-    Python_model,
-    Python_specific_section
+	Python,
+	Python_model,
+	Python_specific_section
 }
 
 triples {
-    Python =iof=> Language;
-    Python =generates=> Python_model;
-    Python_model =iof=> Model;
-
-    Python_specific_section =iof=> Section;
-    Python_specific_section =pof=> Python_model;
+	Python =iof=> Language;
+	Python_model =iof=> Model;
+	Python =has=> Python_model;
+	Python_specific_section =iof=> Section [ title = "Production rules" ];
+	Python_model =[ has =>
+		Python_specific_section
+	];
+	Python_specific_section =[ groups =>
+	];
 }
 .

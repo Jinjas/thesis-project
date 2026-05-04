@@ -19,6 +19,7 @@ type Props = {
 const tableDict: TableDict[] = [
   {
     section: "section",
+    title: "section",
     rows: [
       ["1", "1-data2", "1-data3", "1.0"],
       ["2", "2-data2", "2-data3", "1.0"],
@@ -26,6 +27,7 @@ const tableDict: TableDict[] = [
   },
   {
     section: "section2",
+    title: "section2",
     rows: [["3", "3-data2", "3-data3", "1.0"]],
   },
 ];
@@ -43,6 +45,7 @@ function groupTableOfCocktail(cocktail: Cocktail, ingredients: Ingredient[]) {
       if (!sectionMap[table.section]) {
         sectionMap[table.section] = {
           section: table.section,
+          title: table.title ?? table.section,
           rows: table.rows.map((row) => {
             const newRow = [...row];
             newRow[0] = "0";
@@ -65,6 +68,7 @@ function groupTableOfCocktail(cocktail: Cocktail, ingredients: Ingredient[]) {
   }
   const data: TableDict[] = Object.entries(sectionMap).map(([s, r]) => ({
     section: s,
+    title: r.title,
     rows: r.rows.map((row) => {
       row[0] = String(counter++);
       return row;

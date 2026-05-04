@@ -1,38 +1,29 @@
 Ontology cognitive_model_PyTorch
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    PyTorch,
-    PyTorch_model,
-    PyTorch_specific_section
+	PyTorch,
+	PyTorch_model,
+	PyTorch_specific_section
 }
 
 triples {
-    PyTorch =iof=> Framework;
-    PyTorch =generates=> PyTorch_model;
-    PyTorch_model =iof=> Model;
-
-    PyTorch_specific_section =iof=> Section;
-    PyTorch_specific_section =pof=> PyTorch_model;
+	PyTorch =iof=> Language;
+	PyTorch_model =iof=> Model;
+	PyTorch =has=> PyTorch_model;
+	PyTorch_specific_section =iof=> Section [ title = "Production rules" ];
+	PyTorch_model =[ has =>
+		PyTorch_specific_section
+	];
+	PyTorch_specific_section =[ groups =>
+	];
 }
 .

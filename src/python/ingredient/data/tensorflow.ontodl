@@ -1,38 +1,29 @@
 Ontology cognitive_model_TensorFlow
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    TensorFlow,
-    TensorFlow_model,
-    TensorFlow_specific_section
+	TensorFlow,
+	TensorFlow_model,
+	TensorFlow_specific_section
 }
 
 triples {
-    TensorFlow =iof=> Library;
-    TensorFlow =generates=> TensorFlow_model;
-    TensorFlow_model =iof=> Model;
-
-    TensorFlow_specific_section =iof=> Section;
-    TensorFlow_specific_section =pof=> TensorFlow_model;
+	TensorFlow =iof=> Language;
+	TensorFlow_model =iof=> Model;
+	TensorFlow =has=> TensorFlow_model;
+	TensorFlow_specific_section =iof=> Section [ title = "Production rules" ];
+	TensorFlow_model =[ has =>
+		TensorFlow_specific_section
+	];
+	TensorFlow_specific_section =[ groups =>
+	];
 }
 .

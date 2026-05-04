@@ -1,38 +1,29 @@
 Ontology cognitive_model_NextJS
 
-attributes {
-    condition: string,
-    action: string,
-    strength: float,
-    probability: float
-}
+attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-    Language,
-    Library,
-    Framework,
-    Tool,
-    Model,
-    Production[condition, action, strength, probability],
-    Section
+	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+	Production [ condition , action , strength ]
 }
 
-relations {
-    generates
-}
+relationships { has , groups }
 
 individuals {
-    NextJS,
-    NextJS_model,
-    NextJS_specific_section
+	NextJS,
+	NextJS_model,
+	NextJS_specific_section
 }
 
 triples {
-    NextJS =iof=> Framework;
-    NextJS =generates=> NextJS_model;
-    NextJS_model =iof=> Model;
-
-    NextJS_specific_section =iof=> Section;
-    NextJS_specific_section =pof=> NextJS_model;
+	NextJS =iof=> Language;
+	NextJS_model =iof=> Model;
+	NextJS =has=> NextJS_model;
+	NextJS_specific_section =iof=> Section [ title = "Production rules" ];
+	NextJS_model =[ has =>
+		NextJS_specific_section
+	];
+	NextJS_specific_section =[ groups =>
+	];
 }
 .

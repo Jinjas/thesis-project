@@ -98,7 +98,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
               updatedCode: string;
               updatedCharacteristics: string;
               updatedExtraData: string;
-              table: { section: string; rows: string[][] }[];
+              table: { section: string; title?: string; rows: string[][] }[];
             }) => ({
               id: createId("ingredient", ingredient.name),
               name: ingredient.name,
