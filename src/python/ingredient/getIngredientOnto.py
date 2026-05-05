@@ -161,6 +161,7 @@ def getOntology(ingredient_name: str, ingredient_type: str):
         content = data_path.read_text(encoding="utf-8")
         table = build_table_from_ontology(content)
         characteristics, extra_data = split_triples_block(content)
+        append_name_to_names_file(ingredient_name)
         return content, characteristics, extra_data, table
 
     section_name = f"{ingredient_name}_specific_section"
