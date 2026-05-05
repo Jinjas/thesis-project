@@ -28,9 +28,6 @@ triples {
     NextJS =has=> NextJS_model;
     NextJS_model =has=> NextJS_specific_section;
 
-    NextJS =iof=> Language;
-    NextJS_model =iof=> Model;
-    NextJS =has=> NextJS_model;
     NextJS_specific_section =iof=> Section [ title = "Production rules" ];
     NextJS_model =[ has =>
         NextJS_specific_section

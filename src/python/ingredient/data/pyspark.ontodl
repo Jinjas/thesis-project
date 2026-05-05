@@ -28,9 +28,6 @@ triples {
     PySpark =has=> PySpark_model;
     PySpark_model =has=> PySpark_specific_section;
 
-    PySpark =iof=> Language;
-    PySpark_model =iof=> Model;
-    PySpark =has=> PySpark_model;
     PySpark_specific_section =iof=> Section [ title = "Production rules" ];
     PySpark_model =[ has =>
         PySpark_specific_section

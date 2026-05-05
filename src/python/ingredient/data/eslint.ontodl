@@ -28,9 +28,6 @@ triples {
     ESLint =has=> ESLint_model;
     ESLint_model =has=> ESLint_specific_section;
 
-    ESLint =iof=> Language;
-    ESLint_model =iof=> Model;
-    ESLint =has=> ESLint_model;
     ESLint_specific_section =iof=> Section [ title = "Production rules" ];
     ESLint_model =[ has =>
         ESLint_specific_section

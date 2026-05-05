@@ -28,9 +28,6 @@ triples {
     PyTorch =has=> PyTorch_model;
     PyTorch_model =has=> PyTorch_specific_section;
 
-    PyTorch =iof=> Language;
-    PyTorch_model =iof=> Model;
-    PyTorch =has=> PyTorch_model;
     PyTorch_specific_section =iof=> Section [ title = "Production rules" ];
     PyTorch_model =[ has =>
         PyTorch_specific_section

@@ -28,9 +28,6 @@ triples {
     TensorFlow =has=> TensorFlow_model;
     TensorFlow_model =has=> TensorFlow_specific_section;
 
-    TensorFlow =iof=> Language;
-    TensorFlow_model =iof=> Model;
-    TensorFlow =has=> TensorFlow_model;
     TensorFlow_specific_section =iof=> Section [ title = "Production rules" ];
     TensorFlow_model =[ has =>
         TensorFlow_specific_section

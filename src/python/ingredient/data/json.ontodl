@@ -28,9 +28,6 @@ triples {
     JSON =has=> JSON_model;
     JSON_model =has=> JSON_specific_section;
 
-    JSON =iof=> Language;
-    JSON_model =iof=> Model;
-    JSON =has=> JSON_model;
     JSON_specific_section =iof=> Section [ title = "Production rules" ];
     JSON_model =[ has =>
         JSON_specific_section

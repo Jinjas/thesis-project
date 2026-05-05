@@ -29,9 +29,6 @@ triples {
     PL0 =has=> PL0_model;
     PL0_model =has=> program_section;
 
-    PL0 =iof=> Language;
-    PL0_model =iof=> Model;
-    PL0 =has=> PL0_model;
     program_section =iof=> Section [ title = "Production rules" ];
     PL0_model =[ has =>
         program_section

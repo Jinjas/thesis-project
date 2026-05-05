@@ -28,9 +28,6 @@ triples {
     JavaScript =has=> JavaScript_model;
     JavaScript_model =has=> JavaScript_specific_section;
 
-    JavaScript =iof=> Language;
-    JavaScript_model =iof=> Model;
-    JavaScript =has=> JavaScript_model;
     JavaScript_specific_section =iof=> Section [ title = "Production rules" ];
     JavaScript_model =[ has =>
         JavaScript_specific_section

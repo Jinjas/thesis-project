@@ -28,9 +28,6 @@ triples {
     TSQL =has=> TSQL_model;
     TSQL_model =has=> TSQL_specific_section;
 
-    TSQL =iof=> Language;
-    TSQL_model =iof=> Model;
-    TSQL =has=> TSQL_model;
     TSQL_specific_section =iof=> Section [ title = "Production rules" ];
     TSQL_model =[ has =>
         TSQL_specific_section

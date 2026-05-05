@@ -51,13 +51,7 @@ triples {
     Tornado =has=> Tornado_model;
     Tornado_model =has=> Tornado_specific_section;
 
-    Tornado =iof=> Language;
-    Tornado_model =iof=> Model;
-    Tornado =has=> Tornado_model;
     Tornado_specific_section =iof=> Section [ title = "Production rules" ];
-    Tornado_model =[ has =>
-        Tornado_specific_section
-    ];
     Tornado_specific_section =[ groups =>
         program_production2,
         program_production3,

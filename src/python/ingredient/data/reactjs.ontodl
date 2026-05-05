@@ -28,9 +28,6 @@ triples {
     ReactJS =has=> ReactJS_model;
     ReactJS_model =has=> ReactJS_specific_section;
 
-    ReactJS =iof=> Language;
-    ReactJS_model =iof=> Model;
-    ReactJS =has=> ReactJS_model;
     ReactJS_specific_section =iof=> Section [ title = "Production rules" ];
     ReactJS_model =[ has =>
         ReactJS_specific_section

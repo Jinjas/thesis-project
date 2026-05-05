@@ -28,9 +28,6 @@ triples {
     TypeScript =has=> TypeScript_model;
     TypeScript_model =has=> TypeScript_specific_section;
 
-    TypeScript =iof=> Language;
-    TypeScript_model =iof=> Model;
-    TypeScript =has=> TypeScript_model;
     TypeScript_specific_section =iof=> Section [ title = "Production rules" ];
     TypeScript_model =[ has =>
         TypeScript_specific_section

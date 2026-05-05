@@ -28,9 +28,6 @@ triples {
     Python =has=> Python_model;
     Python_model =has=> Python_specific_section;
 
-    Python =iof=> Language;
-    Python_model =iof=> Model;
-    Python =has=> Python_model;
     Python_specific_section =iof=> Section [ title = "Production rules" ];
     Python_model =[ has =>
         Python_specific_section

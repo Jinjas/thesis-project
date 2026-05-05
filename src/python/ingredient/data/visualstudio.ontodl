@@ -28,9 +28,6 @@ triples {
     VisualStudio =has=> VisualStudio_model;
     VisualStudio_model =has=> VisualStudio_specific_section;
 
-    VisualStudio =iof=> Language;
-    VisualStudio_model =iof=> Model;
-    VisualStudio =has=> VisualStudio_model;
     VisualStudio_specific_section =iof=> Section [ title = "Production rules" ];
     VisualStudio_model =[ has =>
         VisualStudio_specific_section
