@@ -21,7 +21,6 @@ PRODUCTION_DEF_RE = re.compile(
     r"^\s*(\w+)\s*=\s*iof\s*=>\s*Production\s*\[(.*?)\]\s*;$",
     re.MULTILINE | re.DOTALL,
 )
-LEGACY_POF_RE = re.compile(r"^\s*(\w+)\s*=\s*pof\s*=>\s*(\w+)\s*;$", re.MULTILINE)
 ATTR_RE = re.compile(r"(\w+)\s*=\s*(?:'([^']*)'|\"([^\"]*)\"|([\d.]+))")
 MODEL_HAS_LINE_RE = re.compile(r"^\s*\w+_model\s*=has=>\s*.*;\s*$")
 
@@ -107,10 +106,8 @@ def parse_attributes(raw_attributes: str) -> dict[str, str]:
 
 def build_table_from_ontology(content: str) -> dict[str, dict[str, object]]:
     sections: dict[str, dict[str, object]] = {}
-    section_order: list[str] = []
     section_groups: dict[str, list[str]] = {}
     production_attrs: dict[str, dict[str, str]] = {}
-    legacy_links: dict[str, str] = {}
 
     def ensure_section(section_name: str, title: str | None = None) -> None:
         if section_name not in sections:
@@ -118,7 +115,6 @@ def build_table_from_ontology(content: str) -> dict[str, dict[str, object]]:
                 "title": title or default_section_title(section_name),
                 "rows": [],
             }
-            section_order.append(section_name)
         elif title:
             sections[section_name]["title"] = title
 
@@ -136,14 +132,10 @@ def build_table_from_ontology(content: str) -> dict[str, dict[str, object]]:
         production_name = match.group(1)
         production_attrs[production_name] = parse_attributes(match.group(2))
 
-    for match in LEGACY_POF_RE.finditer(content):
-        legacy_links[match.group(1)] = match.group(2)
-
     prod_id = 1
-    used_productions: set[str] = set()
 
     if section_groups:
-        ordered_sections = section_order + [section for section in section_groups if section not in section_order]
+        ordered_sections = [*sections, *[section for section in section_groups if section not in sections]]
         for section_name in ordered_sections:
             for production_name in section_groups.get(section_name, []):
                 attrs = production_attrs.get(production_name)
@@ -156,24 +148,7 @@ def build_table_from_ontology(content: str) -> dict[str, dict[str, object]]:
                     attrs.get("action", ""),
                     attrs.get("strength", ""),
                 ])
-                used_productions.add(production_name)
                 prod_id += 1
-
-    if not used_productions and legacy_links:
-        for production_name, section_name in legacy_links.items():
-            attrs = production_attrs.get(production_name)
-            if attrs is None:
-                continue
-
-            ensure_section(section_name)
-
-            sections[section_name]["rows"].append([
-                str(prod_id),
-                attrs.get("condition", ""),
-                attrs.get("action", ""),
-                attrs.get("strength", ""),
-            ])
-            prod_id += 1
 
     return sections
 
