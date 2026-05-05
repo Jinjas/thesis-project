@@ -145,6 +145,24 @@ Se a infraestrutura externa mapear `443 -> 50812`, podes usar `https://cosmo.epl
 
 Para documentação completa, consulta [DEPLOYMENT.md](DEPLOYMENT.md).
 
+# ver conteudo do volume:
+
+```bash
+
+docker volume inspect cocktail_data
+
+docker run --rm -v cocktail_data:/data busybox sh -c "ls -la /data"
+docker run --rm -v cocktail_data:/data busybox cat /data/NAMES.txt
+
+docker volume inspect ingredient_data
+
+docker run --rm -v ingredient_data:/data busybox sh -c "ls -la /data"
+docker run --rm -v ingredient_data:/data busybox cat /data/python.ontodl
+
+
+
+```
+
 # REINICIO DE SERVIÇO COM BACKUP RESTORE
 
 - limpeza:
