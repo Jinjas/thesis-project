@@ -238,10 +238,10 @@ def describe_block_action(nodes: Iterable[Node]) -> str:
 def build_production(spec: ProductionSpec) -> str:
     return (
         f"{spec.name} =iof=> Production[\n"
-        f"\t\tcondition = \"{escape_text(spec.condition)}\" ,\n"
-        f"\t\taction = \"{escape_text(spec.action)}\" ,\n"
-        f"\t\tstrength = {spec.strength:.1f}\n"
-        f"\t];"
+        f"        condition = \"{escape_text(spec.condition)}\" ,\n"
+        f"        action = \"{escape_text(spec.action)}\" ,\n"
+        f"        strength = {spec.strength:.1f}\n"
+        f"    ];"
     )
 
 
@@ -279,41 +279,44 @@ def build_ontology(name: str, input_type: str, productions: list[ProductionSpec]
         individuals.append(production.name)
 
     hidden_lines = [
-        f"\t{input_type} =isa=> Ingredient;",
-        f"\tIngredient =has=> Model;",
-        f"\tModel =has=> Production;",
-        f"\tSection =groups=> Production;",
-        f"\t{name} =iof=> {input_type};",
-        f"\t{name}_model =iof=> Model;",
-        f"\t{name} =has=> {name}_model;",
-        f"\t{name}_model =has=> {', '.join(section_names)};" if section_names else f"\t{name}_model =has=> ;",
+        f"    Language =isa=> Ingredient;",
+        f"    Library =isa=> Ingredient;",
+        f"    Framework =isa=> Ingredient;",
+        f"    Tool =isa=> Ingredient;",
+        f"    Ingredient =has=> Model;",
+        f"    Model =has=> Production;",
+        f"    Section =groups=> Production;",
+        f"    {name} =iof=> {input_type};",
+        f"    {name}_model =iof=> Model;",
+        f"    {name} =has=> {name}_model;",
+        f"    {name}_model =has=> {', '.join(section_names)};\n" if section_names else f"    {name}_model =has=> ;\n",
     ]
 
     for section_idx, section_name in enumerate(section_names):
-        hidden_lines.append(f"\t{section_name} =iof=> Section [ title = \"{escape_text(section_titles[section_idx])}\" ];")
+        hidden_lines.append(f"    {section_name} =iof=> Section [ title = \"{escape_text(section_titles[section_idx])}\" ];")
 
     editable_triples: list[str] = []
 
     for section_idx, section_name in enumerate(section_names):
         section_prods = list(partitions.values())[section_idx]
-        section_prod_list = ",\n\t\t".join(p.name for p in section_prods)
-        editable_triples.append(f"\t{section_name} =[ groups =>\n\t\t{section_prod_list}\n\t];")
+        section_prod_list = ",\n        ".join(p.name for p in section_prods)
+        editable_triples.append(f"    {section_name} =[ groups =>\n        {section_prod_list}\n    ];")
     
     for production in productions:
-        editable_triples.append(f"\t{build_production(production)}")
+        editable_triples.append(f"    {build_production(production)}")
 
-    individuals_str = ",\n\t".join(individuals)
+    individuals_str = ",\n    ".join(individuals)
 
     return (
         f"Ontology cognitive_model_{name}\n\n"
         "attributes { condition : string , action : string , strength : float , title : string }\n\n"
         "concepts {\n"
-        "\tIngredient , Language , Library , Framework , Tool , Model , Section [ title ] ,\n"
-        "\tProduction [ condition , action , strength ]\n"
+        "    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,\n"
+        "    Production [ condition , action , strength ]\n"
         "}\n\n"
         "relationships { has , groups }\n\n"
         "individuals {\n"
-        f"\t{individuals_str}\n"
+        f"    {individuals_str}\n"
         "}\n\n"
         "triples {\n"
         + "\n".join(hidden_lines)
