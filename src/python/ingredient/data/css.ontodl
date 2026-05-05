@@ -56,6 +56,7 @@ individuals {
 	function_p
 }
 
+triples {
 	Language =isa=> Ingredient;
 	Ingredient =has=> Model;
 	Model =has=> Production;
@@ -64,10 +65,9 @@ individuals {
 	CSS_model =iof=> Model;
 	CSS =has=> CSS_model;
 	CSS_model =has=> CSS_sec1, CSS_sec2;
+
 	CSS_sec1 =iof=> Section [ title = "Goals and subgoals" ];
 	CSS_sec2 =iof=> Section [ title = "Production rules" ];
-
-triples {
 	CSS_sec1 =[ groups =>
 		goal_p,
 		subgoal_p,

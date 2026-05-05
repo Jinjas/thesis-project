@@ -23,6 +23,7 @@ PRODUCTION_DEF_RE = re.compile(
 )
 LEGACY_POF_RE = re.compile(r"^\s*(\w+)\s*=\s*pof\s*=>\s*(\w+)\s*;$", re.MULTILINE)
 ATTR_RE = re.compile(r"(\w+)\s*=\s*(?:'([^']*)'|\"([^\"]*)\"|([\d.]+))")
+MODEL_HAS_LINE_RE = re.compile(r"^\s*\w+_model\s*=has=>\s*.*;\s*$")
 
 
 def to_safe_filename(value: str) -> str:
@@ -37,20 +38,57 @@ def default_section_title(section_name: str) -> str:
     return section_name.replace("_", " ").strip().title() or section_name
 
 
+def append_name_to_names_file(ingredient_name: str) -> None:
+    names_file = data_dir / "NAMES.txt"
+    existing_names = []
+    if names_file.exists():
+        existing_names = names_file.read_text(encoding="utf-8").splitlines()
+
+    normalized = ingredient_name.strip().lower()
+    if any(name.strip().lower() == normalized for name in existing_names):
+        return
+
+    updated_names = [name for name in existing_names if name.strip()]
+    updated_names.append(ingredient_name)
+    names_file.write_text("\n".join(updated_names), encoding="utf-8")
+
+
 def split_triples_block(content: str) -> tuple[str, str]:
-    marker = "triples {"
-    start = content.find(marker)
-    if start == -1:
+    lines = content.splitlines()
+    triples_start_idx = next(
+        (idx for idx, line in enumerate(lines) if line.strip().lower() == "triples {"),
+        -1,
+    )
+    if triples_start_idx == -1:
         return "", content.rstrip()
 
-    end = content.find("\n}", start)
-    if end == -1:
-        end = content.find("}", start)
-    if end == -1:
-        end = len(content)
+    triples_end_idx = next(
+        (idx for idx in range(triples_start_idx + 1, len(lines)) if lines[idx].strip() == "}"),
+        len(lines),
+    )
 
-    extra_data = content[:start].rstrip()
-    characteristics = content[start + len(marker):end].strip()
+    model_has_idx = next(
+        (
+            idx
+            for idx in range(triples_start_idx + 1, triples_end_idx)
+            if MODEL_HAS_LINE_RE.match(lines[idx])
+        ),
+        -1,
+    )
+
+    if model_has_idx != -1:
+        extra_data = "\n".join(lines[: model_has_idx + 1]).rstrip()
+        body_lines = lines[model_has_idx + 1 : triples_end_idx]
+    else:
+        extra_data = "\n".join(lines[:triples_start_idx]).rstrip()
+        body_lines = lines[triples_start_idx + 1 : triples_end_idx]
+
+    while body_lines and not body_lines[0].strip():
+        body_lines.pop(0)
+    while body_lines and not body_lines[-1].strip():
+        body_lines.pop()
+
+    characteristics = "\n".join(body_lines).strip()
     return characteristics, extra_data
 
 
@@ -169,6 +207,7 @@ def getOntology(ingredient_name: str, ingredient_type: str):
         f"\t{section_name}",
         "}",
         "",
+        "triples {",
         f"\tLanguage =isa=> Ingredient;",
         f"\tIngredient =has=> Model;",
         f"\tModel =has=> Production;",
@@ -177,9 +216,8 @@ def getOntology(ingredient_name: str, ingredient_type: str):
         f"\t{ingredient_name}_model =iof=> Model;",
         f"\t{ingredient_name} =has=> {ingredient_name}_model;",
         f"\t{ingredient_name}_model =has=> {section_name};",
-        f"\t{section_name} =iof=> Section [ title = 'Production rules' ];",
         "",
-        "triples {",
+        f"\t{section_name} =iof=> Section [ title = 'Production rules' ];",
         f"\t{section_name} =[ groups =>",
         "\t];",
         "}",
@@ -188,6 +226,7 @@ def getOntology(ingredient_name: str, ingredient_type: str):
 
     characteristics, extra_data = split_triples_block(content)
     data_path.write_text(content, encoding="utf-8")
+    append_name_to_names_file(ingredient_name)
     table = {section_name: {"title": "Production rules", "rows": []}}
     return content, characteristics, extra_data, table
 

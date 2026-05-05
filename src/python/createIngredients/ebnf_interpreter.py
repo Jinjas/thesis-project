@@ -315,8 +315,9 @@ def build_ontology(name: str, input_type: str, productions: list[ProductionSpec]
         "individuals {\n"
         f"\t{individuals_str}\n"
         "}\n\n"
+        "triples {\n"
         + "\n".join(hidden_lines)
-        + "\n\ntriples {\n"
+        + "\n"
         + "\n".join(editable_triples)
         + "\n}\n."
     )

@@ -56,6 +56,7 @@ individuals {
 	function_p
 }
 
+triples {
 	Language =isa=> Ingredient;
 	Ingredient =has=> Model;
 	Model =has=> Production;
@@ -66,8 +67,6 @@ individuals {
 	firstGrammarEX_model =has=> firstGrammarEX_sec1, firstGrammarEX_sec2;
 	firstGrammarEX_sec1 =iof=> Section [ title = "Goals and subgoals" ];
 	firstGrammarEX_sec2 =iof=> Section [ title = "Production rules" ];
-
-triples {
 	firstGrammarEX_sec1 =[ groups =>
 		goal_p,
 		subgoal_p,
