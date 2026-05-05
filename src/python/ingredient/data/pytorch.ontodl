@@ -3,27 +3,39 @@ Ontology cognitive_model_PyTorch
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	PyTorch,
-	PyTorch_model,
-	PyTorch_specific_section
+    PyTorch,
+    PyTorch_model,
+    PyTorch_specific_section
 }
 
 triples {
-	PyTorch =iof=> Language;
-	PyTorch_model =iof=> Model;
-	PyTorch =has=> PyTorch_model;
-	PyTorch_specific_section =iof=> Section [ title = "Production rules" ];
-	PyTorch_model =[ has =>
-		PyTorch_specific_section
-	];
-	PyTorch_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    PyTorch =iof=> Framework;
+    PyTorch_model =iof=> Model;
+    PyTorch =has=> PyTorch_model;
+    PyTorch_model =has=> PyTorch_specific_section;
+
+    PyTorch =iof=> Language;
+    PyTorch_model =iof=> Model;
+    PyTorch =has=> PyTorch_model;
+    PyTorch_specific_section =iof=> Section [ title = "Production rules" ];
+    PyTorch_model =[ has =>
+        PyTorch_specific_section
+    ];
+    PyTorch_specific_section =[ groups =>
+    ];
 }
 .

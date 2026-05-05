@@ -3,27 +3,39 @@ Ontology cognitive_model_PySpark
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	PySpark,
-	PySpark_model,
-	PySpark_specific_section
+    PySpark,
+    PySpark_model,
+    PySpark_specific_section
 }
 
 triples {
-	PySpark =iof=> Language;
-	PySpark_model =iof=> Model;
-	PySpark =has=> PySpark_model;
-	PySpark_specific_section =iof=> Section [ title = "Production rules" ];
-	PySpark_model =[ has =>
-		PySpark_specific_section
-	];
-	PySpark_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    PySpark =iof=> Library;
+    PySpark_model =iof=> Model;
+    PySpark =has=> PySpark_model;
+    PySpark_model =has=> PySpark_specific_section;
+
+    PySpark =iof=> Language;
+    PySpark_model =iof=> Model;
+    PySpark =has=> PySpark_model;
+    PySpark_specific_section =iof=> Section [ title = "Production rules" ];
+    PySpark_model =[ has =>
+        PySpark_specific_section
+    ];
+    PySpark_specific_section =[ groups =>
+    ];
 }
 .

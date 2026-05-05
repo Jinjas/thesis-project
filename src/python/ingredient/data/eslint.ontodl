@@ -3,27 +3,39 @@ Ontology cognitive_model_ESLint
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	ESLint,
-	ESLint_model,
-	ESLint_specific_section
+    ESLint,
+    ESLint_model,
+    ESLint_specific_section
 }
 
 triples {
-	ESLint =iof=> Language;
-	ESLint_model =iof=> Model;
-	ESLint =has=> ESLint_model;
-	ESLint_specific_section =iof=> Section [ title = "Production rules" ];
-	ESLint_model =[ has =>
-		ESLint_specific_section
-	];
-	ESLint_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    ESLint =iof=> Tool;
+    ESLint_model =iof=> Model;
+    ESLint =has=> ESLint_model;
+    ESLint_model =has=> ESLint_specific_section;
+
+    ESLint =iof=> Language;
+    ESLint_model =iof=> Model;
+    ESLint =has=> ESLint_model;
+    ESLint_specific_section =iof=> Section [ title = "Production rules" ];
+    ESLint_model =[ has =>
+        ESLint_specific_section
+    ];
+    ESLint_specific_section =[ groups =>
+    ];
 }
 .

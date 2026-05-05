@@ -3,27 +3,39 @@ Ontology cognitive_model_TypeScript
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	TypeScript,
-	TypeScript_model,
-	TypeScript_specific_section
+    TypeScript,
+    TypeScript_model,
+    TypeScript_specific_section
 }
 
 triples {
-	TypeScript =iof=> Language;
-	TypeScript_model =iof=> Model;
-	TypeScript =has=> TypeScript_model;
-	TypeScript_specific_section =iof=> Section [ title = "Production rules" ];
-	TypeScript_model =[ has =>
-		TypeScript_specific_section
-	];
-	TypeScript_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    TypeScript =iof=> Language;
+    TypeScript_model =iof=> Model;
+    TypeScript =has=> TypeScript_model;
+    TypeScript_model =has=> TypeScript_specific_section;
+
+    TypeScript =iof=> Language;
+    TypeScript_model =iof=> Model;
+    TypeScript =has=> TypeScript_model;
+    TypeScript_specific_section =iof=> Section [ title = "Production rules" ];
+    TypeScript_model =[ has =>
+        TypeScript_specific_section
+    ];
+    TypeScript_specific_section =[ groups =>
+    ];
 }
 .

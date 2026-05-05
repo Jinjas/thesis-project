@@ -88,7 +88,7 @@ def split_triples_block(content: str) -> tuple[str, str]:
     while body_lines and not body_lines[-1].strip():
         body_lines.pop()
 
-    characteristics = "\n".join(body_lines).strip()
+    characteristics = "\n".join(body_lines).rstrip()
     return characteristics, extra_data
 
 
@@ -195,31 +195,31 @@ def getOntology(ingredient_name: str, ingredient_type: str):
         "attributes { condition : string , action : string , strength : float , title : string }",
         "",
         "concepts {",
-        "\tIngredient , Language , Library , Framework , Tool , Model , Section [ title ] ,",
-        "\tProduction [ condition , action , strength ]",
+        "    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,",
+        "    Production [ condition , action , strength ]",
         "}",
         "",
         "relationships { has , groups }",
         "",
         "individuals {",
-        f"\t{ingredient_name},",
-        f"\t{ingredient_name}_model,",
-        f"\t{section_name}",
+        f"    {ingredient_name},",
+        f"    {ingredient_name}_model,",
+        f"    {section_name}",
         "}",
         "",
         "triples {",
-        f"\tLanguage =isa=> Ingredient;",
-        f"\tIngredient =has=> Model;",
-        f"\tModel =has=> Production;",
-        f"\tSection =groups=> Production;",
-        f"\t{ingredient_name} =iof=> {ingredient_type};",
-        f"\t{ingredient_name}_model =iof=> Model;",
-        f"\t{ingredient_name} =has=> {ingredient_name}_model;",
-        f"\t{ingredient_name}_model =has=> {section_name};",
+        f"    Language =isa=> Ingredient;\n    Library =isa=> Ingredient;\n    Framework =isa=> Ingredient;\n    Tool =isa=> Ingredient;",
+        f"    Ingredient =has=> Model;",
+        f"    Model =has=> Production;",
+        f"    Section =groups=> Production;",
+        f"    {ingredient_name} =iof=> {ingredient_type};",
+        f"    {ingredient_name}_model =iof=> Model;",
+        f"    {ingredient_name} =has=> {ingredient_name}_model;",
+        f"    {ingredient_name}_model =has=> {section_name};",
         "",
-        f"\t{section_name} =iof=> Section [ title = 'Production rules' ];",
-        f"\t{section_name} =[ groups =>",
-        "\t];",
+        f"    {section_name} =iof=> Section [ title = 'Production rules' ];",
+        f"    {section_name} =[ groups =>",
+        "    ];",
         "}",
         ".",
     ])

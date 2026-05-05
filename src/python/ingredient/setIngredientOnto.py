@@ -238,13 +238,13 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
         *production_names,
     ])
 
-    individuals_list = ",\n\t".join(individuals)
+    individuals_list = ",\n    ".join(individuals)
 
     model_sections = ", ".join(section_names)
     model_has_line = (
-        f"\t{ingredient_name}_model =has=> {model_sections};"
+        f"    {ingredient_name}_model =has=> {model_sections};"
         if model_sections
-        else f"\t{ingredient_name}_model =has=> ;"
+        else f"    {ingredient_name}_model =has=> ;"
     )
 
     lines = [
@@ -253,24 +253,24 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
         "attributes { condition : string , action : string , strength : float , title : string }",
         "",
         "concepts {",
-        "\tIngredient , Language , Library , Framework , Tool , Model , Section [ title ] ,",
-        "\tProduction [ condition , action , strength ]",
+        "    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,",
+        "    Production [ condition , action , strength ]",
         "}",
         "",
         "relationships { has , groups }",
         "",
         "individuals {",
-        f"\t{individuals_list}",
+        f"    {individuals_list}",
         "}",
         "",
         "triples {",
-        f"\tLanguage =isa=> Ingredient;",
-        f"\tIngredient =has=> Model;",
-        f"\tModel =has=> Production;",
-        f"\tSection =groups=> Production;",
-        f"\t{ingredient_name} =iof=> {ingredient_type};",
-        f"\t{ingredient_name}_model =iof=> Model;",
-        f"\t{ingredient_name} =has=> {ingredient_name}_model;",
+        f"    Language =isa=> Ingredient;\n    Library =isa=> Ingredient;\n    Framework =isa=> Ingredient;\n    Tool =isa=> Ingredient;",
+        f"    Ingredient =has=> Model;",
+        f"    Model =has=> Production;",
+        f"    Section =groups=> Production;",
+        f"    {ingredient_name} =iof=> {ingredient_type};",
+        f"    {ingredient_name}_model =iof=> Model;",
+        f"    {ingredient_name} =has=> {ingredient_name}_model;",
         model_has_line,
     ]
 
@@ -278,7 +278,7 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
 
     if normalized_triples_body:
         lines.append("")
-        lines.append(normalized_triples_body)
+        lines.append(f"    {normalized_triples_body}")
 
     lines.extend([
         "}",
