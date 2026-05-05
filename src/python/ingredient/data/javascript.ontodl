@@ -3,27 +3,36 @@ Ontology cognitive_model_JavaScript
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	JavaScript,
-	JavaScript_model,
-	JavaScript_specific_section
+    JavaScript,
+    JavaScript_model,
+    JavaScript_specific_section
 }
 
 triples {
-	JavaScript =iof=> Language;
-	JavaScript_model =iof=> Model;
-	JavaScript =has=> JavaScript_model;
-	JavaScript_specific_section =iof=> Section [ title = "Production rules" ];
-	JavaScript_model =[ has =>
-		JavaScript_specific_section
-	];
-	JavaScript_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    JavaScript =iof=> Language;
+    JavaScript_model =iof=> Model;
+    JavaScript =has=> JavaScript_model;
+    JavaScript_model =has=> JavaScript_specific_section;
+
+    JavaScript_specific_section =iof=> Section [ title = "Production rules" ];
+    JavaScript_model =[ has =>
+        JavaScript_specific_section
+    ];
+    JavaScript_specific_section =[ groups =>
+    ];
 }
 .

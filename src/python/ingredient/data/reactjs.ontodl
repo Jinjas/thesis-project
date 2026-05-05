@@ -3,27 +3,36 @@ Ontology cognitive_model_ReactJS
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	ReactJS,
-	ReactJS_model,
-	ReactJS_specific_section
+    ReactJS,
+    ReactJS_model,
+    ReactJS_specific_section
 }
 
 triples {
-	ReactJS =iof=> Language;
-	ReactJS_model =iof=> Model;
-	ReactJS =has=> ReactJS_model;
-	ReactJS_specific_section =iof=> Section [ title = "Production rules" ];
-	ReactJS_model =[ has =>
-		ReactJS_specific_section
-	];
-	ReactJS_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    ReactJS =iof=> Library;
+    ReactJS_model =iof=> Model;
+    ReactJS =has=> ReactJS_model;
+    ReactJS_model =has=> ReactJS_specific_section;
+
+    ReactJS_specific_section =iof=> Section [ title = "Production rules" ];
+    ReactJS_model =[ has =>
+        ReactJS_specific_section
+    ];
+    ReactJS_specific_section =[ groups =>
+    ];
 }
 .

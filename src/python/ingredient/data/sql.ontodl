@@ -3,27 +3,36 @@ Ontology cognitive_model_SQL
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	SQL,
-	SQL_model,
-	SQL_specific_section
+    SQL,
+    SQL_model,
+    SQL_specific_section
 }
 
 triples {
-	SQL =iof=> Language;
-	SQL_model =iof=> Model;
-	SQL =has=> SQL_model;
-	SQL_specific_section =iof=> Section [ title = "Production rules" ];
-	SQL_model =[ has =>
-		SQL_specific_section
-	];
-	SQL_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    SQL =iof=> Language;
+    SQL_model =iof=> Model;
+    SQL =has=> SQL_model;
+    SQL_model =has=> SQL_specific_section;
+
+    SQL_specific_section =iof=> Section [ title = "Production rules" ];
+    SQL_model =[ has =>
+        SQL_specific_section
+    ];
+    SQL_specific_section =[ groups =>
+    ];
 }
 .

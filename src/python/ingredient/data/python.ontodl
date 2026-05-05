@@ -3,27 +3,36 @@ Ontology cognitive_model_Python
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	Python,
-	Python_model,
-	Python_specific_section
+    Python,
+    Python_model,
+    Python_specific_section
 }
 
 triples {
-	Python =iof=> Language;
-	Python_model =iof=> Model;
-	Python =has=> Python_model;
-	Python_specific_section =iof=> Section [ title = "Production rules" ];
-	Python_model =[ has =>
-		Python_specific_section
-	];
-	Python_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    Python =iof=> Language;
+    Python_model =iof=> Model;
+    Python =has=> Python_model;
+    Python_model =has=> Python_specific_section;
+
+    Python_specific_section =iof=> Section [ title = "Production rules" ];
+    Python_model =[ has =>
+        Python_specific_section
+    ];
+    Python_specific_section =[ groups =>
+    ];
 }
 .

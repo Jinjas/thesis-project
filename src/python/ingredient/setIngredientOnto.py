@@ -21,7 +21,18 @@ PRODUCTION_DEF_RE = re.compile(
     r"^\s*(\w+)\s*=\s*iof\s*=>\s*Production\s*\[(.*?)\]\s*;$",
     re.MULTILINE | re.DOTALL,
 )
-LEGACY_POF_RE = re.compile(r"^\s*(\w+)\s*=\s*pof\s*=>\s*(\w+)\s*;$", re.MULTILINE)
+MODEL_HAS_RE = re.compile(r"^\s*(\w+)_model\s*=has=>\s*(.*?)\s*;$", re.MULTILINE)
+TRIPLES_BLOCK_RE = re.compile(r"triples\s*\{(.*)\}\s*\.?\s*$", re.DOTALL | re.IGNORECASE)
+BASE_TRIPLE_PATTERNS = [
+    re.compile(r"^\s*Language\s*=isa=>\s*Ingredient\s*;\s*$"),
+    re.compile(r"^\s*Ingredient\s*=has=>\s*Model\s*;\s*$"),
+    re.compile(r"^\s*Model\s*=has=>\s*Production\s*;\s*$"),
+    re.compile(r"^\s*Section\s*=groups=>\s*Production\s*;\s*$"),
+    re.compile(r"^\s*\w+\s*=iof=>\s*\w+\s*;\s*$"),
+    re.compile(r"^\s*\w+_model\s*=iof=>\s*Model\s*;\s*$"),
+    re.compile(r"^\s*\w+\s*=has=>\s*\w+_model\s*;\s*$"),
+    re.compile(r"^\s*\w+_model\s*=has=>\s*.*;\s*$"),
+]
 ATTR_RE = re.compile(r"(\w+)\s*=\s*(?:'([^']*)'|\"([^\"]*)\"|([\d.]+))")
 
 
@@ -37,6 +48,22 @@ def default_section_title(section_name: str) -> str:
     return section_name.replace("_", " ").strip().title() or section_name
 
 
+def append_name_to_names_file(ingredient_name: str) -> None:
+    names_file = data_dir / "NAMES.txt"
+    existing_names = []
+
+    if names_file.exists():
+        existing_names = names_file.read_text(encoding="utf-8").splitlines()
+
+    normalized = ingredient_name.strip().lower()
+    if any(name.strip().lower() == normalized for name in existing_names):
+        return
+
+    updated_names = [name for name in existing_names if name.strip()]
+    updated_names.append(ingredient_name)
+    names_file.write_text("\n".join(updated_names), encoding="utf-8")
+
+
 def split_group_items(raw_items: str) -> list[str]:
     return [item.strip().rstrip(",") for item in raw_items.split(",") if item.strip()]
 
@@ -50,13 +77,77 @@ def parse_attributes(raw_attributes: str) -> dict[str, str]:
     return attributes
 
 
-def build_table_from_new_code(new_code: str) -> tuple[dict[str, dict[str, object]], list[str], dict[str, str]]:
+def unique_in_order(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for value in values:
+        if value in seen:
+            continue
+        seen.add(value)
+        ordered.append(value)
+    return ordered
+
+
+def extract_triples_body(new_code: str) -> str:
+    stripped = new_code.strip()
+    block_match = TRIPLES_BLOCK_RE.search(stripped)
+    body = block_match.group(1).strip() if block_match else stripped
+
+    body_lines = body.splitlines()
+    while body_lines and body_lines[-1].strip() == ".":
+        body_lines.pop()
+
+    return "\n".join(body_lines).strip()
+
+
+def strip_leading_base_triples(triples_body: str) -> str:
+    if not triples_body:
+        return ""
+
+    lines = triples_body.splitlines()
+
+    first_non_empty = 0
+    while first_non_empty < len(lines) and not lines[first_non_empty].strip():
+        first_non_empty += 1
+
+    idx = first_non_empty
+    for pattern in BASE_TRIPLE_PATTERNS:
+        while idx < len(lines) and not lines[idx].strip():
+            idx += 1
+        if idx >= len(lines) or not pattern.match(lines[idx]):
+            return triples_body.strip()
+        idx += 1
+
+    return "\n".join(lines[idx:]).strip()
+
+
+def extract_section_names(new_code: str, ingredient_name: str) -> list[str]:
+    sections_from_defs = [match.group(1) for match in SECTION_DEF_RE.finditer(new_code)]
+
+    sections_from_model: list[str] = []
+    ingredient_model = f"{ingredient_name}_model"
+    for match in MODEL_HAS_RE.finditer(new_code):
+        model_name = f"{match.group(1)}_model"
+        if model_name != ingredient_model:
+            continue
+        sections_from_model.extend(split_group_items(match.group(2)))
+
+    if not sections_from_model:
+        generic_model_match = MODEL_HAS_RE.search(new_code)
+        if generic_model_match:
+            sections_from_model.extend(split_group_items(generic_model_match.group(2)))
+
+    return unique_in_order([*sections_from_defs, *sections_from_model])
+
+
+def extract_production_names(new_code: str) -> list[str]:
+    return unique_in_order([match.group(1) for match in PRODUCTION_DEF_RE.finditer(new_code)])
+
+
+def build_table_from_new_code(new_code: str) -> dict[str, dict[str, object]]:
     table: dict[str, dict[str, object]] = {}
-    section_order: list[str] = []
     section_groups: dict[str, list[str]] = {}
-    section_titles: dict[str, str] = {}
     production_attrs: dict[str, dict[str, str]] = {}
-    legacy_links: dict[str, str] = {}
 
     def ensure_section(section_name: str, title: str | None = None) -> None:
         if section_name not in table:
@@ -64,34 +155,27 @@ def build_table_from_new_code(new_code: str) -> tuple[dict[str, dict[str, object
                 "title": title or default_section_title(section_name),
                 "rows": [],
             }
-            section_order.append(section_name)
         elif title:
             table[section_name]["title"] = title
 
     for match in SECTION_DEF_RE.finditer(new_code):
         section_name = match.group(1)
         title = match.group(2) or match.group(3)
-        if title:
-            section_titles[section_name] = title
         ensure_section(section_name, title)
 
     for match in SECTION_GROUP_RE.finditer(new_code):
         section_name = match.group(1)
-        ensure_section(section_name, section_titles.get(section_name))
+        ensure_section(section_name)
         section_groups[section_name] = split_group_items(match.group(2))
 
     for match in PRODUCTION_DEF_RE.finditer(new_code):
         production_name = match.group(1)
         production_attrs[production_name] = parse_attributes(match.group(2))
 
-    for match in LEGACY_POF_RE.finditer(new_code):
-        legacy_links[match.group(1)] = match.group(2)
-
     prod_id = 1
-    used_productions: set[str] = set()
 
     if section_groups:
-        ordered_sections = section_order + [section for section in section_groups if section not in section_order]
+        ordered_sections = [*table, *[section for section in section_groups if section not in table]]
         for section_name in ordered_sections:
             for production_name in section_groups.get(section_name, []):
                 attrs = production_attrs.get(production_name)
@@ -104,41 +188,37 @@ def build_table_from_new_code(new_code: str) -> tuple[dict[str, dict[str, object
                     attrs.get("action", ""),
                     attrs.get("strength", ""),
                 ])
-                used_productions.add(production_name)
                 prod_id += 1
 
-    if not used_productions and legacy_links:
-        for production_name, section_name in legacy_links.items():
-            attrs = production_attrs.get(production_name)
-            if attrs is None:
-                continue
-
-            ensure_section(section_name, section_titles.get(section_name))
-            table[section_name]["rows"].append([
-                str(prod_id),
-                attrs.get("condition", ""),
-                attrs.get("action", ""),
-                attrs.get("strength", ""),
-            ])
-            prod_id += 1
-
-    return table, section_order, section_titles
+    return table
 
 
 def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
     safe_name = to_safe_filename(ingredient_name)
     data_path = data_dir / f"{safe_name}.ontodl"
 
-    table, section_order, section_titles = build_table_from_new_code(newCode)
-    section_names = list(section_order or table.keys())
+    triples_body = extract_triples_body(newCode)
+    normalized_triples_body = strip_leading_base_triples(triples_body)
 
-    individuals = [ingredient_name, f"{ingredient_name}_model", *section_names]
-    for match in PRODUCTION_DEF_RE.finditer(newCode):
-        individuals.append(match.group(1))
+    table = build_table_from_new_code(normalized_triples_body)
+    section_names = extract_section_names(normalized_triples_body, ingredient_name)
+    production_names = extract_production_names(normalized_triples_body)
 
-    seen = set()
-    individuals = [value for value in individuals if not (value in seen or seen.add(value))]
+    individuals = unique_in_order([
+        ingredient_name,
+        f"{ingredient_name}_model",
+        *section_names,
+        *production_names,
+    ])
+
     individuals_list = ",\n    ".join(individuals)
+
+    model_sections = ", ".join(section_names)
+    model_has_line = (
+        f"    {ingredient_name}_model =has=> {model_sections};"
+        if model_sections
+        else f"    {ingredient_name}_model =has=> ;"
+    )
 
     lines = [
         f"Ontology cognitive_model_{ingredient_name}",
@@ -146,51 +226,32 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
         "attributes { condition : string , action : string , strength : float , title : string }",
         "",
         "concepts {",
-        "\tIngredient , Language , Library , Framework , Tool , Model , Section [ title ] ,",
-        "\tProduction [ condition , action , strength ]",
+        "    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,",
+        "    Production [ condition , action , strength ]",
         "}",
         "",
         "relationships { has , groups }",
         "",
         "individuals {",
-        f"\t{individuals_list}",
+        f"    {individuals_list}",
         "}",
         "",
-        f"\tLanguage =isa=> Ingredient;",
-        f"\tIngredient =has=> Model;",
-        f"\tModel =has=> Production;",
-        f"\tSection =groups=> Production;",
-        f"\t{ingredient_name} =iof=> {ingredient_type};",
-        f"\t{ingredient_name}_model =iof=> Model;",
-        f"\t{ingredient_name} =has=> {ingredient_name}_model;",
-        f"\t{ingredient_name}_model =has=> {', '.join(section_names)};" if section_names else f"\t{ingredient_name}_model =has=> ;",
-        *[
-            f"\t{section_name} =iof=> Section [ title = '{table.get(section_name, {}).get('title', section_titles.get(section_name, default_section_title(section_name)))}' ];"
-            for section_name in section_names
-        ],
-        "",
         "triples {",
+        f"    Language =isa=> Ingredient;\n    Library =isa=> Ingredient;\n    Framework =isa=> Ingredient;\n    Tool =isa=> Ingredient;",
+        f"    Ingredient =has=> Model;",
+        f"    Model =has=> Production;",
+        f"    Section =groups=> Production;",
+        f"    {ingredient_name} =iof=> {ingredient_type};",
+        f"    {ingredient_name}_model =iof=> Model;",
+        f"    {ingredient_name} =has=> {ingredient_name}_model;",
+        model_has_line,
     ]
 
-    for section_name in section_names:
-        rows = table.get(section_name, {}).get("rows", [])
-        lines.append(f"\t{section_name} =[ groups =>")
-        lines.append("\t\t" + ",\n\t\t".join(row[0] for row in rows))
-        lines.append("\t];")
+    extraData = "\n".join(lines).rstrip()
 
-    for production in PRODUCTION_DEF_RE.finditer(newCode):
-        prod_name = production.group(1)
-        attrs = parse_attributes(production.group(2))
-        condition = attrs.get("condition", "")
-        action = attrs.get("action", "")
-        strength = attrs.get("strength", "1.0")
-        lines.append(
-            f"\t{prod_name} =iof=> Production[\n"
-            f"\t\tcondition = '{condition}' ,\n"
-            f"\t\taction = '{action}' ,\n"
-            f"\t\tstrength = {strength}\n"
-            f"\t];"
-        )
+    if normalized_triples_body:
+        lines.append("")
+        lines.append(f"    {normalized_triples_body}")
 
     lines.extend([
         "}",
@@ -198,8 +259,8 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
     ])
 
     newOnto = "\n".join(lines)
-    extraData = newOnto.split("triples {", 1)[0].rstrip()
     data_path.write_text(newOnto, encoding="utf-8")
+    append_name_to_names_file(ingredient_name)
     return newOnto, extraData, table
 
 

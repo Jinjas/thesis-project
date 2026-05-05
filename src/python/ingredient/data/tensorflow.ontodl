@@ -3,27 +3,36 @@ Ontology cognitive_model_TensorFlow
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	TensorFlow,
-	TensorFlow_model,
-	TensorFlow_specific_section
+    TensorFlow,
+    TensorFlow_model,
+    TensorFlow_specific_section
 }
 
 triples {
-	TensorFlow =iof=> Language;
-	TensorFlow_model =iof=> Model;
-	TensorFlow =has=> TensorFlow_model;
-	TensorFlow_specific_section =iof=> Section [ title = "Production rules" ];
-	TensorFlow_model =[ has =>
-		TensorFlow_specific_section
-	];
-	TensorFlow_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    TensorFlow =iof=> Library;
+    TensorFlow_model =iof=> Model;
+    TensorFlow =has=> TensorFlow_model;
+    TensorFlow_model =has=> TensorFlow_specific_section;
+
+    TensorFlow_specific_section =iof=> Section [ title = "Production rules" ];
+    TensorFlow_model =[ has =>
+        TensorFlow_specific_section
+    ];
+    TensorFlow_specific_section =[ groups =>
+    ];
 }
 .

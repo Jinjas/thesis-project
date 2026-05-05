@@ -3,27 +3,36 @@ Ontology cognitive_model_TailwindCSS
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	TailwindCSS,
-	TailwindCSS_model,
-	TailwindCSS_specific_section
+    TailwindCSS,
+    TailwindCSS_model,
+    TailwindCSS_specific_section
 }
 
 triples {
-	TailwindCSS =iof=> Language;
-	TailwindCSS_model =iof=> Model;
-	TailwindCSS =has=> TailwindCSS_model;
-	TailwindCSS_specific_section =iof=> Section [ title = "Production rules" ];
-	TailwindCSS_model =[ has =>
-		TailwindCSS_specific_section
-	];
-	TailwindCSS_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    TailwindCSS =iof=> Tool;
+    TailwindCSS_model =iof=> Model;
+    TailwindCSS =has=> TailwindCSS_model;
+    TailwindCSS_model =has=> TailwindCSS_specific_section;
+
+    TailwindCSS_specific_section =iof=> Section [ title = "Production rules" ];
+    TailwindCSS_model =[ has =>
+        TailwindCSS_specific_section
+    ];
+    TailwindCSS_specific_section =[ groups =>
+    ];
 }
 .

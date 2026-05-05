@@ -3,27 +3,36 @@ Ontology cognitive_model_NextJS
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	NextJS,
-	NextJS_model,
-	NextJS_specific_section
+    NextJS,
+    NextJS_model,
+    NextJS_specific_section
 }
 
 triples {
-	NextJS =iof=> Language;
-	NextJS_model =iof=> Model;
-	NextJS =has=> NextJS_model;
-	NextJS_specific_section =iof=> Section [ title = "Production rules" ];
-	NextJS_model =[ has =>
-		NextJS_specific_section
-	];
-	NextJS_specific_section =[ groups =>
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    NextJS =iof=> Framework;
+    NextJS_model =iof=> Model;
+    NextJS =has=> NextJS_model;
+    NextJS_model =has=> NextJS_specific_section;
+
+    NextJS_specific_section =iof=> Section [ title = "Production rules" ];
+    NextJS_model =[ has =>
+        NextJS_specific_section
+    ];
+    NextJS_specific_section =[ groups =>
+    ];
 }
 .

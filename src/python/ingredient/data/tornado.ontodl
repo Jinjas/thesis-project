@@ -3,188 +3,194 @@ Ontology cognitive_model_Tornado
 attributes { condition : string , action : string , strength : float , title : string }
 
 concepts {
-	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , strength ]
 }
 
 relationships { has , groups }
 
 individuals {
-	Tornado,
-	Tornado_model,
-	Tornado_specific_section,
-	program_production2,
-	program_production3,
-	program_production4,
-	program_production5,
-	program_production6,
-	program_production7,
-	program_production8,
-	program_production9,
-	program_production10,
-	program_production11,
-	program_production12,
-	program_production13,
-	program_production14,
-	program_production15,
-	program_production16,
-	program_production17,
-	program_production18,
-	program_production19,
-	program_production20,
-	program_production21,
-	program_production22,
-	program_production23,
-	program_production24
+    Tornado,
+    Tornado_model,
+    Tornado_specific_section,
+    program_production2,
+    program_production3,
+    program_production4,
+    program_production5,
+    program_production6,
+    program_production7,
+    program_production8,
+    program_production9,
+    program_production10,
+    program_production11,
+    program_production12,
+    program_production13,
+    program_production14,
+    program_production15,
+    program_production16,
+    program_production17,
+    program_production18,
+    program_production19,
+    program_production20,
+    program_production21,
+    program_production22,
+    program_production23,
+    program_production24
 }
 
 triples {
-	Tornado =iof=> Language;
-	Tornado_model =iof=> Model;
-	Tornado =has=> Tornado_model;
-	Tornado_specific_section =iof=> Section [ title = "Production rules" ];
-	Tornado_model =[ has =>
-		Tornado_specific_section
-	];
-	Tornado_specific_section =[ groups =>
-		program_production2,
-		program_production3,
-		program_production4,
-		program_production5,
-		program_production6,
-		program_production7,
-		program_production8,
-		program_production9,
-		program_production10,
-		program_production11,
-		program_production12,
-		program_production13,
-		program_production14,
-		program_production15,
-		program_production16,
-		program_production17,
-		program_production18,
-		program_production19,
-		program_production20,
-		program_production21,
-		program_production22,
-		program_production23,
-		program_production24
-	];
-	program_production2 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production3 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production4 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production5 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production6 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production7 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production8 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production9 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production10 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production11 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production12 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production13 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production14 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production15 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production16 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production17 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production18 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production19 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production20 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production21 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production22 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production23 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
-	program_production24 =iof=> Production[
-		condition = "If a program is a subgoal" ,
-		action = "the program block is..." ,
-		strength = 1.0
-	];
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    Tornado =iof=> Framework;
+    Tornado_model =iof=> Model;
+    Tornado =has=> Tornado_model;
+    Tornado_model =has=> Tornado_specific_section;
+
+    Tornado_specific_section =iof=> Section [ title = "Production rules" ];
+    Tornado_specific_section =[ groups =>
+        program_production2,
+        program_production3,
+        program_production4,
+        program_production5,
+        program_production6,
+        program_production7,
+        program_production8,
+        program_production9,
+        program_production10,
+        program_production11,
+        program_production12,
+        program_production13,
+        program_production14,
+        program_production15,
+        program_production16,
+        program_production17,
+        program_production18,
+        program_production19,
+        program_production20,
+        program_production21,
+        program_production22,
+        program_production23,
+        program_production24
+    ];
+    program_production2 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production3 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production4 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production5 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production6 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production7 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production8 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production9 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production10 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production11 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production12 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production13 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production14 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production15 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production16 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production17 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production18 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production19 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production20 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production21 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production22 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production23 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
+    program_production24 =iof=> Production[
+        condition = "If a program is a subgoal" ,
+        action = "the program block is..." ,
+        strength = 1.0
+    ];
 }
 .
