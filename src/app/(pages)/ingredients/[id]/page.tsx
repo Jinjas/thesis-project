@@ -20,15 +20,15 @@ import { FeaturePopup, type FeatureOption } from "../../../components/popups";
 
 const FEATURE_OPTIONS: FeatureOption[] = [
   {
-    value: "feature_a",
-    label: "Feature A",
-    cond: ["Language", "Library"],
-    func: undefined,
+    value: "from_existing_file",
+    label: "From Existing File",
+    cond: "all",
+    func: undefined, //default definition is to just import the file content as-is
   },
   {
-    value: "feature_b",
-    label: "Feature B",
-    cond: "all",
+    value: "from_ebnf_definition",
+    label: "From EBNF Definition",
+    cond: ["Language"],
     func: undefined,
   },
 ];
@@ -154,11 +154,11 @@ export default function IngredientDetailPage() {
               onClick={() => {
                 setIsFeaturePopupOpen(true);
               }}
-              label="Feature"
+              label="Import"
               variant="underlined"
             />
 
-            <ImportButton func={setCharacteristics} />
+            {/* <ImportButton func={setCharacteristics} /> */}
 
             <ExportButton code={code} filename={name || "ingredient"} />
           </div>
