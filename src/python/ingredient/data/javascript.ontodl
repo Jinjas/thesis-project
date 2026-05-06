@@ -12,7 +12,11 @@ relationships { has , groups }
 individuals {
     JavaScript,
     JavaScript_model,
-    JavaScript_specific_section
+    JavaScript_sec1,
+    JavaScript_sec2,
+    goal_p,
+    subgoal_p,
+    source_p
 }
 
 triples {
@@ -26,13 +30,33 @@ triples {
     JavaScript =iof=> Language;
     JavaScript_model =iof=> Model;
     JavaScript =has=> JavaScript_model;
-    JavaScript_model =has=> JavaScript_specific_section;
+    JavaScript_model =has=> JavaScript_sec1, JavaScript_sec2;
 
-    JavaScript_specific_section =iof=> Section [ title = "Production rules" ];
-    JavaScript_model =[ has =>
-        JavaScript_specific_section
+    JavaScript_sec1 =iof=> Section [ title = "Goals and subgoals" ];
+    JavaScript_sec2 =iof=> Section [ title = "Production rules" ];
+    JavaScript_sec1 =[ groups =>
+        goal_p,
+        subgoal_p,
+        source_p
     ];
-    JavaScript_specific_section =[ groups =>
+    JavaScript_sec2 =[ groups =>
+        
     ];
+    goal_p =iof=> Production[
+        condition = "If all subgoals were met" ,
+        action = "then the goal is met" ,
+        strength = 1.0
+    ];
+    subgoal_p =iof=> Production[
+        condition = "If a subgoal is already written" ,
+        action = "then the subgoal is met" ,
+        strength = 1.1
+    ];
+    source_p =iof=> Production[
+        condition = "If new source text must be written" ,
+        action = "then the grammar construct becomes a subgoal" ,
+        strength = 1.1
+    ];
+}
 }
 .

@@ -18,6 +18,7 @@ type Props = {
   isOpen: boolean;
   title?: string;
   description?: string;
+  description2?: string;
   options: readonly FeatureOption[];
   ingredientType?: IngredientType | null;
   onClose: () => void;
@@ -27,7 +28,8 @@ type Props = {
 export default function FeaturePopup({
   isOpen,
   title = "Feature",
-  description = "Choose a feature type and import a file for it.",
+  description = "Choose a feature mode and select a file for it.",
+  description2 = undefined,
   options,
   ingredientType,
   onClose,
@@ -121,6 +123,9 @@ export default function FeaturePopup({
         </div>
 
         <p className="pt-2 text-sm text-gray-600">{description}</p>
+        {description2 && (
+          <p className="pt-2 text-xs text-gray-600">{description2}</p>
+        )}
 
         <div className="pt-4 flex gap-3 items-start">
           <div className="flex-1">
@@ -129,7 +134,7 @@ export default function FeaturePopup({
                 value: o.value,
                 label: o.label,
               }))}
-              placeholder="Select feature..."
+              placeholder="Select mode..."
               value={searchInput}
               onChange={(v) => {
                 setSearchInput(v);

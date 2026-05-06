@@ -175,6 +175,9 @@ export default function IngredientDetailPage() {
         isOpen={isFeaturePopupOpen}
         options={FEATURE_OPTIONS}
         ingredientType={ingredient?.type}
+        title="Import"
+        description="Choose a import mode and select a file for it."
+        description2=" Note that the only thing that can be changed are sections and productions."
         onClose={() => setIsFeaturePopupOpen(false)}
         onImport={(content: string) => setCharacteristics(content)}
       />

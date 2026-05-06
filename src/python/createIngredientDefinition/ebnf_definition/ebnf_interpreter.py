@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-import argparse
+import sys
+import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -386,31 +387,18 @@ def interpret_grammar(grammar_text: str, name: str, input_type: str) -> str:
     return build_scene_from_rules(name, input_type, rules)
 
 
-def default_output_path(input_path: Path) -> Path:
-    return input_path.with_suffix(".ontodl")
-
-
 def main() -> None:
-    arg_parser = argparse.ArgumentParser(description="Generate iof-style productions from an EBNF grammar.")
-    arg_parser.add_argument(
-        "input",
-        nargs="?",
-        default=str(BASE_DIR / "firstGrammarEX.txt"),
-        help="Path to the EBNF grammar example",
-    )
-    arg_parser.add_argument(
-        "--output",
-        help="Optional file path where the generated scene will be written",
-    )
-    args = arg_parser.parse_args()
-
-    input_path = Path(args.input)
-    grammar_text = input_path.read_text(encoding="utf-8")
-    scene = interpret_grammar(grammar_text, input_path.stem, "Language")
-    output_path = Path(args.output) if args.output else default_output_path(input_path)
-
-    output_path.write_text(scene + "\n", encoding="utf-8")
-    print(output_path)
+    input_data = json.loads(sys.stdin.read())
+    
+    grammar_text = input_data["grammar_text"]
+    name = input_data["name"]
+    input_type = input_data.get("input_type", "Language")
+    
+    ontodl = interpret_grammar(grammar_text, name, input_type)
+    
+    print(json.dumps({
+        "ontodl": ontodl
+    }))
 
 
 if __name__ == "__main__":
