@@ -16,6 +16,22 @@ import {
   ConfirmationBox,
 } from "../../../components";
 import { DoubleSectionLayout } from "../../../layouts";
+import { FeaturePopup, type FeatureOption } from "../../../components/popups";
+
+const FEATURE_OPTIONS: FeatureOption[] = [
+  {
+    value: "feature_a",
+    label: "Feature A",
+    cond: ["Language", "Library"],
+    func: undefined,
+  },
+  {
+    value: "feature_b",
+    label: "Feature B",
+    cond: "all",
+    func: undefined,
+  },
+];
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
@@ -32,6 +48,7 @@ export default function IngredientDetailPage() {
   const [extraDataHidden, setExtraDataHidden] = useState(true);
   const [extraData, setExtraData] = useState("");
   const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
+  const [isFeaturePopupOpen, setIsFeaturePopupOpen] = useState(false);
 
   const {
     pendingIngredient,
@@ -133,6 +150,14 @@ export default function IngredientDetailPage() {
           </div>
 
           <div className="flex gap-2">
+            <ActionButton
+              onClick={() => {
+                setIsFeaturePopupOpen(true);
+              }}
+              label="Feature"
+              variant="underlined"
+            />
+
             <ImportButton func={setCharacteristics} />
 
             <ExportButton code={code} filename={name || "ingredient"} />
@@ -145,6 +170,14 @@ export default function IngredientDetailPage() {
         )}
         <CodeEdit code={characteristics} setCode={setCharacteristics} />
       </div>
+
+      <FeaturePopup
+        isOpen={isFeaturePopupOpen}
+        options={FEATURE_OPTIONS}
+        ingredientType={ingredient?.type}
+        onClose={() => setIsFeaturePopupOpen(false)}
+        onImport={(content: string) => setCharacteristics(content)}
+      />
 
       <div className="pt-2 px-2 flex gap-2 justify-between">
         <ActionButton
