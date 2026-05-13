@@ -110,11 +110,11 @@ export default function SidebarSection({
         title="Unsaved Changes"
         description="There are unsaved changes on this page. Do you wish to continue?"
         boldDescription="These changes will be discarded."
-        confirmLabel="Yes"
+        confirmLabel="Proceed"
         confirmVariant="save"
-        showCancel={true}
-        cancelLabel="No"
-        cancelVariant="remove"
+        showCancel={false}
+        cancelLabel="Cancel"
+        cancelVariant="save"
         onCancel={() => {
           setIsGuardPopupOpen(false);
           setPendingHref(null);
