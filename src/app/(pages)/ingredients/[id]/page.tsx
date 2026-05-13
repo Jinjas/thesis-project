@@ -17,21 +17,7 @@ import {
 } from "../../../components";
 import { DoubleSectionLayout } from "../../../layouts";
 import { FeaturePopup, type FeatureOption } from "../../../components/popups";
-
-const FEATURE_OPTIONS: FeatureOption[] = [
-  {
-    value: "from_existing_file",
-    label: "From Existing File",
-    cond: "all",
-    func: undefined, //default definition is to just import the file content as-is
-  },
-  {
-    value: "from_ebnf_definition",
-    label: "From EBNF Definition",
-    cond: ["Language"],
-    func: undefined,
-  },
-];
+import { createIngredientDefinition } from "@/app/context/services/ingredientApi";
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
@@ -49,6 +35,39 @@ export default function IngredientDetailPage() {
   const [extraData, setExtraData] = useState("");
   const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
   const [isFeaturePopupOpen, setIsFeaturePopupOpen] = useState(false);
+
+  const FEATURE_OPTIONS: FeatureOption[] = [
+    {
+      value: "from_existing_file",
+      label: "From Existing File",
+      cond: "all",
+    },
+    {
+      value: "from_ebnf_definition",
+      label: "From EBNF Definition",
+      cond: ["Language"],
+      process: async (content: string) => {
+        const result = await createIngredientDefinition(
+          name,
+          type,
+          "ebnf",
+          content,
+        );
+        return result.updatedCode;
+      },
+    },
+  ];
+
+  async function handleFeatureImport(content: string, feature: string) {
+    const option = FEATURE_OPTIONS.find((o) => o.value === feature);
+    if (!option) return;
+
+    const result = option.process
+      ? await option.process(content)
+      : content;
+
+    setCharacteristics(result);
+  }
 
   const {
     pendingIngredient,
@@ -179,7 +198,7 @@ export default function IngredientDetailPage() {
         description="Choose a import mode and select a file for it."
         description2=" Note that the only thing that can be changed are sections and productions."
         onClose={() => setIsFeaturePopupOpen(false)}
-        onImport={(content: string) => setCharacteristics(content)}
+        onImport={handleFeatureImport}
       />
 
       <div className="pt-2 px-2 flex gap-2 justify-between">

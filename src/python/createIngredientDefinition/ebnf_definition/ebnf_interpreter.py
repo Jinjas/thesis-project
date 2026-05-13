@@ -387,7 +387,7 @@ def interpret_grammar(grammar_text: str, name: str, input_type: str) -> str:
     return build_scene_from_rules(name, input_type, rules)
 
 
-def main() -> None:
+def main():
     input_data = json.loads(sys.stdin.read())
     
     grammar_text = input_data["grammar_text"]

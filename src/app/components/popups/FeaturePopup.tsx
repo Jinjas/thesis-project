@@ -10,8 +10,8 @@ export type FeatureOption = {
   label: string;
   // condition: if omitted or 'all' means available for all types; otherwise an array of IngredientType values
   cond?: IngredientType[] | "all";
-  // optional function to handle imported file (to be implemented later)
-  func?: (content: string, feature: string) => void;
+  // optional async function to process content (if undefined, content is used as-is)
+  process?: (content: string) => Promise<string> | string;
 };
 
 type Props = {

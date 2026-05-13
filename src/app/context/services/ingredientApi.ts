@@ -58,3 +58,25 @@ export async function removeIngredient(data: any) {
 
   if (!res.ok) throw new Error("Removing ingredient failed");
 }
+
+export async function createIngredientDefinition(
+  name: string,
+  input_type: string,
+  fileType: string,
+  grammar_text: string,
+) {
+  const res = await fetch("/api/ingredientImport/getOntology", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name,
+      input_type,
+      fileType,
+      grammar_text,
+    }),
+  });
+
+  if (!res.ok) throw new Error("Failed to create ingredient definition");
+
+  return res.json();
+}
