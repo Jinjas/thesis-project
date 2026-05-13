@@ -53,7 +53,7 @@ export default function IngredientDetailPage() {
           "ebnf",
           content,
         );
-        return result.updatedCode;
+        return result;
       },
     },
   ];
@@ -66,7 +66,14 @@ export default function IngredientDetailPage() {
       ? await option.process(content)
       : content;
 
-    setCharacteristics(result);
+    if (typeof result === "string") {
+      setCharacteristics(result);
+      setExtraData("");
+    } else {
+      const r = result as any;
+      setCharacteristics(r.updatedCode ?? "");
+      setExtraData(r.extraData ?? "");
+    }
   }
 
   const {

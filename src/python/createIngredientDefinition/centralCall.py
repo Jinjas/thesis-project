@@ -1,6 +1,7 @@
 import json
 import sys
 from pathlib import Path
+import re
 
 # Add the script's parent directory to sys.path to enable imports
 sys.path.insert(0, str(Path(__file__).parent))
@@ -40,13 +41,26 @@ def main():
     else:
         raise ValueError(f"Unsupported input type: {input_type}")
 
-    print(
-        json.dumps(
-            {
-                "updatedCode": ontodl,
-            }
-        )
-    )
+    
+
+    ontodl_text = ontodl or ""
+    lines = ontodl_text.splitlines(keepends=True)
+    split_idx = None
+    pattern = re.compile(r"^\s*" + re.escape(name) + r"_model\s*=has=>.*;\s*$")
+    for idx, line in enumerate(lines):
+        if pattern.match(line):
+            split_idx = idx
+            break
+
+    if split_idx is not None:
+        extraData = "".join(lines[: split_idx + 1])
+        characteristics = "".join(lines[split_idx + 2 :])
+    else:
+        
+        extraData = ontodl_text
+        characteristics = ""
+
+    print(json.dumps({"updatedCode": characteristics, "extraData": extraData}))
 
 
 if __name__ == "__main__":

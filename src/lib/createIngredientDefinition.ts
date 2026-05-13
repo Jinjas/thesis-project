@@ -12,6 +12,7 @@ export async function createIngredientDefinition(
   params: CreateIngredientDefinitionParams,
 ): Promise<{
   updatedCode: string;
+  extraData: string;
 }> {
   const scriptPath = path.join(
     process.cwd(),
@@ -30,9 +31,11 @@ export async function createIngredientDefinition(
 
   const parsed = await runPythonJson<{
     updatedCode: string;
+    extraData?: string;
   }>(scriptPath, input);
 
   return {
     updatedCode: parsed.updatedCode,
+    extraData: parsed.extraData ?? "",
   };
 }
