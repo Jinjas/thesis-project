@@ -42,10 +42,12 @@ function groupTableOfCocktail(cocktail: Cocktail, ingredients: Ingredient[]) {
   const sectionMap: Record<string, TableDict> = {};
   for (const ingredient of cockIngredients) {
     for (const table of ingredient.table) {
-      if (!sectionMap[table.section]) {
-        sectionMap[table.section] = {
+      const sectionTitle = table.title ?? table.section;
+
+      if (!sectionMap[sectionTitle]) {
+        sectionMap[sectionTitle] = {
           section: table.section,
-          title: table.title ?? table.section,
+          title: sectionTitle,
           rows: table.rows.map((row) => {
             const newRow = [...row];
             newRow[0] = "0";
@@ -54,7 +56,7 @@ function groupTableOfCocktail(cocktail: Cocktail, ingredients: Ingredient[]) {
           }),
         };
       } else {
-        const existingRows = sectionMap[table.section].rows;
+        const existingRows = sectionMap[sectionTitle].rows;
         for (const row of table.rows) {
           const newRow = [...row];
           newRow[0] = "0";
