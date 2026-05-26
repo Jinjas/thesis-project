@@ -10,10 +10,18 @@ import {
 } from "../../../components";
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../../context/AppContext";
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Ingredient, INGREDIENT_TYPES, IngredientType } from "../../../types";
 import Link from "next/link";
 import { DoubleSectionLayout } from "../../../layouts";
+import { buildCocktailTable } from "../../../context/utils/cocktailTable";
+
+const EXPORT_OPTIONS = [
+  { value: "txt", label: "OntoDL (.txt)" },
+  { value: "ontodl", label: "OntoDL (.ontodl)" },
+  { value: "csv", label: "Table (.csv)" },
+  { value: "xls", label: "Excel (.xls)" },
+] as const;
 
 export default function CocktailDetailPage() {
   const { id } = useParams();
@@ -51,6 +59,11 @@ export default function CocktailDetailPage() {
   const ingredientsFull = Object.entries(cocktail.ingredients)
     .map(([id]) => ingredients.find((i) => i.id === id))
     .filter(isIngredient);
+
+  const exportTable = useMemo(
+    () => buildCocktailTable(cocktail, ingredients),
+    [cocktail, ingredients],
+  );
 
   const groupedIngredients = INGREDIENT_TYPES.reduce(
     (acc, type) => {
@@ -91,7 +104,12 @@ export default function CocktailDetailPage() {
           <div className="flex gap-2">
             <ImportButton func={(onto) => updateOnto(cocktail.id, onto)} />
 
-            <ExportButton code={cocktail.onto} filename={name || "cocktail"} />
+            <ExportButton
+              code={cocktail.onto}
+              filename={name || "cocktail"}
+              options={EXPORT_OPTIONS}
+              table={exportTable}
+            />
           </div>
         </div>
 
