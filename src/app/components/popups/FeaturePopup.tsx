@@ -28,6 +28,8 @@ type Props = {
   description2?: string;
   options: readonly FeatureOption[];
   ingredientType?: IngredientType | null;
+  mode?: "import" | "export";
+  onExport?: (feature: string) => void;
   onClose: () => void;
   onImport: (content: string, feature: string) => void;
 };
@@ -39,6 +41,8 @@ export default function FeaturePopup({
   description2 = undefined,
   options,
   ingredientType,
+  mode = "import",
+  onExport,
   onClose,
   onImport,
 }: Props) {
@@ -87,6 +91,12 @@ export default function FeaturePopup({
 
   function handleImportClick() {
     fileInputRef.current?.click();
+  }
+
+  function handleExportClick() {
+    if (!selectedFeature) return;
+    onExport?.(selectedFeature);
+    onClose();
   }
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -163,21 +173,32 @@ export default function FeaturePopup({
           </div>
 
           <div className="flex-shrink-0">
-            <ActionButton
-              onClick={handleImportClick}
-              label="Import File"
-              variant="save"
-              disabled={!selectedFeature || !isFeatureAllowed}
-            />
-          </div>
+            {mode === "import" ? (
+              <>
+                <ActionButton
+                  onClick={handleImportClick}
+                  label="Import File"
+                  variant="save"
+                  disabled={!selectedFeature || !isFeatureAllowed}
+                />
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".txt,.ontodl"
-            className="hidden"
-            onChange={handleFileChange}
-          />
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".txt,.ontodl"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </>
+            ) : (
+              <ActionButton
+                onClick={handleExportClick}
+                label="Export File"
+                variant="save"
+                disabled={!selectedFeature || !isFeatureAllowed}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
