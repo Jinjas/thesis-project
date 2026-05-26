@@ -9,7 +9,8 @@ usage:
 import { useAppContext } from "../../context/AppContext";
 import { useParams } from "next/navigation";
 import SectionTable from "./TableArea";
-import { TableDict, Ingredient, Cocktail } from "../../types";
+import { Ingredient, TableDict } from "../../types";
+import { buildCocktailTable } from "../../context/utils/cocktailTable";
 
 type Props = {
   type: number;
@@ -32,54 +33,6 @@ const tableDict: TableDict[] = [
   },
 ];
 
-function groupTableOfCocktail(cocktail: Cocktail, ingredients: Ingredient[]) {
-  let counter = 1;
-  const cockIngredients: Ingredient[] = Object.entries(cocktail.ingredients)
-    .filter(([_, v]) => v)
-    .map(([ingId]) => ingredients.find((i) => i.id === ingId))
-    .filter((i): i is (typeof ingredients)[number] => !!i);
-
-  const sectionMap: Record<string, TableDict> = {};
-  for (const ingredient of cockIngredients) {
-    for (const table of ingredient.table) {
-      const sectionTitle = table.title ?? table.section;
-
-      if (!sectionMap[sectionTitle]) {
-        sectionMap[sectionTitle] = {
-          section: table.section,
-          title: sectionTitle,
-          rows: table.rows.map((row) => {
-            const newRow = [...row];
-            newRow[0] = "0";
-            newRow[newRow.length - 1] = "--";
-            return newRow;
-          }),
-        };
-      } else {
-        const existingRows = sectionMap[sectionTitle].rows;
-        for (const row of table.rows) {
-          const newRow = [...row];
-          newRow[0] = "0";
-          newRow[newRow.length - 1] = "--";
-          if (!existingRows.some((r) => r.join() === newRow.join())) {
-            existingRows.push(newRow);
-          }
-        }
-      }
-    }
-  }
-  const data: TableDict[] = Object.entries(sectionMap).map(([s, r]) => ({
-    section: s,
-    title: r.title,
-    rows: r.rows.map((row) => {
-      row[0] = String(counter++);
-      return row;
-    }),
-  }));
-
-  return data;
-}
-
 export default function TableData({ type, selectedId }: Props) {
   const { ingredients, cocktails } = useAppContext();
   const { id } = useParams();
@@ -99,7 +52,7 @@ export default function TableData({ type, selectedId }: Props) {
     case 1: {
       const cocktail = cocktails.find((c) => c.id === id);
       if (!cocktail) break;
-      data = groupTableOfCocktail(cocktail, ingredients);
+      data = buildCocktailTable(cocktail, ingredients);
 
       if (data) return <SectionTable data={data} />;
       break;
@@ -118,7 +71,7 @@ export default function TableData({ type, selectedId }: Props) {
     case 3: {
       const cocktail = cocktails.find((c) => c.id === selectedId);
       if (!cocktail) break;
-      data = groupTableOfCocktail(cocktail, ingredients);
+      data = buildCocktailTable(cocktail, ingredients);
 
       if (data) return <SectionTable data={data} />;
       break;

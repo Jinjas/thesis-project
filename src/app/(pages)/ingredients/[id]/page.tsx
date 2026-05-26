@@ -36,6 +36,13 @@ export default function IngredientDetailPage() {
   const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
   const [isFeaturePopupOpen, setIsFeaturePopupOpen] = useState(false);
 
+  const EXPORT_OPTIONS = [
+    { value: "txt", label: "OntoDL (.txt)" },
+    { value: "ontodl", label: "OntoDL (.ontodl)" },
+    { value: "csv", label: "Table (.csv)" },
+    { value: "xls", label: "Table (.xls)" },
+  ] as const;
+
   const FEATURE_OPTIONS: FeatureOption[] = [
     {
       value: "from_existing_file",
@@ -62,9 +69,7 @@ export default function IngredientDetailPage() {
     const option = FEATURE_OPTIONS.find((o) => o.value === feature);
     if (!option) return;
 
-    const result = option.process
-      ? await option.process(content)
-      : content;
+    const result = option.process ? await option.process(content) : content;
 
     if (typeof result === "string") {
       setCharacteristics(result);
@@ -186,7 +191,12 @@ export default function IngredientDetailPage() {
 
             {/* <ImportButton func={setCharacteristics} /> */}
 
-            <ExportButton code={code} filename={name || "ingredient"} />
+            <ExportButton
+              code={code}
+              filename={name || "ingredient"}
+              options={EXPORT_OPTIONS}
+              table={ingredient.table}
+            />
           </div>
         </div>
         {!extraDataHidden && (
