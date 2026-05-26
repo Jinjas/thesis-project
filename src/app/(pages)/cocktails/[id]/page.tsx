@@ -20,7 +20,7 @@ const EXPORT_OPTIONS = [
   { value: "txt", label: "OntoDL (.txt)" },
   { value: "ontodl", label: "OntoDL (.ontodl)" },
   { value: "csv", label: "Table (.csv)" },
-  { value: "xls", label: "Excel (.xls)" },
+  { value: "xls", label: "Table (.xls)" },
 ] as const;
 
 export default function CocktailDetailPage() {
