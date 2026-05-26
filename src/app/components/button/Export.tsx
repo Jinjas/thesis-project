@@ -3,6 +3,10 @@
 import { useState } from "react";
 import type { TableDict } from "../../types";
 import { FeaturePopup, type FeatureOption } from "../popups";
+import {
+  exportVisualization,
+  type VizExportFormat,
+} from "@/app/context/utils/vizExport";
 
 /*usage:
 
@@ -15,6 +19,7 @@ type Props = {
   label?: string;
   options: readonly FeatureOption[];
   table?: TableDict[];
+  viz?: string;
 };
 
 function escapeDelimitedValue(value: string, delimiter: string) {
@@ -93,8 +98,11 @@ export default function ExportButton({
   label = "Export",
   options,
   table,
+  viz,
 }: Props) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const visualizationFormats = new Set(["svg", "jpeg", "png", "pdf"]);
 
   function handleExport(format: string) {
     if (format === "csv") {
@@ -114,6 +122,14 @@ export default function ExportButton({
         `${filename}.xls`,
         "application/vnd.ms-excel;charset=utf-8",
       );
+      return;
+    }
+
+    if (visualizationFormats.has(format)) {
+      if (!viz) return;
+
+      void exportVisualization(viz, filename, format as VizExportFormat);
+
       return;
     }
 
