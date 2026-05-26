@@ -21,6 +21,10 @@ const EXPORT_OPTIONS = [
   { value: "ontodl", label: "OntoDL (.ontodl)" },
   { value: "csv", label: "Table (.csv)" },
   { value: "xls", label: "Table (.xls)" },
+  { value: "svg", label: "Visualization (.svg)" },
+  { value: "jpeg", label: "Visualization (.jpeg)" },
+  { value: "png", label: "Visualization (.png)" },
+  { value: "pdf", label: "Visualization (.pdf)" },
 ] as const;
 
 export default function CocktailDetailPage() {
@@ -109,6 +113,7 @@ export default function CocktailDetailPage() {
               filename={name || "cocktail"}
               options={EXPORT_OPTIONS}
               table={exportTable}
+              viz={cocktail.viz}
             />
           </div>
         </div>
