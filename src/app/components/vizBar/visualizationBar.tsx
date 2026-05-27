@@ -10,13 +10,22 @@ import { useState, useEffect } from "react";
 import VisSidebar from "./VizImgSideBar";
 import { useParams, useRouter } from "next/navigation";
 
-export default function VizBar() {
+type Props = {
+  selectedId: string;
+};
+
+export default function VizBar({ selectedId }: Props) {
   const { cocktails } = useAppContext();
   const [collapsed, setCollapsed] = useState(false);
   const { id } = useParams();
-  const router = useRouter();
+  let cocktail;
+  if (selectedId === "") {
+    cocktail = cocktails.find((c) => c.id === id);
+  } else {
+    cocktail = cocktails.find((c) => c.id === selectedId);
+  }
 
-  const cocktail = cocktails.find((c) => c.id === id);
+  const router = useRouter();
 
   const [scale, setScale] = useState(1);
 
@@ -26,7 +35,20 @@ export default function VizBar() {
     }
   }, [cocktail, router]);
 
-  if (!cocktail) return <p className="p-6">Redirecting…</p>;
+  if (!cocktail)
+    return (
+      <aside
+        className={`bg-gray-100 duration-300 flex flex-col py-6 relative text-black transition-all ${collapsed ? "px-2 w-2" : "px-4 w-80"}`}
+      >
+        <button
+          onClick={() => setCollapsed((v) => !v)}
+          className=" absolute top-1/2 -left-3 -translate-y-1/2 bg-gray-100 border border-gray-400 rounded-full w-6 h-6 flex items-center justify-center hover:bg-gray-300 cursor-pointer"
+        >
+          {collapsed ? "‹" : "›"}
+        </button>
+        {!collapsed && <div className="overflow-hidden">Generating...</div>}
+      </aside>
+    );
 
   return (
     <aside

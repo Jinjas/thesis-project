@@ -21,6 +21,7 @@ export default function CocktailsPage() {
       title="Cocktails"
       typeOf2="cocktailList"
       id={selectedID}
+      withViz={true}
     >
       <AddItemForm
         value={cocktailName}

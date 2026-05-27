@@ -114,7 +114,7 @@ export default function DoubleSectionLayout({
   }
 
   return (
-    <BaseLayout withViz={withViz}>
+    <BaseLayout withViz={withViz} selectedId={id}>
       <section
         className={`flex-1 p-9 bg-gray-100 text-black flex flex-col w-full ${extraFlag != "" ? extraFlag : "h-screen"}`}
       >
