@@ -204,7 +204,7 @@ save:
 
 ```bash
 cd .\thesis-project\
-ssh pg56006@cosmo.epl.di.uminho.pt "cat ~/thesis-project/backups/tese-data-20260505-172816.tar.gz" > backups/tese-data-20260505-172816.tar.gz
+ssh pg56006@cosmo.epl.di.uminho.pt "cat ~/thesis-project/backups/tese-data-20260527-011439.tar.gz" > backups/tese-data-20260527-011439.tar.gz
 ```
 
 use:
@@ -219,7 +219,7 @@ sftp pg56006@cosmo.epl.di.uminho.pt
 ```bash
 mkdir thesis-project
 mkdir thesis-project/backups
-put "C:\Users\cramos\Documents\universidadeRodrigo\university\fifthyear\tese\thesis-project\backups\tese-data-20260505-172816.tar.gz" "thesis-project/backups/tese-data-20260505-172816.tar.gz"
+put "C:\Users\cramos\Documents\universidadeRodrigo\university\fifthyear\tese\thesis-project\backups\tese-data-20260527-011439.tar.gz" "thesis-project/backups/tese-data-20260527-011439.tar.gz"
 bye
 ```
 
@@ -227,9 +227,9 @@ Depois, no servidor:
 
 ```bash
 cd ~/thesis-project
-ls -lh backups/tese-data-20260505-172816.tar.gz
-gzip -t backups/tese-data-20260505-172816.tar.gz && echo OK
-make restore FILE=backups/tese-data-20260505-172816.tar.gz
+ls -lh backups/tese-data-20260527-011439.tar.gz
+gzip -t backups/tese-data-20260527-011439.tar.gz && echo OK
+make restore FILE=backups/tese-data-20260527-011439.tar.gz
 make restart
 make test
 ```
