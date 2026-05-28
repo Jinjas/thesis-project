@@ -1,13 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
-import { Cocktail } from "../../types";
+import { Cocktail, Ingredient } from "../../types";
 import ConfirmationBox from "../popups/ConfirmationBox";
+import ExportButton from "../button/Export";
+import { buildCocktailTable } from "../../context/utils/cocktailTable";
+
+const EXPORT_OPTIONS = [
+  { value: "txt", label: "OntoDL (.txt)" },
+  { value: "ontodl", label: "OntoDL (.ontodl)" },
+  { value: "csv", label: "Table (.csv)" },
+  { value: "xls", label: "Table (.xls)" },
+  { value: "svg", label: "Visualization (.svg)" },
+  { value: "jpeg", label: "Visualization (.jpeg)" },
+  { value: "png", label: "Visualization (.png)" },
+  { value: "pdf", label: "Visualization (.pdf)" },
+] as const;
 
 type Props = {
   cocktails: Cocktail[];
+  ingredients: Ingredient[];
   selectedId: string;
   setId: (value: string) => void;
   remCocktail: (id: string) => Promise<void>;
@@ -15,12 +29,24 @@ type Props = {
 
 export default function CocktailList({
   cocktails,
+  ingredients,
   selectedId,
   setId,
   remCocktail,
 }: Props) {
   const [isRemovePopupOpen, setIsRemovePopupOpen] = useState(false);
   const [pendingCocktail, setPendingCocktail] = useState<Cocktail | null>(null);
+
+  const exportTables = useMemo(
+    () =>
+      Object.fromEntries(
+        cocktails.map((cocktail) => [
+          cocktail.id,
+          buildCocktailTable(cocktail, ingredients),
+        ]),
+      ),
+    [cocktails, ingredients],
+  );
 
   useEffect(() => {
     if (!selectedId && cocktails.length > 0) {
@@ -57,6 +83,15 @@ export default function CocktailList({
                 className="flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
               >
+                <ExportButton
+                  code={i.onto}
+                  filename={i.name || "cocktail"}
+                  title={`Export ${i.name}`}
+                  iconOnly={true}
+                  options={EXPORT_OPTIONS}
+                  table={exportTables[i.id]}
+                  viz={i.viz}
+                />
                 <Link
                   href={`/cocktails/${i.id}`}
                   onClick={(e) => e.stopPropagation()}
@@ -65,6 +100,7 @@ export default function CocktailList({
                 >
                   <Pencil size={16} />
                 </Link>
+
                 <button
                   onClick={() => handleRemoveClick(i)}
                   title={`Remove ${i.name}`}
