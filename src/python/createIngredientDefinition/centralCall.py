@@ -54,7 +54,7 @@ def main():
 
     if split_idx is not None:
         extraData = "".join(lines[: split_idx + 1])
-        characteristics = "".join(lines[split_idx + 2 :])
+        characteristics = "".join(lines[split_idx + 2 :-2])
     else:
         
         extraData = ontodl_text

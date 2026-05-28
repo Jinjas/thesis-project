@@ -238,7 +238,7 @@ def describe_block_action(nodes: Iterable[Node]) -> str:
 
 def build_production(spec: ProductionSpec) -> str:
     return (
-        f"{spec.name} =iof=> Production[\n"
+        f"{spec.name} =iof => Production[\n"
         f"        condition = \"{escape_text(spec.condition)}\" ,\n"
         f"        action = \"{escape_text(spec.action)}\" ,\n"
         f"        strength = {spec.strength:.1f}\n"
@@ -294,7 +294,7 @@ def build_ontology(name: str, input_type: str, productions: list[ProductionSpec]
     ]
 
     for section_idx, section_name in enumerate(section_names):
-        hidden_lines.append(f"    {section_name} =iof=> Section [ title = \"{escape_text(section_titles[section_idx])}\" ];")
+        hidden_lines.append(f"    {section_name} =iof => Section [ title = \"{escape_text(section_titles[section_idx])}\" ];")
 
     editable_triples: list[str] = []
 

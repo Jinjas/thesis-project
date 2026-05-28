@@ -8,6 +8,7 @@ concepts {
 }
 
 individuals {
+    CSS,
     Frontend_Basic,
     Frontend_BasicDevelopment,
     Frontend_BasicCocktail,
@@ -27,6 +28,7 @@ relations {
 }
 
 triples {
+    CSS = iof => Language;
 %    TensorFlow = iof => Library;
     JavaScript = iof => Language;
     TypeScript = iof => Language;
@@ -44,5 +46,6 @@ triples {
     TailwindCSS = pof => Frontend_BasicCocktail;
     ESLint = pof => Frontend_BasicCocktail;
 %    TensorFlow = pof => Frontend_BasicCocktail;
+    CSS = pof => Frontend_BasicCocktail;
 }
 .
