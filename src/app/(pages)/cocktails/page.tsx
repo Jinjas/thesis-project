@@ -44,6 +44,7 @@ export default function CocktailsPage() {
 
       <CocktailList
         cocktails={cocktails}
+        ingredients={ingredients}
         selectedId={selectedID}
         setId={setSelectedID}
         remCocktail={remCocktail}
