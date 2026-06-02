@@ -5,8 +5,16 @@ import { useEffect } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { Cocktail, Ingredient } from "../../types";
 import ConfirmationBox from "../popups/ConfirmationBox";
+import ExportButton from "../button/Export";
 import { type RemoveIngredientResult } from "../../context/utils/ingredientRemoval";
 import { useIngredientRemovalFlow } from "../../context/utils/useIngredientRemovalFlow";
+
+const EXPORT_OPTIONS = [
+  { value: "txt", label: "OntoDL (.txt)" },
+  { value: "ontodl", label: "OntoDL (.ontodl)" },
+  { value: "csv", label: "Table (.csv)" },
+  { value: "xls", label: "Table (.xls)" },
+] as const;
 
 type Props = {
   ingredients: Ingredient[];
@@ -64,6 +72,15 @@ export default function IngredientList({
                 className="flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
               >
+                <ExportButton
+                  code={i.code}
+                  filename={i.name || "ingredient"}
+                  title={`Export ${i.name}`}
+                  iconOnly={true}
+                  options={EXPORT_OPTIONS}
+                  table={i.table}
+                />
+
                 <Link
                   href={`/ingredients/${i.id}`}
                   title={`Edit ${i.name}`}
@@ -71,6 +88,7 @@ export default function IngredientList({
                 >
                   <Pencil size={16} />
                 </Link>
+
                 <button
                   onClick={() => requestRemove(i)}
                   title={`Remove ${i.name}`}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowDownToLine } from "lucide-react";
 import type { TableDict } from "../../types";
 import { FeaturePopup, type FeatureOption } from "../popups";
 import {
@@ -17,6 +18,8 @@ type Props = {
   code: string;
   filename?: string;
   label?: string;
+  iconOnly?: boolean;
+  title?: string;
   options: readonly FeatureOption[];
   table?: TableDict[];
   viz?: string;
@@ -96,6 +99,8 @@ export default function ExportButton({
   code,
   filename = "ingredient",
   label = "Export",
+  iconOnly = false,
+  title,
   options,
   table,
   viz,
@@ -141,9 +146,15 @@ export default function ExportButton({
     <>
       <button
         onClick={() => setIsPopupOpen(true)}
-        className="font-semibold pb-2 hover:underline cursor-pointer"
+        title={title ?? label}
+        aria-label={title ?? label}
+        className={
+          iconOnly
+            ? "bg-gray-700 hover:bg-gray-800 text-white p-2 rounded border inline-flex items-center justify-center cursor-pointer"
+            : "font-semibold pb-2 hover:underline cursor-pointer"
+        }
       >
-        {label}
+        {iconOnly ? <ArrowDownToLine size={16} /> : label}
       </button>
 
       <FeaturePopup
