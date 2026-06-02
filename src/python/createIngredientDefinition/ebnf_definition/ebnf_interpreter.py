@@ -52,6 +52,9 @@ class GrammarTransformer(Transformer):
     def repeated_group(self, children):
         return Node("repeated_group", children=list(children))
 
+    def grouped_expression(self, children):
+        return Node("grouped_expression", children=list(children))
+
     def name(self, children):
         (token,) = children
         return Node("name", token.value)
@@ -161,6 +164,8 @@ def describe_nodes(nodes: Iterable[Node]) -> str:
             parts.append(f"optional group [{describe_nodes(node.children)}]")
         elif node.kind == "repeated_group":
             parts.append(f"repeated group {{{describe_nodes(node.children)}}}")
+        elif node.kind == "grouped_expression":
+            parts.append(f"({describe_nodes(node.children)})")
         elif node.children:
             parts.append(describe_nodes(node.children))
 

@@ -1,0 +1,62 @@
+stylesheet = { declaration } .
+declaration = statement | function_expression | class_declaration .
+class_declaration = "class" ID [ "extends" comma_separated_expressions ] class_body .
+class_body = "{" { class_member } "}" .
+class_member = [ "static" | "getter" | "setter" | "public" | "private" ] ( class_method | class_property ) .
+class_method = [ "#" ] ID function_params_postfix compound_statement .
+class_property = [ "#" ] ID [ "=" expression ] [ ";" ] .
+compound_statement = "{" { statement } "}" .
+statement = expression ";" | declaration_statement | if_statement | switch_statement | for_statement
+    | for_in_statement | for_of_statement | do_while_statement | control_flow_statement
+    | try_catch_finally_statement | label_statement | export_statement | import_statement .
+export_statement = "export" [ "default" ] declaration_statement [ ";" ]
+    | "export" module_element "from" module_element [ ";" ] .
+import_statement = "import" module_element [ ";" ]
+    | "import" paren_enclosed_string [ ";" ]
+    | "import" module_element "from" module_element [ ";" ] .
+label_statement = ID ":" { statement } .
+with_statement = "with" "(" expression ")" compound_statement .
+try_catch_finally_statement = "try" compound_statement [ "catch" [ "(" expression ")" ] compound_statement ]
+    [ "finally" compound_statement ] .
+control_flow_statement = "break" [ ";" ] | "continue" [ ";" ] | "return" expression [ ";" ] | "throw" expression [ ";" ] .
+do_while_statement = "do" compound_statement "while" "(" expression ")" [ ";" ] .
+for_statement =    "for" "(" ( declaration_statement ";" expression ";" | expression ( "in" | "of" ) ) expression ")" compound_statement .
+switch_statement = "switch" "(" expression ")" { "case" expression ":" { statement } | "default" ":" { statement } } .
+if_statement = "if" "(" expression ")" compound_statement [ { "else" if_statement } | "else" compound_statement ] .
+declaration_statement = ( "var" | "let" | "const" | "static" ) lvalue "=" expression [ ";" ] .
+expression = ternary_expression | logic_expression | unary_expression | primary_expression [ ASSIGNMENT_SYMBOL expression ] .
+ternary_expression = logic_expression "?" logic_expression ":" logic_expression .
+logic_expression = expression LOGIC_SYMBOL expression .
+unary_expression = prefix_expression | postfix_expression .
+postfix_expression = primary_expression ( bracket_notation_property | dot_notation_property )
+    | primary_expression "(" [ comma_separated_expressions ] ")"
+    | primary_expression "++"
+    | primary_expression "--"
+    | primary_expression "`" { printable | "${" [ expression ] "}" } "`"
+    | primary_expression "?" .
+prefix_expression = "+" primary_expression | "-" primary_expression
+    | "++" primary_expression | "--" primary_expression
+    | "!" primary_expression | "~" primary_expression
+    | "..." expression | "typeof" expression | "void" expression | "delete" expression
+    | "await" expression | "new" expression .
+primary_expression = lexical_literal | syntactic_literal | paren_enclosed_expression | class_expression
+    | function_expression | arrow_expression | "this" .
+arrow_expression = [ "async" ] ( function_call_expression | ID ) "=>" ( compound_statement | expression ) .
+class_expression = "class" class_body .
+function_expression = [ "async" ] "function" ( ID ) function_params_postfix compound_statement .
+paren_enclosed_expression = "(" [ expression ] ")" .
+lvalue = ID | "{" [ comma_separated_properties ] "}" | "[" [ comma_separated_expressions ] "]" .
+syntactic_literal = "`" { printable | "${" [ expression ] "}" } "`" | "{" [ comma_separated_properties ] "}" | "[" [ comma_separated_expressions ] "]" .
+comma_separated_properties = property { "," property } .
+property = [ ID ":" ] expression .
+bracket_notation_property = { "[" expression "]" } .
+dot_notation_property = "." expression { "." expression } .
+comma_separated_expressions = expression { "," expression } .
+function_params_postfix = "(" [ function_parameter { "," function_parameter } ] ")" .
+function_parameter = ID [ "=" expression ] | "{" [ comma_separated_properties ] "}" .
+module_element = module_name | "{" comma_separated_module_names "}" .
+paren_enclosed_string = "(" STR ")" .
+comma_separated_module_names = module_name { "," module_name } .
+module_name = ID | ID "as" ID | STR .
+lexical_terminals = lexical_literal | WS | COMMENT .
+lexical_literal = ID | STR | NUM | REGEXP .

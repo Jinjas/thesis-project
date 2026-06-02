@@ -9,10 +9,13 @@ rule: name "=" expression "."
 	| reserved_string
 	| optional_group
 	| repeated_group
+	| grouped_expression
 
 optional_group: "[" expression "]"
 
 repeated_group: "{" expression "}"
+
+grouped_expression: "(" expression ")"
 
 name: NAME
 
@@ -20,8 +23,8 @@ terminal: TERMINAL
 
 reserved_string: STRING
 
-NAME: /[a-z][a-z0-9_]*/
-TERMINAL.2: /[A-Z][A-Z0-9_]*/
+NAME: /[a-z][a-z0-9_-]*/
+TERMINAL.2: /[A-Z][A-Z0-9_-]*/
 %import common.ESCAPED_STRING -> STRING
 PIPE: "|"
 %import common.WS
