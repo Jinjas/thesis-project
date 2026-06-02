@@ -5,9 +5,10 @@ class_body = "{" { class_member } "}" .
 class_member = [ "static" | "getter" | "setter" | "public" | "private" ] ( class_method | class_property ) .
 class_method = [ "#" ] ID function_params_postfix compound_statement .
 class_property = [ "#" ] ID [ "=" expression ] [ ";" ] .
+
 compound_statement = "{" { statement } "}" .
 statement = expression ";" | declaration_statement | if_statement | switch_statement | for_statement
-    | for_in_statement | for_of_statement | do_while_statement | control_flow_statement
+    | do_while_statement | control_flow_statement
     | try_catch_finally_statement | label_statement | export_statement | import_statement .
 export_statement = "export" [ "default" ] declaration_statement [ ";" ]
     | "export" module_element "from" module_element [ ";" ] .
@@ -24,6 +25,7 @@ for_statement =    "for" "(" ( declaration_statement ";" expression ";" | expres
 switch_statement = "switch" "(" expression ")" { "case" expression ":" { statement } | "default" ":" { statement } } .
 if_statement = "if" "(" expression ")" compound_statement [ { "else" if_statement } | "else" compound_statement ] .
 declaration_statement = ( "var" | "let" | "const" | "static" ) lvalue "=" expression [ ";" ] .
+
 expression = ternary_expression | logic_expression | unary_expression | primary_expression [ ASSIGNMENT_SYMBOL expression ] .
 ternary_expression = logic_expression "?" logic_expression ":" logic_expression .
 logic_expression = expression LOGIC_SYMBOL expression .
@@ -52,6 +54,7 @@ property = [ ID ":" ] expression .
 bracket_notation_property = { "[" expression "]" } .
 dot_notation_property = "." expression { "." expression } .
 comma_separated_expressions = expression { "," expression } .
+
 function_params_postfix = "(" [ function_parameter { "," function_parameter } ] ")" .
 function_parameter = ID [ "=" expression ] | "{" [ comma_separated_properties ] "}" .
 module_element = module_name | "{" comma_separated_module_names "}" .
