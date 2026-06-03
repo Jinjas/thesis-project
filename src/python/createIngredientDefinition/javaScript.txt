@@ -1,9 +1,10 @@
 stylesheet = { declaration } .
-declaration = statement | function_expression | class_declaration .
-class_declaration = "class" ID [ "extends" comma_separated_expressions ] class_body .
+declaration = statement | func_declaration | class_declaration .
+class_declaration = "class" ID [ "extends" com_sep_exprs ] class_body .
 class_body = "{" { class_member } "}" .
-class_member = [ "static" | "getter" | "setter" | "public" | "private" ] ( class_method | class_property ) .
-class_method = [ "#" ] ID function_params_postfix compound_statement .
+class_member = [ class_modifier ] ( class_method | class_property ) .
+class_modifier = "static" | "getter" | "setter" | "public" | "private" .
+class_method = [ "#" ] ID func_params_postfix compound_statement .
 class_property = [ "#" ] ID [ "=" expression ] [ ";" ] .
 
 compound_statement = "{" { statement } "}" .
@@ -26,40 +27,39 @@ switch_statement = "switch" "(" expression ")" { "case" expression ":" { stateme
 if_statement = "if" "(" expression ")" compound_statement [ { "else" if_statement } | "else" compound_statement ] .
 declaration_statement = ( "var" | "let" | "const" | "static" ) lvalue "=" expression [ ";" ] .
 
-expression = ternary_expression | logic_expression | unary_expression | primary_expression [ ASSIGNMENT_SYMBOL expression ] .
-ternary_expression = logic_expression "?" logic_expression ":" logic_expression .
-logic_expression = expression LOGIC_SYMBOL expression .
-unary_expression = prefix_expression | postfix_expression .
-postfix_expression = primary_expression ( bracket_notation_property | dot_notation_property )
-    | primary_expression "(" [ comma_separated_expressions ] ")"
-    | primary_expression "++"
-    | primary_expression "--"
-    | primary_expression "`" { printable | "${" [ expression ] "}" } "`"
-    | primary_expression "?" .
-prefix_expression = "+" primary_expression | "-" primary_expression
-    | "++" primary_expression | "--" primary_expression
-    | "!" primary_expression | "~" primary_expression
+expression = ternary_expr | logic_expr | unary_expr | primary_expr [ ASSIGNMENT_SYMBOL expression ] .
+ternary_expr = logic_expr "?" logic_expr ":" logic_expr .
+logic_expr = expression LOGIC_SYMBOL expression .
+unary_expr = prefix_expr | postfix_expr .
+postfix_expr = primary_expr ( brck_notation_property | dot_notation_property )
+    | primary_expr "(" [ com_sep_exprs ] ")"
+    | primary_expr "++"
+    | primary_expr "--"
+    | primary_expr "`" { printable | "${" [ expression ] "}" } "`"
+    | primary_expr "?" .
+prefix_expr = "+" primary_expr | "-" primary_expr
+    | "++" primary_expr | "--" primary_expr
+    | "!" primary_expr | "~" primary_expr
     | "..." expression | "typeof" expression | "void" expression | "delete" expression
     | "await" expression | "new" expression .
-primary_expression = lexical_literal | syntactic_literal | paren_enclosed_expression | class_expression
-    | function_expression | arrow_expression | "this" .
-arrow_expression = [ "async" ] ( function_call_expression | ID ) "=>" ( compound_statement | expression ) .
-class_expression = "class" class_body .
-function_expression = [ "async" ] "function" ( ID ) function_params_postfix compound_statement .
-paren_enclosed_expression = "(" [ expression ] ")" .
-lvalue = ID | "{" [ comma_separated_properties ] "}" | "[" [ comma_separated_expressions ] "]" .
-syntactic_literal = "`" { printable | "${" [ expression ] "}" } "`" | "{" [ comma_separated_properties ] "}" | "[" [ comma_separated_expressions ] "]" .
-comma_separated_properties = property { "," property } .
+primary_expr = lexical_literal | syntactic_literal | paren_enclosed_expr | class_expr
+    | func_declaration | arrow_expr | "this" .
+arrow_expr = [ "async" ] ( func_params_postfix | ID ) "=>" ( compound_statement | expression ) .
+class_expr = "class" class_body .
+func_declaration = [ "async" ] "function" ( ID ) func_params_postfix compound_statement .
+paren_enclosed_expr = "(" [ expression ] ")" .
+lvalue = ID | "{" [ com_sep_properties ] "}" | "[" [ com_sep_exprs ] "]" .
+syntactic_literal = "`" { printable | "${" [ expression ] "}" } "`" | "{" [ com_sep_properties ] "}" | "[" [ com_sep_exprs ] "]" .
+com_sep_properties = property { "," property } .
 property = [ ID ":" ] expression .
-bracket_notation_property = { "[" expression "]" } .
+brck_notation_property = { "[" expression "]" } .
 dot_notation_property = "." expression { "." expression } .
-comma_separated_expressions = expression { "," expression } .
+com_sep_exprs = expression { "," expression } .
 
-function_params_postfix = "(" [ function_parameter { "," function_parameter } ] ")" .
-function_parameter = ID [ "=" expression ] | "{" [ comma_separated_properties ] "}" .
-module_element = module_name | "{" comma_separated_module_names "}" .
+func_params_postfix = "(" [ func_param { "," func_param } ] ")" .
+func_param = ID [ "=" expression ] | "{" [ com_sep_properties ] "}" .
+module_element = module_name | "{" com_sep_module_names "}" .
 paren_enclosed_string = "(" STR ")" .
-comma_separated_module_names = module_name { "," module_name } .
+com_sep_module_names = module_name { "," module_name } .
 module_name = ID | ID "as" ID | STR .
-lexical_terminals = lexical_literal | WS | COMMENT .
 lexical_literal = ID | STR | NUM | REGEXP .

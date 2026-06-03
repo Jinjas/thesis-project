@@ -1,0 +1,111 @@
+stylesheet = { declaration } .
+declaration = statement | func_declaration | class_declaration | interface_declaration
+    | type_alias_declaration | enum_declaration | namespace_declaration | ambient_declaration .
+func_declaration = [ "async" ] "function" [ ID ] [ type_params ] func_params_postfix
+    [ ":" type_expr ] compound_statement .
+class_declaration = "class" ID [ type_params ] [ "extends" type_expr ]
+    [ "implements" com_sep_type_exprs ] class_body .
+class_body = "{" { class_member } "}" .
+class_member = [ class_modifier ] ( class_method | class_property ) .
+class_modifier = "static" | "public" | "private" | "protected" | "readonly" | "abstract" | "override" .
+class_method = [ "#" ] ID [ type_params ] func_params_postfix [ ":" type_expr ] compound_statement .
+class_property = [ "#" ] ID [ "?" ] [ ":" type_expr ] [ "=" expression ] [ ";" ] .
+interface_declaration = "interface" ID [ type_params ] [ "extends" com_sep_type_exprs ] "{" { interface_member } "}" .
+interface_member = property_signature | method_signature | call_signature .
+property_signature = [ "readonly" ] ID [ "?" ] ":" type_expr [ ";" ] .
+method_signature = [ "readonly" ] ID [ type_params ] func_params_postfix [ ":" type_expr ] [ ";" ] .
+call_signature = [ type_params ] func_params_postfix [ ":" type_expr ] [ ";" ] .
+type_alias_declaration = "type" ID [ type_params ] "=" type_expr [ ";" ] .
+enum_declaration = [ "const" ] "enum" ID "{" [ com_sep_enum_members ] "}" .
+com_sep_enum_members = ID [ "=" expression ] { "," ID [ "=" expression ] } [ "," ] .
+namespace_declaration = "namespace" ID "{" { declaration } "}" .
+ambient_declaration = "declare" ( func_declaration | class_declaration | interface_declaration
+    | type_alias_declaration | enum_declaration | namespace_declaration ) .
+
+compound_statement = "{" { statement } "}" .
+statement = expression ";" | declaration_statement | if_statement | switch_statement | for_statement
+    | do_while_statement | control_flow_statement | try_catch_finally_statement | label_statement
+    | export_statement | import_statement | with_statement .
+export_statement = "export" [ "default" ] declaration_statement [ ";" ]
+    | "export" "type" declaration_statement [ ";" ]
+    | "export" module_element "from" module_element [ ";" ] .
+import_statement = "import" [ "type" ] module_element [ ";" ]
+    | "import" paren_enclosed_string [ ";" ]
+    | "import" module_element "from" module_element [ ";" ] .
+label_statement = ID ":" { statement } .
+with_statement = "with" "(" expression ")" compound_statement .
+try_catch_finally_statement = "try" compound_statement [ "catch" [ "(" [ ID ] ")" ] compound_statement ]
+    [ "finally" compound_statement ] .
+control_flow_statement = "break" [ ";" ] | "continue" [ ";" ] | "return" [ expression ] [ ";" ]
+    | "throw" expression [ ";" ] .
+do_while_statement = "do" compound_statement "while" "(" expression ")" [ ";" ] .
+for_statement = "for" "(" ( declaration_statement ";" expression ";" [ expression ]
+    | [ expression ] ( "in" | "of" ) expression ) ")" compound_statement .
+switch_statement = "switch" "(" expression ")" { "case" expression ":" { statement } | "default" ":" { statement } } .
+if_statement = "if" "(" expression ")" compound_statement [ { "else" if_statement } | "else" compound_statement ] .
+declaration_statement = ( "var" | "let" | "const" | "declare" ) lvalue [ ":" type_expr ]
+    [ "=" expression ] [ ";" ] .
+
+expression = ternary_expr | logic_expr | unary_expr | primary_expr [ ASSIGNMENT_SYMBOL expression ] .
+ternary_expr = logic_expr "?" logic_expr ":" logic_expr .
+logic_expr = primary_expr { LOGIC_SYMBOL primary_expr } .
+unary_expr = prefix_expr | postfix_expr .
+postfix_expr = primary_expr ( brkt_notation_property | dot_notation_property )
+    | primary_expr "(" [ com_sep_exprs ] ")"
+    | primary_expr "++"
+    | primary_expr "--"
+    | primary_expr "`" { printable | "${" [ expression ] "}" } "`"
+    | primary_expr "?" .
+prefix_expr = "+" primary_expr | "-" primary_expr
+    | "++" primary_expr | "--" primary_expr
+    | "!" primary_expr | "~" primary_expr
+    | "..." expression | "typeof" expression | "void" expression | "delete" expression
+    | "await" expression | "new" expression .
+primary_expr = lexical_literal | syntactic_literal | paren_enclosed_expr | class_expr
+    | func_declaration | arrow_expr | "this" | ID .
+arrow_expr = [ "async" ] ( func_params_postfix | ID ) "=>" ( compound_statement | expression ) .
+class_expr = "class" [ ID ] [ type_params ] [ "extends" type_expr ]
+    [ "implements" com_sep_type_exprs ] class_body .
+paren_enclosed_expr = "(" [ expression ] ")" .
+lvalue = ID | "{" [ com_sep_properties ] "}" | "[" [ com_sep_exprs ] "]" .
+syntactic_literal = "`" { printable | "${" [ expression ] "}" } "`" | "{" [ com_sep_properties ] "}" | "[" [ com_sep_exprs ] "]" .
+com_sep_properties = property { "," property } .
+property = [ ID ":" ] expression .
+brkt_notation_property = { "[" expression "]" } .
+dot_notation_property = "." expression { "." expression } .
+com_sep_exprs = expression { "," expression } .
+
+type_expr = intersection_type { "|" intersection_type } .
+intersection_type = array_type { "&" array_type } .
+array_type = non_array_type { "[]" } .
+non_array_type = literal_type | keyword_type | type_reference | tuple_type | func_type
+    | parenthesized_type | type_literal | type_operator | indexed_access_type
+    | conditional_type | mapped_type .
+type_reference = ID [ "<" com_sep_type_exprs ">" ] .
+com_sep_type_exprs = type_expr { "," type_expr } .
+parenthesized_type = "(" type_expr ")" .
+tuple_type = "[" [ com_sep_type_exprs ] "]" .
+func_type = [ "new" ] "(" [ com_sep_type_params ] ")" "=>" type_expr .
+type_params = "<" com_sep_type_params ">" .
+com_sep_type_params = type_param { "," type_param } .
+type_param = ID [ "extends" type_expr ] [ "=" type_expr ] .
+type_literal = "{" [ com_sep_type_members ] "}" .
+com_sep_type_members = type_member { "," type_member } .
+type_member = [ "readonly" ] ID [ "?" ] ":" type_expr [ ";" ] .
+type_operator = "keyof" type_expr | "readonly" type_expr | "typeof" ID .
+indexed_access_type = type_expr "[" type_expr "]" .
+conditional_type = type_expr "extends" type_expr "?" type_expr ":" type_expr .
+mapped_type = "{" [ "readonly" ] "[" ID "in" type_expr "]" [ "?" ] ":" type_expr [ ";" ] "}" .
+literal_type = STR | NUM | "true" | "false" | "null" | "undefined" .
+keyword_type = "any" | "unknown" | "never" | "void" | "object" | "boolean"
+    | "number" | "string" | "symbol" | "bigint" .
+
+func_params_postfix = "(" [ com_sep_func_params ] ")" .
+com_sep_func_params = func_param { "," func_param } .
+func_param = [ "..." ] ID [ "?" ] [ ":" type_expr ] [ "=" expression ]
+    | "{" [ com_sep_properties ] "}" | "[" [ com_sep_exprs ] "]" .
+module_element = module_name | "{" com_sep_module_names "}" .
+paren_enclosed_string = "(" STR ")" .
+com_sep_module_names = module_name { "," module_name } .
+module_name = ID | ID "as" ID | STR .
+lexical_literal = ID | STR | NUM | REGEXP .
