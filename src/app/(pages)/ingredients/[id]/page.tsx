@@ -9,7 +9,6 @@ import { IngredientType, INGREDIENT_TYPES } from "../../../types";
 import {
   TypeSelector,
   CodeEdit,
-  ImportButton,
   ExportButton,
   TextCampEdit,
   ActionButton,
@@ -21,8 +20,13 @@ import { createIngredientDefinition } from "@/app/context/services/ingredientApi
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
-  const { ingredients, cocktails, updateIngredient, remIngredient } =
-    useAppContext();
+  const {
+    ingredients,
+    cocktails,
+    updateIngredient,
+    remIngredient,
+    updateIngredientOnCocktail,
+  } = useAppContext();
   const router = useRouter();
   const { setHasUnsavedChanges, resetUnsavedChanges } = useUnsavedChanges();
   const ingredient = ingredients.find((i) => i.id === id);
@@ -144,6 +148,23 @@ export default function IngredientDetailPage() {
   async function handleSaveIngredient() {
     if (!ingredient) return;
     await updateIngredient(ingredient.id, name, type, characteristics);
+
+    for (const cocktail of cocktails) {
+      if (
+        cocktail.ingredients &&
+        cocktail.ingredients[ingredient.id] !== undefined
+      ) {
+        await updateIngredientOnCocktail(
+          cocktail.id,
+          ingredient.name,
+          ingredient.type,
+          name,
+          type,
+          cocktail.ingredients[ingredient.id],
+        );
+      }
+    }
+
     resetUnsavedChanges();
     setIsSavePopupOpen(false);
   }
@@ -188,8 +209,6 @@ export default function IngredientDetailPage() {
               label="Import"
               variant="underlined"
             />
-
-            {/* <ImportButton func={setCharacteristics} /> */}
 
             <ExportButton
               code={code}

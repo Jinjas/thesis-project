@@ -23,7 +23,7 @@ triples {
     Ingredient =has=> Model;
     Model =has=> Production;
     Section =groups=> Production;
-    TailwindCSS =iof=> Tool;
+    TailwindCSS =iof=> Framework;
     TailwindCSS_model =iof=> Model;
     TailwindCSS =has=> TailwindCSS_model;
     TailwindCSS_model =has=> TailwindCSS_specific_section;

@@ -12,12 +12,12 @@ individuals {
     Frontend_Basic,
     Frontend_BasicDevelopment,
     Frontend_BasicCocktail,
-    TailwindCSS,
     ESLint,
     JavaScript,
     TypeScript,
     SQL,
-    NextJS
+    NextJS,
+    TailwindCSS
 %    TensorFlow
 %    ReactJS
 }
@@ -34,7 +34,7 @@ triples {
     TypeScript = iof => Language;
     %ReactJS = iof => Library;
     NextJS = iof => Framework;
-    TailwindCSS = iof => Tool;
+    TailwindCSS = iof => Framework;
     SQL = iof => Language;
     ESLint = iof => Tool;
     Frontend_Basic = requires => Frontend_BasicDevelopment;
