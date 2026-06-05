@@ -53,6 +53,7 @@ type AppContextType = {
     prevType: IngredientType,
     newName: string,
     newType: IngredientType,
+    active: boolean,
   ) => Promise<void>;
   addCocktail: (name: string, firstIngredient: string) => Promise<string>;
   addIngredientToCocktail: (
@@ -400,6 +401,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     prevType: IngredientType,
     newName: string,
     newType: IngredientType,
+    active: boolean,
   ) {
     const cocktail = cocktails.find((c) => c.id === cocktailId);
     if (!cocktail) return;
@@ -412,6 +414,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           prevIngredientType: prevType,
           newIngredientName: newName,
           newIngredientType: newType,
+          active: active,
         });
 
         const vizValue = normalizeSvg(data.updatedViz);

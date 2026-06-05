@@ -150,15 +150,17 @@ export default function IngredientDetailPage() {
     await updateIngredient(ingredient.id, name, type, characteristics);
 
     for (const cocktail of cocktails) {
-      // `cocktail.ingredients` is a map of ingredientId -> boolean (ParamMap).
-      // Check the map for the ingredient id and only update when present/active.
-      if (cocktail.ingredients && cocktail.ingredients[ingredient.id]) {
+      if (
+        cocktail.ingredients &&
+        cocktail.ingredients[ingredient.id] !== undefined
+      ) {
         await updateIngredientOnCocktail(
           cocktail.id,
           ingredient.name,
           ingredient.type,
           name,
           type,
+          cocktail.ingredients[ingredient.id],
         );
       }
     }

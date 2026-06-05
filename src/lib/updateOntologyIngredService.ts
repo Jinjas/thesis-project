@@ -7,6 +7,7 @@ export async function updateIngredientOnOntology(
   prevName: string,
   prevType: string,
   onto: string,
+  active: boolean,
 ): Promise<{ updatedOnto: string; updatedViz: string }> {
   const scriptPath = path.join(
     process.cwd(),
@@ -24,6 +25,7 @@ export async function updateIngredientOnOntology(
     new_ingredient_type: ingredientType,
     prev_ingredient: prevName,
     prev_ingredient_type: prevType,
+    active: active,
   };
 
   const parsed = await runPythonJson<{

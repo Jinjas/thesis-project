@@ -24,13 +24,14 @@ export async function POST(req: NextRequest) {
     const parsedBody = await parseJsonBody(req);
     if ("response" in parsedBody) return parsedBody.response;
 
-    const data = parsedBody.data as Record<string, unknown>;
-
-    const onto = data["onto"] as unknown;
-    const newIngredientName = data["newIngredientName"] as unknown;
-    const newIngredientType = data["newIngredientType"] as unknown;
-    const prevIngredientName = data["prevIngredientName"] as unknown;
-    const prevIngredientType = data["prevIngredientType"] as unknown;
+    const {
+      onto,
+      newIngredientName,
+      newIngredientType,
+      prevIngredientName,
+      prevIngredientType,
+      active,
+    } = parsedBody.data;
 
     const validatedNewIngredientName = validateName(newIngredientName);
     const validatedNewIngredientType =
@@ -38,13 +39,15 @@ export async function POST(req: NextRequest) {
     const validatedPrevName = validateName(prevIngredientName);
     const validatedPrevType = validateIngredientType(prevIngredientType);
     const validatedCurrentOnto = validateTextField(onto, 200_000);
+    const validatedActive = parseBoolean(active);
 
     if (
       !validatedNewIngredientName ||
       !validatedNewIngredientType ||
       !validatedPrevName ||
       !validatedPrevType ||
-      !validatedCurrentOnto
+      !validatedCurrentOnto ||
+      validatedActive === null
     ) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
@@ -55,6 +58,7 @@ export async function POST(req: NextRequest) {
       validatedPrevName,
       validatedPrevType,
       validatedCurrentOnto,
+      validatedActive,
     );
 
     return NextResponse.json(result);
