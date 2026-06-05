@@ -21,6 +21,7 @@ import {
 } from "./services/ingredientApi";
 import {
   addIngredientToOntology,
+  updateIngredientOnOntology,
   generate,
   getCocktails,
   update,
@@ -46,7 +47,13 @@ type AppContextType = {
     newType: IngredientType,
     newCode: string,
   ) => Promise<void>;
-
+  updateIngredientOnCocktail: (
+    onto: string,
+    prevName: string,
+    prevType: IngredientType,
+    newName: string,
+    newType: IngredientType,
+  ) => Promise<void>;
   addCocktail: (name: string, firstIngredient: string) => Promise<string>;
   addIngredientToCocktail: (
     cocktailId: string,
@@ -387,6 +394,45 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     });
   }
 
+  async function updateIngredientOnCocktail(
+    cocktailId: string,
+    prevName: string,
+    prevType: IngredientType,
+    newName: string,
+    newType: IngredientType,
+  ) {
+    const cocktail = cocktails.find((c) => c.id === cocktailId);
+    if (!cocktail) return;
+
+    enqueueCocktailUpdate(cocktailId, async () => {
+      try {
+        const data = await updateIngredientOnOntology({
+          onto: cocktail.onto,
+          prevIngredientName: prevName,
+          prevIngredientType: prevType,
+          newIngredientName: newName,
+          newIngredientType: newType,
+        });
+
+        const vizValue = normalizeSvg(data.updatedViz);
+
+        setCocktails((prev) =>
+          prev.map((c) =>
+            c.id === cocktailId
+              ? {
+                  ...c,
+                  onto: data.updatedOnto,
+                  viz: vizValue,
+                }
+              : c,
+          ),
+        );
+      } catch (err) {
+        console.error("error updating ontology", err);
+      }
+    });
+  }
+
   async function updateIngredientStatus(
     cocktailId: string,
     ingredientId: string,
@@ -508,6 +554,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         addIngredient,
         remIngredient,
         updateIngredient,
+        updateIngredientOnCocktail,
         addIngredientToCocktail,
         updateIngredientStatus,
         updateOnto,

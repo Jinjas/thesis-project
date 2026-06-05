@@ -37,6 +37,17 @@ export async function update(data: any) {
   return res.json();
 }
 
+export async function updateIngredientOnOntology(data: any) {
+  const res = await fetch("/api/ontology/updateIngredientOnOntology", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Ontology update failed");
+
+  return res.json();
+}
+
 export async function prepare(data: any) {
   const res = await fetch("/api/ontology/prepare", {
     method: "POST",
