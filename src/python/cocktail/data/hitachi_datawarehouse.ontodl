@@ -3,8 +3,8 @@ Ontology Hitachi_DataWarehouse
 concepts {
     Language,
     Tool,
-    Library
-%    Framework
+    Library,
+    Framework
 }
 
 individuals {
@@ -16,8 +16,8 @@ individuals {
     PySpark,
     Python,
     JSON,
-    TSQL
-%    TailwindCSS
+    TSQL,
+    TailwindCSS
 }
 
 relations {
@@ -26,7 +26,7 @@ relations {
 }
 
 triples {
-%    TailwindCSS = iof => Tool;
+    TailwindCSS = iof => Framework;
 	JSON = iof => Language;
 	PySpark = iof => Library;
 	Python = iof => Language;
@@ -41,7 +41,7 @@ triples {
 	SQL = pof => Hitachi_DataWarehouseCocktail;
 	TSQL = pof => Hitachi_DataWarehouseCocktail;
 	VisualStudio = pof => Hitachi_DataWarehouseCocktail;
-%    TailwindCSS = pof => Hitachi_DataWarehouseCocktail;
+    TailwindCSS = pof => Hitachi_DataWarehouseCocktail;
 }
 
 .
