@@ -52,7 +52,7 @@ export default function VizBar({ selectedId }: Props) {
 
   return (
     <aside
-      className={`bg-gray-100 duration-300 flex flex-col py-6 relative text-black transition-all ${collapsed ? "px-2 w-2" : "px-4 w-80"}`}
+      className={`bg-gray-100 duration-300 flex flex-col justify-between py-6 relative text-black transition-all ${collapsed ? "px-2 w-2" : "px-4 w-80"}`}
     >
       <button
         onClick={() => setCollapsed((v) => !v)}
@@ -72,6 +72,13 @@ export default function VizBar({ selectedId }: Props) {
             />
           )}
         </div>
+      </div>
+      <div className="pb-10 text-sm text-gray-600">
+        {!collapsed && (
+          <p>
+            <strong>Name:</strong> {cocktail.name}
+          </p>
+        )}
       </div>
     </aside>
   );
