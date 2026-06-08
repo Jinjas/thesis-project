@@ -4,8 +4,15 @@ import { X } from "lucide-react";
 
 type Props = {
   onClick: () => void;
-  label: string;
-  variant?: "save" | "remove" | "close" | "expand" | "double" | "underlined";
+  label: any;
+  variant?:
+    | "save"
+    | "remove"
+    | "close"
+    | "expand"
+    | "expand2"
+    | "double"
+    | "underlined";
   disabled?: boolean;
 };
 
@@ -23,6 +30,8 @@ export default function ActionButton({
     save: "disabled:bg-gray-400 text-white rounded px-3 py-2 bg-gray-700 hover:bg-gray-900",
     expand:
       "disabled:bg-gray-400 text-white rounded px-1 py-1 bg-gray-700 hover:bg-gray-900 text-xs",
+    expand2:
+      "disabled:bg-gray-400 text-black rounded px-6 py-1 hover:bg-gray-100",
     double:
       " disabled:bg-gray-200 rounded w-full px-2 text-2xl font-semibold hover:bg-gray-100 bg-transparent ",
     underlined: "font-semibold pb-2 hover:underline cursor-pointer",

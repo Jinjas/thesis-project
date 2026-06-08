@@ -11,6 +11,9 @@ import { useParams } from "next/navigation";
 import SectionTable from "./TableArea";
 import { Ingredient, TableDict } from "../../types";
 import { buildCocktailTable } from "../../context/utils/cocktailTable";
+import { ActionButton } from "../button";
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 type Props = {
   type: number;
@@ -36,7 +39,9 @@ const tableDict: TableDict[] = [
 export default function TableData({ type, selectedId }: Props) {
   const { ingredients, cocktails } = useAppContext();
   const { id } = useParams();
-
+  const [extraDataHidden, setExtraDataHidden] = useState<{
+    [key: string]: boolean;
+  }>({});
   let data: TableDict[] | undefined = [];
 
   switch (type) {
@@ -81,7 +86,6 @@ export default function TableData({ type, selectedId }: Props) {
     case 4: {
       const cocktail = cocktails.find((c) => c.id === id);
       if (!cocktail) break;
-
       const activeIngredients: Ingredient[] = Object.entries(
         cocktail.ingredients,
       )
@@ -91,11 +95,37 @@ export default function TableData({ type, selectedId }: Props) {
 
       if (activeIngredients.length)
         return (
-          <div className="overflow-auto">
-            {activeIngredients.map((ing) => (
-              <div key={ing.id}>
-                <h2 className="py-2 text-md font-bold">{ing.name}</h2>
-                <SectionTable data={ing.table} />
+          <div className="flex flex-col overflow-auto gap-2">
+            {activeIngredients.map((ing, index) => (
+              <div className="flex flex-col gap-2" key={ing.id}>
+                <ActionButton
+                  onClick={() => {
+                    setExtraDataHidden((v) => ({
+                      ...v,
+                      [ing.id]: !v[ing.id],
+                    }));
+                  }}
+                  label={
+                    extraDataHidden[ing.id] ? (
+                      <div className="flex gap-1 justify-between">
+                        <h2 className="text-md font-bold">{ing.name}</h2>
+                        <ChevronUp size={16} className="mt-1" />
+                      </div>
+                    ) : (
+                      <div className="flex gap-1 justify-between">
+                        <h2 className="text-md font-bold">{ing.name}</h2>
+                        <ChevronDown size={16} className="mt-1" />
+                      </div>
+                    )
+                  }
+                  variant="expand2"
+                />
+
+                {!extraDataHidden[ing.id] && <SectionTable data={ing.table} />}
+
+                {activeIngredients.length - 1 > index && (
+                  <hr className="border-gray-300" />
+                )}
               </div>
             ))}
           </div>
@@ -116,11 +146,37 @@ export default function TableData({ type, selectedId }: Props) {
 
       if (activeIngredients.length)
         return (
-          <div className="overflow-auto">
-            {activeIngredients.map((ing) => (
-              <div key={ing.id}>
-                <h2 className="py-2 text-md font-bold">{ing.name}</h2>
-                <SectionTable data={ing.table} />
+          <div className="flex flex-col overflow-auto gap-2">
+            {activeIngredients.map((ing, index) => (
+              <div className="flex flex-col gap-2" key={ing.id}>
+                <ActionButton
+                  onClick={() => {
+                    setExtraDataHidden((v) => ({
+                      ...v,
+                      [ing.id]: !v[ing.id],
+                    }));
+                  }}
+                  label={
+                    extraDataHidden[ing.id] ? (
+                      <div className="flex gap-1 justify-between">
+                        <h2 className="text-md font-bold">{ing.name}</h2>
+                        <ChevronUp size={16} className="mt-1" />
+                      </div>
+                    ) : (
+                      <div className="flex gap-1 justify-between">
+                        <h2 className="text-md font-bold">{ing.name}</h2>
+                        <ChevronDown size={16} className="mt-1" />
+                      </div>
+                    )
+                  }
+                  variant="expand2"
+                />
+
+                {!extraDataHidden[ing.id] && <SectionTable data={ing.table} />}
+
+                {activeIngredients.length - 1 > index && (
+                  <hr className="border-gray-300" />
+                )}
               </div>
             ))}
           </div>
