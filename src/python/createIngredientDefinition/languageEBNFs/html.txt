@@ -1,0 +1,27 @@
+stylesheet = { declaration } .
+declaration = html_document | doctype | head | body | element | text | comment_or_space .
+html_document = doctype? comment_or_space* "<html" [ attribute_list ] ">" head? body "</html>" .
+
+doctype = "<!DOCTYPE html>" .
+head = "<head" [ attribute_list ] ">" { head_element } "</head>" .
+head_element = title | meta_element | link_element | base_element | script_element | style_element | comment_or_space .
+title = "<title" [ attribute_list ] ">" text* "</title>" .
+meta_element = "<meta" [ attribute_list ] ">" .
+link_element = "<link" [ attribute_list ] ">" .
+base_element = "<base" [ attribute_list ] ">" .
+script_element = "<script" [ attribute_list ] ">" { text | element | comment_or_space } "</script>" .
+style_element = "<style" [ attribute_list ] ">" { text | element | comment_or_space } "</style>" .
+body = "<body" [ attribute_list ] ">" { node } "</body>" .
+node = element | text | comment_or_space .
+element = normal_element | void_element .
+normal_element = "<" tag_name [ attribute_list ] ">" { node } "</" tag_name ">" .
+void_element = "<" ID [ attribute_list ] ">" .
+tag_name = ID .
+attribute_list = { attribute } .
+attribute = ID [ "=" attribute_value ] | data_attribute | aria_attribute | event_attribute .
+data_attribute = "data-" ID [ "=" attribute_value ] .
+aria_attribute = "aria-" ID [ "=" attribute_value ] .
+event_attribute = "on" ID [ "=" attribute_value ] .
+attribute_value = STR | ID .
+text = STR | ID .
+comment_or_space = COMMENT | WS .
