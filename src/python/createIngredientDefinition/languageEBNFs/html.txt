@@ -1,11 +1,11 @@
 stylesheet = { declaration } .
 declaration = html_document | doctype | head | body | element | text | comment_or_space .
-html_document = doctype? comment_or_space* "<html" [ attribute_list ] ">" head? body "</html>" .
+html_document = [ doctype ] { comment_or_space } "<html" [ attribute_list ] ">" [ head ] body "</html>" .
 
 doctype = "<!DOCTYPE html>" .
 head = "<head" [ attribute_list ] ">" { head_element } "</head>" .
 head_element = title | meta_element | link_element | base_element | script_element | style_element | comment_or_space .
-title = "<title" [ attribute_list ] ">" text* "</title>" .
+title = "<title" [ attribute_list ] ">" { text } "</title>" .
 meta_element = "<meta" [ attribute_list ] ">" .
 link_element = "<link" [ attribute_list ] ">" .
 base_element = "<base" [ attribute_list ] ">" .

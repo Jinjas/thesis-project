@@ -1,0 +1,17 @@
+stylesheet = { declaration } .
+declaration = json | json_value | json_object | json_array | json_string | json_number | json_boolean | json_null .
+
+json = json_value .
+
+json_value = json_object | json_array | json_string | json_number | json_boolean | json_null .
+json_null = "null" .
+json_boolean = "true" | "false" .
+json_number = NUM .
+json_string = STR .
+
+json_array = ws "[" ws [ json_value ws { "," ws json_value ws } ] "]" ws .
+json_object = ws "{" ws [ member ws { "," ws member ws } ] "}" ws .
+
+member = json_string ws ":" ws json_value .
+lexical_literal = STR | NUM | REGEXP .
+ws = WS .

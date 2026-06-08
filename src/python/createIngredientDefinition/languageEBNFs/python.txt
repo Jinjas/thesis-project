@@ -1,0 +1,90 @@
+stylesheet = { declaration } .
+
+declaration = single_input | file_input | eval_input | decorator | func_def | classdef | statement | import_stmt | encoding_decl .
+
+single_input = NEWLINE | simple_stmt | compound_stmt NEWLINE .
+file_input = { NEWLINE | stmt } END_MARKER .
+eval_input = test_list { NEWLINE } END_MARKER .
+
+decorator = "@" dotted_name [ "(" [ arg_list ] ")" ] NEWLINE .
+
+func_def = [ASYNC] "def" ID parameters [ "->" test ] ":" [ TYPE_COMMENT ] func_body_suite .
+
+parameters = "(" [ typed_args_list ] ")" .
+typed_args_list = tfp_def { "," tfp_def } | "*" [ tfp_def ] { "," tfp_def } | "**" tfp_def .
+tfp_def = ID [ ":" test ] .
+var_args_list = vfp_def { "," vfp_def } | "*" [ vfp_def ] { "," vfp_def } | "**" vfp_def .
+vfp_def = ID .
+
+stmt = simple_stmt | compound_stmt .
+simple_stmt = small_stmt { ";" small_stmt } [ ";" ] NEWLINE .
+small_stmt = expr_stmt | del_stmt | pass_stmt | flow_stmt | import_stmt | global_stmt | non_local_stmt | assert_stmt | return_stmt .
+expr_stmt = test_list_star_expr [ annas_sign | augas_sign ( yield_expr | test_list ) | ( "=" ( yield_expr | test_list_star_expr ) ) ] [ TYPE_COMMENT ] .
+annas_sign = ":" test [ "=" ( yield_expr | test_list ) ] .
+test_list_star_expr = ( test | star_expr ) { "," ( test | star_expr ) } [ "," ] .
+augas_sign = "+=" | "-=" | "*=" | "@=" | "/=" | "%=" | "&=" | "|=" | "^=" | "<<=" | ">>=" | "**=" | "//= " .
+del_stmt = "del" expr_list .
+pass_stmt = "pass" .
+return_stmt = "return" [ test_list_star_expr ] .
+import_stmt = import_name | import_from .
+import_name = "import" import_as_names .
+rel_dots = "." { "." } .
+import_from = "from" ID "import" import_as_names .
+import_as_name = ID [ "as" ID ] .
+import_as_names = import_as_name { "," import_as_name } [ "," ] .
+dotted_name = ID { "." ID } .
+global_stmt = "global" ID { "," ID } .
+non_local_stmt = "non_local" ID { "," ID } .
+assert_stmt = "assert" test [ "," test ] .
+
+compound_stmt = if_stmt | while_stmt | for_stmt | try_stmt | with_stmt | func_def | classdef | decorated | async_stmt .
+async_stmt = ASYNC ( func_def | with_stmt | for_stmt ) .
+if_stmt = "if" named_expr_test ":" suite { "elif" named_expr_test ":" suite } [ "else" ":" suite ] .
+while_stmt = "while" named_expr_test ":" suite [ "else" ":" suite ] .
+for_stmt = "for" expr_list "in" test_list ":" [ TYPE_COMMENT ] suite [ "else" ":" suite ] .
+try_stmt = "try" ":" suite ( { except_clause ":" suite } [ "else" ":" suite ] [ "finally" ":" suite ] | "finally" ":" suite ) .
+with_stmt = "with" with_item { "," with_item } ":" [ TYPE_COMMENT ] suite .
+with_item = test [ "as" expr ] .
+except_clause = "except" [ test [ "as" ID ] ] .
+suite = simple_stmt | NEWLINE ID stmt { stmt } DEDENT .
+
+named_expr_test = test [ ":=" test ] .
+test = or_test [ "if" or_test "else" test ] | lamb_def .
+test_no_cond = or_test | lamb_def_no_cond .
+lamb_def = "lambda" [ var_args_list ] ":" test .
+lamb_def_no_cond = "lambda" [ var_args_list ] ":" test_no_cond .
+or_test = and_test { "or" and_test } .
+and_test = not_test { "and" not_test } .
+not_test = "not" not_test | comparison .
+comparison = expr { comp_op expr } .
+comp_op = "<" | ">" | "==" | ">=" | "<=" | "<>" | "!=" | "in" | "not" "in" | "is" | "is" "not" .
+star_expr = "*" expr .
+expr = xor_expr { "|" xor_expr } .
+xor_expr = and_expr { "^" and_expr } .
+and_expr = shift_expr { "&" shift_expr } .
+shift_expr = arith_expr { ( "<<" | ">>" ) arith_expr } .
+arith_expr = term { ( "+" | "-" ) term } .
+term = factor { ( "*" | "@" | "/" | "%" | "//" ) factor } .
+factor = ( "+" | "-" | "~" ) factor | power .
+power = [ AWAIT ] atom { trailer } [ "**" factor ] .
+atom = "(" [ yield_expr | test_list_comp ] ")" | "[" [ test_list_comp ] "]" | "{" [ dict_or_set_maker ] "}" | ID | NUM | STR { STR } | "..." | "None" | "True" | "False" .
+test_list_comp = ( named_expr_test | star_expr ) ( comp_for | { "," ( named_expr_test | star_expr ) } [ "," ] ) .
+trailer = "(" [ arg_list ] ")" | "[" subscript_list "]" | "." ID .
+subscript_list = subscript { "," subscript } [ "," ] .
+subscript = test | [ test ] ":" [ test ] [ ":" [ test ] ] .
+expr_list = ( expr | star_expr ) { "," ( expr | star_expr ) } [ "," ] .
+test_list = test { "," test } [ "," ] .
+dict_or_set_maker = ( ( ( test ":" test | "**" expr ) ( comp_for | { "," ( test ":" test | "**" expr ) } [ "," ] ) ) | ( ( test | star_expr ) ( comp_for | { "," ( test | star_expr ) } [ "," ] ) ) ) .
+classdef = "class" ID [ "(" [ arg_list ] ")" ] ":" suite .
+arg_list = argument { "," argument } [ "," ] .
+argument = test [ comp_for ] | test ":=" test | test "=" test | "**" test | "*" test .
+
+comp_iter = comp_for | comp_if .
+comp_for = [ ASYNC ] "for" expr_list "in" or_test [ comp_iter ] .
+comp_if = "if" test_no_cond [ comp_iter ] .
+encoding_decl = ID .
+yield_expr = "yield" [ "from" test | test_list_star_expr ] .
+
+func_body_suite = simple_stmt | NEWLINE [ TYPE_COMMENT NEWLINE ] ID stmt { stmt } DEDENT .
+
+lexical_literal = ID | STR | NUM | REGEXP .
