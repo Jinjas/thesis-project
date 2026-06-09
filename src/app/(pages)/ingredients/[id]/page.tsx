@@ -219,7 +219,7 @@ export default function IngredientDetailPage() {
           </div>
         </div>
         {!extraDataHidden && (
-          <div className="flex text-gray-500 whitespace-pre text-sm px-2">
+          <div className="flex text-gray-500 whitespace-pre font-mono text-xs px-2">
             {extraData}
           </div>
         )}
