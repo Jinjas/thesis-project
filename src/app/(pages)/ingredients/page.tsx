@@ -37,7 +37,7 @@ export default function IngredientsPage() {
         onChange={(e) => setName(e.target.value)}
         onSubmit={() => {
           if (name.trim() !== "") {
-            const id = addIngredient(name, type);
+            const id = addIngredient(name.trim().replace(" ", "_"), type);
             setName("");
             setTemporaryType("");
             //redirect(`/ingredients/${id}`);

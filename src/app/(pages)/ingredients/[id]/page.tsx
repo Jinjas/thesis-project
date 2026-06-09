@@ -147,7 +147,12 @@ export default function IngredientDetailPage() {
 
   async function handleSaveIngredient() {
     if (!ingredient) return;
-    await updateIngredient(ingredient.id, name, type, characteristics);
+    await updateIngredient(
+      ingredient.id,
+      name.trim().replace(" ", "_"),
+      type,
+      characteristics,
+    );
 
     for (const cocktail of cocktails) {
       if (
@@ -158,7 +163,7 @@ export default function IngredientDetailPage() {
           cocktail.id,
           ingredient.name,
           ingredient.type,
-          name,
+          name.trim().replace(" ", "_"),
           type,
           cocktail.ingredients[ingredient.id],
         );
