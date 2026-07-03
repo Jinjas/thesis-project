@@ -12,9 +12,7 @@ export default function BaseLayout({ children, withViz, selectedId }: Props) {
     <div className="flex h-screen w-full cursor-default">
       <Sidebar />
 
-      <main className="flex flex-1">{children}</main>
-
-      {withViz && <VizBar selectedId={selectedId || ""} />}
+      <main className="flex flex-1 min-w-0 overflow-hidden">{children}</main>
     </div>
   );
 }

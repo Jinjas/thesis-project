@@ -11,7 +11,10 @@ type Props = {
 
 export default function VisSidebar({ pdfUrl, scale, onScaleChange }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const [dimensions, setDimensions] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
 
   function zoomIn() {
     onScaleChange(Math.min(scale + 0.2, 4));
@@ -21,43 +24,38 @@ export default function VisSidebar({ pdfUrl, scale, onScaleChange }: Props) {
     onScaleChange(Math.max(scale - 0.2, 0.2));
   }
 
-  useEffect(() => {
-    if (!containerRef.current || !imgRef.current) return;
-    if (scale !== 1) return;
-
+  const fitToContainer = (iw: number, ih: number) => {
+    if (!containerRef.current) return;
     const cw = containerRef.current.clientWidth;
-    const ch = containerRef.current.clientHeight;
-    const iw = imgRef.current.naturalWidth;
-    const ih = imgRef.current.naturalHeight;
+    const ch = containerRef.current.clientHeight || 150;
 
-    if (!iw || !ih) return;
+    if (!cw || !ch) return;
 
     const scaleX = cw / iw;
     const scaleY = ch / ih;
 
     onScaleChange(Math.min(scaleX, scaleY));
-  }, [pdfUrl, onScaleChange, scale]);
+  };
 
-  function handleImageLoad() {
-    if (!containerRef.current || !imgRef.current) return;
+  function handleImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
+    const img = e.currentTarget;
+    const iw = img.naturalWidth;
+    const ih = img.naturalHeight;
 
-    const cw = containerRef.current.clientWidth;
-    const ch = containerRef.current.clientHeight;
-    const iw = imgRef.current.naturalWidth;
-    const ih = imgRef.current.naturalHeight;
-
-    if (!iw || !ih) return;
-
-    const scaleX = cw / iw;
-    const scaleY = ch / ih;
-
-    onScaleChange(Math.min(scaleX, scaleY));
+    setDimensions({ width: iw, height: ih });
+    fitToContainer(iw, ih);
   }
 
+  useEffect(() => {
+    if (dimensions) {
+      fitToContainer(dimensions.width, dimensions.height);
+    }
+  }, [pdfUrl]);
+
   return (
-    <aside className="flex flex-col h-full">
-      <div className="flex items-center justify-between pb-3">
-        <h2 className="text-lg font-bold">Visualization Bar</h2>
+    <aside className="flex flex-col max-h-full min-w-0">
+      <div className="flex items-center justify-between pb-1 flex-shrink-0">
+        <h2 className="text-lg font-bold">Visualization</h2>
 
         <div className="flex gap-1">
           <button
@@ -77,35 +75,39 @@ export default function VisSidebar({ pdfUrl, scale, onScaleChange }: Props) {
       </div>
 
       {!pdfUrl ? (
-        <p className="text-sm text-gray-500">No visualization available</p>
+        <p className="text-xs text-gray-500">No visualization available</p>
       ) : (
-        <div ref={containerRef} className="flex-1 overflow-auto">
-          <div
-            style={{
-              width: imgRef.current
-                ? imgRef.current.naturalWidth * scale
-                : "auto",
-              height: imgRef.current
-                ? imgRef.current.naturalHeight * scale
-                : "auto",
-            }}
-          >
+        <div
+          ref={containerRef}
+          className="w-full max-h-[140px] overflow-auto min-w-0 border border-gray-200 rounded bg-white"
+          style={{ scrollbarGutter: "stable" }}
+        >
+          {dimensions && (
+            <div
+              style={{
+                width: dimensions.width * scale,
+                height: dimensions.height * scale,
+              }}
+              className="max-w-none flex items-center justify-center m-auto"
+            >
+              <img
+                src={pdfUrl}
+                onLoad={handleImageLoad}
+                className="w-full h-full object-contain block"
+                draggable={false}
+                alt="PDF Preview"
+              />
+            </div>
+          )}
+
+          {!dimensions && (
             <img
-              ref={imgRef}
               src={pdfUrl}
               onLoad={handleImageLoad}
-              style={{
-                width: imgRef.current
-                  ? imgRef.current.naturalWidth * scale
-                  : "auto",
-                height: imgRef.current
-                  ? imgRef.current.naturalHeight * scale
-                  : "auto",
-              }}
-              draggable={false}
-              className="block select-none"
+              className="hidden"
+              alt=""
             />
-          </div>
+          )}
         </div>
       )}
     </aside>

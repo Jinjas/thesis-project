@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import BaseLayout from "./baseLayout";
 import { ActionButton, TableData } from "../components";
+import { VizBar } from "../components";
 
 type Props = {
   title: string;
@@ -49,7 +50,7 @@ export default function DoubleSectionLayout({
 
     case "cocktailDetail":
       children2 = (
-        <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
+        <section className="flex-1 p-9 pb-6 bg-white text-black flex flex-col w-full h-screen ">
           <div className={` ${selectedButton ? "pb-4" : "pb-2"}`}>
             <div className="border-b-2 border-gray-500 flex justify-center w-full">
               <ActionButton
@@ -66,15 +67,17 @@ export default function DoubleSectionLayout({
               />
             </div>
           </div>
-
-          {selectedButton ? <TableData type={1} /> : <TableData type={4} />}
+          <section className="flex overflow-y-auto h-full justify-between gap-4 flex-col">
+            {selectedButton ? <TableData type={1} /> : <TableData type={4} />}
+            <VizBar selectedId={id || ""} />
+          </section>
         </section>
       );
       break;
 
     case "cocktailList":
       children2 = (
-        <section className="flex-1 p-9 bg-white text-black flex flex-col w-full h-screen ">
+        <section className="flex-1 p-9 pb-6 bg-white text-black flex flex-col w-full h-screen ">
           <div className={` ${selectedButton ? "pb-4" : "pb-2"}`}>
             <div className="border-b-2 border-gray-500 flex justify-center w-full">
               <ActionButton
@@ -91,12 +94,14 @@ export default function DoubleSectionLayout({
               />
             </div>
           </div>
-
-          {selectedButton ? (
-            <TableData type={3} selectedId={id} />
-          ) : (
-            <TableData type={5} selectedId={id} />
-          )}
+          <section className="flex overflow-y-auto h-full justify-between gap-4 flex-col">
+            {selectedButton ? (
+              <TableData type={3} selectedId={id} />
+            ) : (
+              <TableData type={5} selectedId={id} />
+            )}
+            <VizBar selectedId={id || ""} />
+          </section>
         </section>
       );
       break;
@@ -115,16 +120,19 @@ export default function DoubleSectionLayout({
 
   return (
     <BaseLayout withViz={withViz} selectedId={id}>
-      <section
-        className={`flex-1 p-9 bg-gray-100 text-black flex flex-col w-full ${extraFlag != "" ? extraFlag : "h-screen"}`}
-      >
-        <h1 className="text-2xl font-bold min-h-[32px] overflow-hidden text-ellipsis">
-          {title}
-        </h1>
-        {children}
-      </section>
+      <div className="grid h-full w-full grid-cols-2">
+        <section
+          className={`min-w-0 overflow-hidden p-9 bg-gray-100 text-black flex flex-col w-full ${extraFlag != "" ? extraFlag : "h-screen"}`}
+        >
+          <h1 className="text-2xl font-bold min-h-[32px] overflow-hidden text-ellipsis">
+            {title}
+          </h1>
+          {children}
+        </section>
 
-      {children2}
+        <div className="min-w-0 overflow-hidden">{children2}</div>
+      </div>
+      {/* {withViz && <VizBar selectedId={id || ""} />} */}
     </BaseLayout>
   );
 }
