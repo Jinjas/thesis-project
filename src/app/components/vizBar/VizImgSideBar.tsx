@@ -55,7 +55,7 @@ export default function VisSidebar({ pdfUrl, scale, onScaleChange }: Props) {
   return (
     <aside className="flex flex-col max-h-full min-w-0">
       <div className="flex items-center justify-between pb-1 flex-shrink-0">
-        <h2 className="text-lg font-bold">Visualization</h2>
+        <h2 className="text-lg font-bold">Cocktail Identity Card</h2>
 
         <div className="flex gap-1">
           <button
