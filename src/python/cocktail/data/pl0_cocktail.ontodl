@@ -8,10 +8,12 @@ concepts {
 }
 
 individuals {
+    CSS,
     PL0_Cocktail,
     PL0_CocktailDevelopment,
     PL0_CocktailCocktail,
     PL0
+%    JavaScript
 }
 
 relations {
@@ -20,10 +22,14 @@ relations {
 }
 
 triples {
+    CSS = iof => Language;
+%    JavaScript = iof => Language;
     PL0 = iof => Language;
     PL0_Cocktail = requires => PL0_CocktailDevelopment;
     PL0_CocktailDevelopment = uses => PL0_CocktailCocktail;
     PL0 = pof => PL0_CocktailCocktail;
+%    JavaScript = pof => PL0_CocktailCocktail;
+    CSS = pof => PL0_CocktailCocktail;
 }
 
 .

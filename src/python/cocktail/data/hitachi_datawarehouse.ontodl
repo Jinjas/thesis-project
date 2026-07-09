@@ -8,6 +8,7 @@ concepts {
 }
 
 individuals {
+    CSS,
 	Hitachi_DataWarehouse,
 	Hitachi_DataWarehouseDevelopment,
 	Hitachi_DataWarehouseCocktail,
@@ -26,6 +27,7 @@ relations {
 }
 
 triples {
+    CSS = iof => Language;
     TailwindCSS = iof => Framework;
 	JSON = iof => Language;
 	PySpark = iof => Library;
@@ -42,6 +44,7 @@ triples {
 	TSQL = pof => Hitachi_DataWarehouseCocktail;
 	VisualStudio = pof => Hitachi_DataWarehouseCocktail;
     TailwindCSS = pof => Hitachi_DataWarehouseCocktail;
+    CSS = pof => Hitachi_DataWarehouseCocktail;
 }
 
 .

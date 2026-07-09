@@ -14,10 +14,10 @@ individuals {
     Frontend_BasicCocktail,
     ESLint,
     JavaScript,
-    TypeScript,
     SQL,
     NextJS,
-    TailwindCSS
+    TailwindCSS,
+    TypeScript
 %    TensorFlow
 %    ReactJS
 }
