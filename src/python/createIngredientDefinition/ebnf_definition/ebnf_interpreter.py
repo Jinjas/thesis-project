@@ -217,7 +217,7 @@ def describe_block_action(nodes: Iterable[Node]) -> str:
         if len(node_list) == 1 and node_list[0].kind == "name":
             return f"then {names[0]} becomes a subgoal"
         if len(names) == 1:
-            return f"then {pluralize(names[0])} become subgoals"
+            return f"then {names[0]} becomes a subgoal"
         joined = ", ".join(names[:-1]) + f" and {names[-1]}"
         return f"then {joined} become subgoals"
 
