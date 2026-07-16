@@ -70,7 +70,7 @@ export default function IngredientDetailPage() {
     {
       value: "from_dts_definition",
       label: "From DTS Definition",
-      cond: ["Library"],
+      cond: ["Library", "Framework"],
       process: async (content: string) => {
         const result = await createIngredientDefinition(
           name,
