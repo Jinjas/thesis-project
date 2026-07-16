@@ -4,6 +4,8 @@ import re
 from tree_sitter import Language, Parser
 import tree_sitter_typescript as ts_types
 
+#  python normalizeRaw.py ..\librariesDefs\react.d.ts
+
 TS_LANGUAGE = Language(ts_types.language_typescript())
 parser = Parser(TS_LANGUAGE)
 
