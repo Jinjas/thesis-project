@@ -30,13 +30,15 @@ def main():
         else:
             raise ValueError(f"Unsupported file type: {fileType}")
     elif input_type == "Framework":
-        if fileType == "json":
+        if fileType in {"dts", "txt"}:
+            ontodl = interpret_library(grammar_text, name, input_type)
+        elif fileType == "json":
             raise ValueError(f"Not implemented file type: {fileType}")
         else:
             raise ValueError(f"Unsupported file type: {fileType}")
     elif input_type == "Library":
         if fileType in {"dts", "txt"}:
-            ontodl = interpret_library(grammar_text, name)
+            ontodl = interpret_library(grammar_text, name, input_type)
         else:
             raise ValueError(f"Unsupported file type: {fileType}")
     else:

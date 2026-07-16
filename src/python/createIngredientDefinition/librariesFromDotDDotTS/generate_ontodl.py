@@ -94,7 +94,7 @@ def split_declarations(declarations: list[Declaration]) -> tuple[list[Declaratio
     return entities, features
 
 
-def build_ontodl(library_name: str, declarations: list[Declaration]) -> str:
+def build_ontodl(library_name: str, declarations: list[Declaration], input_type: str) -> str:
     entities, features = split_declarations(declarations)
 
     entity_productions = [build_production_name(item.kind, item.name) for item in entities]
@@ -135,7 +135,7 @@ def build_ontodl(library_name: str, declarations: list[Declaration]) -> str:
             "    Model =has=> Production;",
             "    Section =groups=> Production;",
             "",
-            f"    {library_name} =iof=> Library;",
+            f"    {library_name} =iof=> {input_type};",
             f"    {library_name}_model =iof=> Model;",
             f"    {library_name} =has=> {library_name}_model;",
             f"    {library_name}_model =has=> {library_name}_sec1, {library_name}_sec2;",
@@ -182,11 +182,11 @@ def library_name_from_input(name: str) -> str:
     return pascalize(name)
 
 
-def interpret_library(grammar_text: str, name: str) -> str:
+def interpret_library(grammar_text: str, name: str, input_type: str) -> str:
     normalized_text = clean_dts_text(grammar_text, f"{name}.d.ts")
     declarations = extract_declarations(normalized_text)
     library_name = library_name_from_input(name)
-    return build_ontodl(library_name, declarations)
+    return build_ontodl(library_name, declarations, input_type)
 
 
 def main() -> None:
@@ -194,8 +194,9 @@ def main() -> None:
 
     grammar_text = input_data["grammar_text"]
     name = input_data["name"]
+    input_type = input_data["input_type"]
 
-    ontodl = interpret_library(grammar_text, name)
+    ontodl = interpret_library(grammar_text, name, input_type)
 
     print(json.dumps({
         "ontodl": ontodl
