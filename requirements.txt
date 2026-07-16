@@ -1,3 +1,5 @@
 lark
 graphviz
 matplotlib
+tree-sitter 
+tree-sitter-typescript

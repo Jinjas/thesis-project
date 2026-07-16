@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const name = validateName(data.name);
     const inputType = validateIngredientType(data.input_type);
     const fileType = validateName(data.fileType);
-    const grammarText = validateTextField(data.grammar_text, 120_000);
+    const grammarText = validateTextField(data.grammar_text, 500_000);
 
     if (!name || !inputType || !fileType || !grammarText) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });

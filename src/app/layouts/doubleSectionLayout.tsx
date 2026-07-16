@@ -122,7 +122,7 @@ export default function DoubleSectionLayout({
     <BaseLayout withViz={withViz} selectedId={id}>
       <div className="grid h-full w-full grid-cols-2">
         <section
-          className={`min-w-0 overflow-hidden p-9 bg-gray-100 text-black flex flex-col w-full ${extraFlag != "" ? extraFlag : "h-screen"}`}
+          className={`min-w-0 p-9 bg-gray-100 text-black flex flex-col w-full ${extraFlag != "" ? extraFlag : "h-screen overflow-hidden"}`}
         >
           <h1 className="text-2xl font-bold min-h-[32px] overflow-hidden text-ellipsis">
             {title}

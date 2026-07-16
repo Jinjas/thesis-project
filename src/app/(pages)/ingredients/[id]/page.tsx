@@ -67,6 +67,20 @@ export default function IngredientDetailPage() {
         return result;
       },
     },
+    {
+      value: "from_dts_definition",
+      label: "From DTS Definition",
+      cond: ["Library"],
+      process: async (content: string) => {
+        const result = await createIngredientDefinition(
+          name,
+          type,
+          "dts",
+          content,
+        );
+        return result;
+      },
+    },
   ];
 
   async function handleFeatureImport(content: string, feature: string) {

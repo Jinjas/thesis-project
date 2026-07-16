@@ -7,6 +7,7 @@ import re
 sys.path.insert(0, str(Path(__file__).parent))
 
 from ebnf_definition.ebnf_interpreter import interpret_grammar
+from librariesFromDotDDotTS.generate_ontodl import interpret_library
 
 
 def main():
@@ -34,8 +35,8 @@ def main():
         else:
             raise ValueError(f"Unsupported file type: {fileType}")
     elif input_type == "Library":
-        if fileType == "json":
-            raise ValueError(f"Not implemented file type: {fileType}")
+        if fileType in {"dts", "txt"}:
+            ontodl = interpret_library(grammar_text, name)
         else:
             raise ValueError(f"Unsupported file type: {fileType}")
     else:
