@@ -12,6 +12,7 @@ export async function setIngredientCode(
     section: string;
     rows: string[][];
   }[];
+  number_of_productions: number;
 }> {
   const scriptPath = path.join(
     process.cwd(),
@@ -34,11 +35,13 @@ export async function setIngredientCode(
       section: string;
       rows: string[][];
     }[];
+    number_of_productions: number;
   }>(scriptPath, input);
 
   return {
     onto: parsed.onto,
     extraData: parsed.extraData,
     table: parsed.table,
+    number_of_productions: parsed.number_of_productions,
   };
 }

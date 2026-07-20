@@ -1,10 +1,10 @@
 Ontology cognitive_model_Tornado
 
-attributes { condition : string , action : string , strength : float , title : string }
+attributes { condition : string , action : string , probability : float , title : string }
 
 concepts {
     Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-    Production [ condition , action , strength ]
+    Production [ condition , action , probability ]
 }
 
 relationships { has , groups }
@@ -80,117 +80,117 @@ triples {
     program_production2 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.054
     ];
     program_production3 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production4 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production5 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production6 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production7 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production8 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production9 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production10 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production11 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production12 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production13 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production14 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production15 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production16 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production17 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production18 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production19 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production20 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production21 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production22 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production23 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
     program_production24 =iof=> Production[
         condition = "If a program is a subgoal" ,
         action = "the program block is..." ,
-        strength = 1.0
+        probability = 0.043
     ];
 }
 .

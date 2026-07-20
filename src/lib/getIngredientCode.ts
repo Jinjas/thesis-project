@@ -13,6 +13,7 @@ export async function getIngredientCode(
     title?: string;
     rows: string[][];
   }[];
+  number_of_productions: number;
 }> {
   const scriptPath = path.join(
     process.cwd(),
@@ -36,6 +37,7 @@ export async function getIngredientCode(
       title?: string;
       rows: string[][];
     }[];
+    number_of_productions: number;
   }>(scriptPath, input);
 
   return {
@@ -43,5 +45,6 @@ export async function getIngredientCode(
     updatedCharacteristics: parsed.updatedCharacteristics,
     updatedExtraData: parsed.updatedExtraData,
     table: parsed.table,
+    number_of_productions: parsed.number_of_productions,
   };
 }
