@@ -106,17 +106,29 @@ export default function TableData({ type, selectedId }: Props) {
                     }));
                   }}
                   label={
-                    extraDataHidden[ing.id] ? (
-                      <div className="flex gap-1 justify-between">
-                        <h2 className="text-md font-bold">{ing.name}</h2>
-                        <ChevronUp size={16} className="mt-1" />
+                    <div className="grid grid-cols-[1.5fr_3fr_auto] gap-4 items-center w-full">
+                      <h2 className="text-md text-left font-bold truncate">
+                        {ing.name}
+                      </h2>
+
+                      <div className=" min-w-[60px] ">
+                        <h3 className="text-sm text-left text-gray-500">
+                          H=
+                          {
+                            ing.table.findLast((row) => row.title === "Total")
+                              ?.rows[0][3]
+                          }
+                        </h3>
                       </div>
-                    ) : (
-                      <div className="flex gap-1 justify-between">
-                        <h2 className="text-md font-bold">{ing.name}</h2>
-                        <ChevronDown size={16} className="mt-1" />
+
+                      <div className="justify-self-end">
+                        {extraDataHidden[ing.id] ? (
+                          <ChevronUp size={16} />
+                        ) : (
+                          <ChevronDown size={16} />
+                        )}
                       </div>
-                    )
+                    </div>
                   }
                   variant="expand2"
                 />
@@ -157,17 +169,29 @@ export default function TableData({ type, selectedId }: Props) {
                     }));
                   }}
                   label={
-                    extraDataHidden[ing.id] ? (
-                      <div className="flex gap-1 justify-between">
-                        <h2 className="text-md font-bold">{ing.name}</h2>
-                        <ChevronUp size={16} className="mt-1" />
+                    <div className="grid grid-cols-[1.5fr_3fr_auto] gap-4 items-center w-full">
+                      <h2 className="text-md text-left font-bold truncate">
+                        {ing.name}
+                      </h2>
+
+                      <div className=" min-w-[60px] ">
+                        <h3 className="text-sm text-left text-gray-500">
+                          H=
+                          {
+                            ing.table.findLast((row) => row.title === "Total")
+                              ?.rows[0][3]
+                          }
+                        </h3>
                       </div>
-                    ) : (
-                      <div className="flex gap-1 justify-between">
-                        <h2 className="text-md font-bold">{ing.name}</h2>
-                        <ChevronDown size={16} className="mt-1" />
+
+                      <div className="justify-self-end">
+                        {extraDataHidden[ing.id] ? (
+                          <ChevronUp size={16} />
+                        ) : (
+                          <ChevronDown size={16} />
+                        )}
                       </div>
-                    )
+                    </div>
                   }
                   variant="expand2"
                 />
