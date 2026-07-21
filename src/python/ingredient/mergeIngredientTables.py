@@ -46,7 +46,7 @@ def safe_entropy(probability: float) -> float:
     return -(probability * log2(probability) + (1 - probability) * log2(1 - probability))
 
 
-def mergeProductions(ingredient_names: list[str]) -> dict:
+def build_cocktail_table(ingredient_names: list[str]):
     merged_sections: dict[str, dict[str, object]] = {}
     section_order: list[str] = []
     total_ingredients = len(ingredient_names)
@@ -77,7 +77,7 @@ def mergeProductions(ingredient_names: list[str]) -> dict:
             production_name = match.group(1)
             productions[production_name] = parse_attributes(match.group(2))
 
-        ordered_sections = [*sections, *[section for section in section_groups if section not in sections]]
+        ordered_sections = [*sections, *[s for s in section_groups if s not in sections]]
 
         for section_name in ordered_sections:
             section_title = sections.get(section_name, default_section_title(section_name))
@@ -87,7 +87,6 @@ def mergeProductions(ingredient_names: list[str]) -> dict:
                 section_entry = {
                     "section": section_name,
                     "title": section_title,
-                    "rows": [],
                     "registry": {},
                 }
                 merged_sections[section_title] = section_entry
@@ -101,7 +100,7 @@ def mergeProductions(ingredient_names: list[str]) -> dict:
                     continue
 
                 key = "|".join([attrs.get("condition", ""), attrs.get("action", "")])
-                probability = float(attrs.get("probability", 0))/total_ingredients if total_ingredients else 0.0
+                probability = float(attrs.get("probability", 0)) / total_ingredients if total_ingredients else 0.0
 
                 if key not in registry:
                     registry[key] = {
@@ -110,15 +109,16 @@ def mergeProductions(ingredient_names: list[str]) -> dict:
                         "probability": probability,
                     }
                 else:
-                    registry[key]["probability"] = float(registry[key]["probability"]) + probability
+                    registry[key]["probability"] += probability
 
+    table_list: list[dict] = []
     total_probability = 0.0
     total_entropy = 0.0
-    global_counter = 1 
+    global_counter = 1
 
     for section_title in section_order:
         section_entry = merged_sections[section_title]
-        registry = section_entry["registry"]
+        registry: dict = section_entry["registry"]
         rows: list[list[str]] = []
 
         for row_data in registry.values():
@@ -129,35 +129,19 @@ def mergeProductions(ingredient_names: list[str]) -> dict:
 
             rows.append(
                 [
-                    str(global_counter),  
+                    str(global_counter),
                     str(row_data["condition"]),
                     str(row_data["action"]),
                     str(round(entropy, 3)),
                 ]
             )
-            global_counter += 1  
+            global_counter += 1
 
-        section_entry["rows"] = rows
-        section_entry.pop("registry", None)
-
-    return {
-        "sections": merged_sections,
-        "section_order": section_order,
-        "total_probability": total_probability,
-        "total_entropy": total_entropy,
-    }
-
-
-def buildTable(productions: dict):
-    table_list = []
-
-    for section_name in productions["section_order"]:
-        info = productions["sections"][section_name]
         table_list.append(
             {
-                "section": info["section"],
-                "title": info.get("title", default_section_title(info["section"])),
-                "rows": info.get("rows", []),
+                "section": section_entry["section"],
+                "title": section_entry["title"],
+                "rows": rows,
             }
         )
 
@@ -166,7 +150,14 @@ def buildTable(productions: dict):
             {
                 "section": "Total",
                 "title": "Total",
-                "rows": [[round(productions["total_probability"], 3), "", "Entropy", round(productions["total_entropy"], 3)]],
+                "rows": [
+                    [
+                        round(total_probability, 3),
+                        "",
+                        "Entropy",
+                        round(total_entropy, 3),
+                    ]
+                ],
             }
         )
 
@@ -175,18 +166,14 @@ def buildTable(productions: dict):
 
 def main():
     input_data = json.loads(sys.stdin.read() or "{}")
-
     ingredient_names = input_data.get("ingredient_names", [])
 
     if not isinstance(ingredient_names, list):
         raise ValueError("ingredient_names must be a list")
 
-    productions = mergeProductions([str(name) for name in ingredient_names])
-    table_list = buildTable(productions)
+    table_list = build_cocktail_table([str(name) for name in ingredient_names])
 
-    print(json.dumps({
-        "table": table_list,
-    }))
+    print(json.dumps({"table": table_list}))
 
 
 if __name__ == "__main__":
