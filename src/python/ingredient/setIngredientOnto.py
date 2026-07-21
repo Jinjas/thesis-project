@@ -200,7 +200,8 @@ def build_table_from_new_code(new_code: str) -> dict[str, dict[str, object]]:
         table["total"] = {
             "title": "Total",
             "rows": [
-                [round(total_prob, 3), "", "Entropy", round(total_entropy, 3)],
+                ["", "", "Entropy", round(total_entropy, 3)],
+                ["", "", "Probability", round(total_prob, 3)],
             ],
         }
     return table

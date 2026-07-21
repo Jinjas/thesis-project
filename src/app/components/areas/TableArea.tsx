@@ -44,7 +44,7 @@ export default function SectionTable({ data }: Props) {
                       key={k}
                       className={`px-2 py-1 border border-r-0  border-b-0 ${k == 0 || k == 3 ? "text-center" : "text-left"}`}
                     >
-                      {k === 0 || k === 3
+                      {k === 3
                         ? cell === "--" || cell === "NaN"
                           ? cell
                           : parseFloat(Number(cell).toFixed(3))

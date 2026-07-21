@@ -132,7 +132,7 @@ def build_cocktail_table(ingredient_names: list[str]):
                     str(global_counter),
                     str(row_data["condition"]),
                     str(row_data["action"]),
-                    str(round(entropy, 3)),
+                    str(entropy),
                 ]
             )
             global_counter += 1
@@ -152,10 +152,16 @@ def build_cocktail_table(ingredient_names: list[str]):
                 "title": "Total",
                 "rows": [
                     [
-                        round(total_probability, 3),
+                        "",
                         "",
                         "Entropy",
                         round(total_entropy, 3),
+                    ],
+                    [
+                        "",
+                        "",
+                        "Probability",
+                        round(total_probability, 3),
                     ]
                 ],
             }

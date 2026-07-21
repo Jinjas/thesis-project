@@ -162,7 +162,8 @@ def build_table_from_ontology(content: str):
         sections["total"] = {
             "title": "Total",
             "rows": [
-                [round(total_prob, 3), "", "Entropy", round(total_entropy, 3)],
+                ["", "", "Entropy", round(total_entropy, 3)],
+                ["", "", "Probability", round(total_prob, 3)],
             ],
         }
     return  number_of_productions, sections
@@ -219,7 +220,7 @@ def getOntology(ingredient_name: str, ingredient_type: str):
     data_path.write_text(content, encoding="utf-8")
     append_name_to_names_file(ingredient_name)
     table = {section_name: {"title": "Production rules", "rows": []},
-             "Total": {"title": "Total", "rows": [["", "", "Entropy", 0.0]]}}
+             "Total": {"title": "Total", "rows": [["", "", "Entropy", 0.0], ["", "", "Probability", 0.0]]}}
     return content, characteristics, extra_data, table, 0
 
 
