@@ -29,7 +29,6 @@ export type Ingredient = {
   extraData: string;
   code: string;
   table: TableDict[];
-  numberOfProductions: number;
 };
 
 export type ParamMap = {

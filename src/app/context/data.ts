@@ -10,7 +10,6 @@ export const INGREDIENTS: Ingredient[] = [
     extraData: "",
     code: "",
     table: [],
-    numberOfProductions: 0,
   },
   {
     id: "ingredient-javascript",
@@ -20,7 +19,6 @@ export const INGREDIENTS: Ingredient[] = [
     extraData: "",
     code: "",
     table: [],
-    numberOfProductions: 0,
   },
   {
     id: "ingredient-reactjs",
@@ -30,7 +28,6 @@ export const INGREDIENTS: Ingredient[] = [
     extraData: "",
     code: "",
     table: [],
-    numberOfProductions: 0,
   },
   {
     id: "ingredient-nextjs",
@@ -40,7 +37,6 @@ export const INGREDIENTS: Ingredient[] = [
     extraData: "",
     code: "",
     table: [],
-    numberOfProductions: 0,
   },
   {
     id: "ingredient-tailwindcss",
@@ -50,7 +46,6 @@ export const INGREDIENTS: Ingredient[] = [
     extraData: "",
     code: "",
     table: [],
-    numberOfProductions: 0,
   },
   {
     id: "ingredient-vite",
@@ -60,7 +55,6 @@ export const INGREDIENTS: Ingredient[] = [
     extraData: "",
     code: "",
     table: [],
-    numberOfProductions: 0,
   },
   {
     id: "ingredient-sql",
@@ -70,6 +64,5 @@ export const INGREDIENTS: Ingredient[] = [
     extraData: "",
     code: "",
     table: [],
-    numberOfProductions: 0,
   },
 ];
