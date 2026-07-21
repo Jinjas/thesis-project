@@ -32,7 +32,7 @@ class ProductionSpec:
     name: str
     condition: str
     action: str
-    probability: float = 0.0
+    probability: float = 0.001
 
 
 class GrammarTransformer(Transformer):
@@ -240,12 +240,12 @@ def describe_block_action(nodes: Iterable[Node]) -> str:
     return "then the block is written"
 
 
-def build_production(spec: ProductionSpec) -> str:
+def build_production(spec: ProductionSpec, total_productions: int) -> str:
     return (
         f"{spec.name} =iof => Production[\n"
         f"        condition = \"{escape_text(spec.condition)}\" ,\n"
         f"        action = \"{escape_text(spec.action)}\" ,\n"
-        f"        probability = {spec.probability:.1f}\n"
+        f"        probability = {1/total_productions}\n"
         f"    ];"
     )
 
@@ -307,8 +307,9 @@ def build_ontology(name: str, input_type: str, productions: list[ProductionSpec]
         section_prod_list = ",\n        ".join(p.name for p in section_prods)
         editable_triples.append(f"    {section_name} =[ groups =>\n        {section_prod_list}\n    ];")
     
+    total_productions = len(productions)
     for production in productions:
-        editable_triples.append(f"    {build_production(production)}")
+        editable_triples.append(f"    {build_production(production,total_productions)}")
 
     individuals_str = ",\n    ".join(individuals)
 
@@ -339,7 +340,7 @@ def build_scene_from_rules(name: str, input_type: str, rules: list[RuleSpec]) ->
             "goal_p",
             "If all subgoals were met",
             "then the goal is met",
-            1.0,
+            0.0,
         )
     )
     productions.append(
