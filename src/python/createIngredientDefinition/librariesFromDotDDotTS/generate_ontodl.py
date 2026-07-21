@@ -113,11 +113,11 @@ def build_ontodl(library_name: str, declarations: list[Declaration], input_type:
         [
             f"Ontology cognitive_model_{library_name}",
             "",
-            "attributes { condition : string , action : string , strength : float , title : string }",
+            "attributes { condition : string , action : string , probability : float , title : string }",
             "",
             "concepts {",
             "    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,",
-            "    Production [ condition , action , strength ]",
+            "    Production [ condition , action , probability ]",
             "}",
             "",
             "relationships { has , groups }",
@@ -162,7 +162,7 @@ def build_ontodl(library_name: str, declarations: list[Declaration], input_type:
                 f"    {build_production_name(declaration.kind, declaration.name)} =iof => Production[",
                 f"        condition = \"{build_condition(declaration.kind, declaration.name)}\" ,",
                 f"        action = \"{build_action(declaration.kind, declaration.name)}\" ,",
-                "        strength = 1.0",
+                "        probability = 1.0",
                 "    ];",
             ]
         )
