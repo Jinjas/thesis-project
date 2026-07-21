@@ -135,7 +135,6 @@ def build_ontodl(library_name: str, declarations: list[Declaration], input_type:
             "    Ingredient =has=> Model;",
             "    Model =has=> Production;",
             "    Section =groups=> Production;",
-            "",
             f"    {library_name} =iof=> {input_type};",
             f"    {library_name}_model =iof=> Model;",
             f"    {library_name} =has=> {library_name}_model;",
@@ -163,7 +162,7 @@ def build_ontodl(library_name: str, declarations: list[Declaration], input_type:
                 f"    {build_production_name(declaration.kind, declaration.name)} =iof => Production[",
                 f"        condition = \"{build_condition(declaration.kind, declaration.name)}\" ,",
                 f"        action = \"{build_action(declaration.kind, declaration.name)}\" ,",
-                f"        probability = {1/total_productions:.3f}",
+                f"        probability = {1/total_productions}",
                 "    ];",
             ]
         )
