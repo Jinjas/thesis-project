@@ -32,8 +32,7 @@ class ProductionSpec:
     name: str
     condition: str
     action: str
-    probability: float = 1.0
-    probability: float = 1.0
+    probability: float = 0.0
 
 
 class GrammarTransformer(Transformer):
@@ -348,7 +347,7 @@ def build_scene_from_rules(name: str, input_type: str, rules: list[RuleSpec]) ->
             "subgoal_p",
             "If a subgoal is already written",
             "then the subgoal is met",
-            1.1,
+            0.0,
         )
     )
     productions.append(
@@ -356,7 +355,7 @@ def build_scene_from_rules(name: str, input_type: str, rules: list[RuleSpec]) ->
             "source_p",
             "If new source text must be written",
             "then the grammar construct becomes a subgoal",
-            1.1,
+            0.0,
         )
     )
 
