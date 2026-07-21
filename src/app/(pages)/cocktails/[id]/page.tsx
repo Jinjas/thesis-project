@@ -1,17 +1,20 @@
 "use client";
 
 import {
-  Sidebar,
   IngredientSearch,
   IngredientGroups,
-  VizBar,
   ImportButton,
   ExportButton,
 } from "../../../components";
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../../context/AppContext";
-import { useMemo, useState, useEffect } from "react";
-import { Ingredient, INGREDIENT_TYPES, IngredientType } from "../../../types";
+import { useEffect, useState } from "react";
+import {
+  Ingredient,
+  INGREDIENT_TYPES,
+  IngredientType,
+  TableDict,
+} from "../../../types";
 import Link from "next/link";
 import { DoubleSectionLayout } from "../../../layouts";
 import { buildCocktailTable } from "../../../context/utils/cocktailTable";
@@ -41,6 +44,7 @@ export default function CocktailDetailPage() {
   const router = useRouter();
 
   const [name, setName] = useState("");
+  const [exportTable, setExportTable] = useState<TableDict[]>([]);
 
   useEffect(() => {
     if (cocktail) {
@@ -54,6 +58,26 @@ export default function CocktailDetailPage() {
     }
   }, [cocktail, router]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadTable() {
+      if (!cocktail) {
+        setExportTable([]);
+        return;
+      }
+
+      const table = await buildCocktailTable(cocktail, ingredients);
+      if (!cancelled) setExportTable(table);
+    }
+
+    void loadTable();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [cocktail, ingredients]);
+
   if (!cocktail) return <p className="p-6">Redirecting…</p>;
 
   function isIngredient(ing: Ingredient | undefined): ing is Ingredient {
@@ -63,11 +87,6 @@ export default function CocktailDetailPage() {
   const ingredientsFull = Object.entries(cocktail.ingredients)
     .map(([id]) => ingredients.find((i) => i.id === id))
     .filter(isIngredient);
-
-  const exportTable = useMemo(
-    () => buildCocktailTable(cocktail, ingredients),
-    [cocktail, ingredients],
-  );
 
   const groupedIngredients = INGREDIENT_TYPES.reduce(
     (acc, type) => {

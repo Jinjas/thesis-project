@@ -18,7 +18,7 @@ export default function SectionTable({ data }: Props) {
       <table className="w-full text-sm table-fixed">
         <thead className="sticky top-0 bg-gray-300 z-10">
           <tr>
-            <th className="w-[8%] px-2 py-1 text-center border-l">N.</th>
+            <th className="w-[8%] px-2 py-1 text-center border-l">Num</th>
             <th className="w-[42%] px-2 py-1 text-center">Condition</th>
             <th className="w-[42%] px-2 py-1 text-center">Action</th>
             <th className="w-[8%] px-1 py-1 text-center">Entr.</th>
