@@ -32,7 +32,7 @@ class ProductionSpec:
     name: str
     condition: str
     action: str
-    strength: float = 1.0
+    probability: float = 1.0
     probability: float = 1.0
 
 
@@ -246,7 +246,7 @@ def build_production(spec: ProductionSpec) -> str:
         f"{spec.name} =iof => Production[\n"
         f"        condition = \"{escape_text(spec.condition)}\" ,\n"
         f"        action = \"{escape_text(spec.action)}\" ,\n"
-        f"        strength = {spec.strength:.1f}\n"
+        f"        probability = {spec.probability:.1f}\n"
         f"    ];"
     )
 
@@ -315,10 +315,10 @@ def build_ontology(name: str, input_type: str, productions: list[ProductionSpec]
 
     return (
         f"Ontology cognitive_model_{name}\n\n"
-        "attributes { condition : string , action : string , strength : float , title : string }\n\n"
+        "attributes { condition : string , action : string , probability : float , title : string }\n\n"
         "concepts {\n"
         "    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,\n"
-        "    Production [ condition , action , strength ]\n"
+        "    Production [ condition , action , probability ]\n"
         "}\n\n"
         "relationships { has , groups }\n\n"
         "individuals {\n"

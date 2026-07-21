@@ -1,10 +1,10 @@
 Ontology cognitive_model_Git
 
-attributes { condition : string , action : string , strength : float , title : string }
+attributes { condition : string , action : string , probability : float , title : string }
 
 concepts {
     Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-    Production [ condition , action , strength ]
+    Production [ condition , action , probability ]
 }
 
 relationships { has , groups }
@@ -113,196 +113,196 @@ triples {
     goal_p =iof => Production[
         condition = "If all subgoals were met" ,
         action = "then the goal is met" ,
-        strength = 1.0
+        probability = 0.026
     ];
     subgoal_p =iof => Production[
         condition = "If a subgoal is already written" ,
         action = "then the subgoal is met" ,
-        strength = 1.1
+        probability = 0.027
     ];
     source_p =iof => Production[
         condition = "If new source text must be written" ,
         action = "then the grammar construct becomes a subgoal" ,
-        strength = 1.1
+        probability = 0.027
     ];
 
     stylesheet_p =iof => Production[
         condition = "If stylesheet is a subgoal" ,
         action = "then the stylesheet subgoal is met and command declarations become subgoals" ,
-        strength = 1.0
+        probability = 0.03
     ];
 
     declaration_repository_command_p =iof => Production[
         condition = "If declaration is a subgoal and repository_command is needed" ,
         action = "then the declaration subgoal is met and repository_command becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.026
     ];
     declaration_history_command_p =iof => Production[
         condition = "If declaration is a subgoal and history_command is needed" ,
         action = "then the declaration subgoal is met and history_command becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.026
     ];
     declaration_branch_command_p =iof => Production[
         condition = "If declaration is a subgoal and branch_command is needed" ,
         action = "then the declaration subgoal is met and branch_command becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
     declaration_remote_command_p =iof => Production[
         condition = "If declaration is a subgoal and remote_command is needed" ,
         action = "then the declaration subgoal is met and remote_command becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
     declaration_recovery_command_p =iof => Production[
         condition = "If declaration is a subgoal and recovery_command is needed" ,
         action = "then the declaration subgoal is met and recovery_command becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
     declaration_snapshot_command_p =iof => Production[
         condition = "If declaration is a subgoal and snapshot_command is needed" ,
         action = "then the declaration subgoal is met and snapshot_command becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
 
     repository_command_clone_p =iof => Production[
         condition = "If repository_command is a subgoal and clone is needed" ,
         action = "then the repository_command subgoal is met and clone_with_url becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
     repository_command_init_p =iof => Production[
         condition = "If repository_command is a subgoal and init is needed" ,
         action = "then the repository_command subgoal is met and 'git init' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     repository_command_status_p =iof => Production[
         condition = "If repository_command is a subgoal and status is needed" ,
         action = "then the repository_command subgoal is met and 'git status' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     repository_command_add_p =iof => Production[
         condition = "If repository_command is a subgoal and add is needed" ,
         action = "then the repository_command subgoal is met and 'git add' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     repository_command_rm_p =iof => Production[
         condition = "If repository_command is a subgoal and rm is needed" ,
         action = "then the repository_command subgoal is met and 'git rm' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
 
     history_command_commit_p =iof => Production[
         condition = "If history_command is a subgoal and commit is needed" ,
         action = "then the history_command subgoal is met and commit_with_message becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
     history_command_log_p =iof => Production[
         condition = "If history_command is a subgoal and log is needed" ,
         action = "then the history_command subgoal is met and 'git log' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     history_command_diff_p =iof => Production[
         condition = "If history_command is a subgoal and diff is needed" ,
         action = "then the history_command subgoal is met and 'git diff' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
 
     branch_command_branch_p =iof => Production[
         condition = "If branch_command is a subgoal and branch is needed" ,
         action = "then the branch_command subgoal is met and branch_with_name becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
     branch_command_switch_p =iof => Production[
         condition = "If branch_command is a subgoal and switch is needed" ,
         action = "then the branch_command subgoal is met and switch_with_target becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
     branch_command_checkout_p =iof => Production[
         condition = "If branch_command is a subgoal and checkout is needed" ,
         action = "then the branch_command subgoal is met and checkout_with_target becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
     branch_command_merge_p =iof => Production[
         condition = "If branch_command is a subgoal and merge is needed" ,
         action = "then the branch_command subgoal is met and 'git merge' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     branch_command_rebase_p =iof => Production[
         condition = "If branch_command is a subgoal and rebase is needed" ,
         action = "then the branch_command subgoal is met and 'git rebase' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
 
     remote_command_fetch_p =iof => Production[
         condition = "If remote_command is a subgoal and fetch is needed" ,
         action = "then the remote_command subgoal is met and 'git fetch' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     remote_command_pull_p =iof => Production[
         condition = "If remote_command is a subgoal and pull is needed" ,
         action = "then the remote_command subgoal is met and pull_with_remote_branch becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
     remote_command_push_p =iof => Production[
         condition = "If remote_command is a subgoal and push is needed" ,
         action = "then the remote_command subgoal is met and push_with_remote_branch becomes a subgoal" ,
-        strength = 1.0
+        probability = 0.027
     ];
 
     recovery_command_restore_p =iof => Production[
         condition = "If recovery_command is a subgoal and restore is needed" ,
         action = "then the recovery_command subgoal is met and 'git restore' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     recovery_command_reset_p =iof => Production[
         condition = "If recovery_command is a subgoal and reset is needed" ,
         action = "then the recovery_command subgoal is met and 'git reset' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
 
     snapshot_command_stash_p =iof => Production[
         condition = "If snapshot_command is a subgoal and stash is needed" ,
         action = "then the snapshot_command subgoal is met and 'git stash' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     snapshot_command_tag_p =iof => Production[
         condition = "If snapshot_command is a subgoal and tag is needed" ,
         action = "then the snapshot_command subgoal is met and 'git tag' is written" ,
-        strength = 1.0
+        probability = 0.027
     ];
 
     clone_with_url_p =iof => Production[
         condition = "If clone_with_url is a subgoal" ,
         action = "then the clone_with_url subgoal is met and 'git clone' and URL are written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     commit_with_message_p =iof => Production[
         condition = "If commit_with_message is a subgoal" ,
         action = "then the commit_with_message subgoal is met and 'git commit -m' and STR are written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     push_with_remote_branch_p =iof => Production[
         condition = "If push_with_remote_branch is a subgoal" ,
         action = "then the push_with_remote_branch subgoal is met and 'git push' and REMOTE and BRANCH are written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     pull_with_remote_branch_p =iof => Production[
         condition = "If pull_with_remote_branch is a subgoal" ,
         action = "then the pull_with_remote_branch subgoal is met and 'git pull' and REMOTE and BRANCH are written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     checkout_with_target_p =iof => Production[
         condition = "If checkout_with_target is a subgoal" ,
         action = "then the checkout_with_target subgoal is met and 'git checkout' and TARGET are written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     switch_with_target_p =iof => Production[
         condition = "If switch_with_target is a subgoal" ,
         action = "then the switch_with_target subgoal is met and 'git switch' and TARGET are written" ,
-        strength = 1.0
+        probability = 0.027
     ];
     branch_with_name_p =iof => Production[
         condition = "If branch_with_name is a subgoal" ,
         action = "then the branch_with_name subgoal is met and 'git branch' and BRANCH are written" ,
-        strength = 1.0
+        probability = 0.027
     ];
 }
 .
