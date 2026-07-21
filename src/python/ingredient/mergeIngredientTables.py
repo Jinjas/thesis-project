@@ -114,24 +114,28 @@ def mergeProductions(ingredient_names: list[str]) -> dict:
 
     total_probability = 0.0
     total_entropy = 0.0
+    global_counter = 1 
+
     for section_title in section_order:
         section_entry = merged_sections[section_title]
         registry = section_entry["registry"]
         rows: list[list[str]] = []
 
-        for index, row_data in enumerate(registry.values(), start=1):
-            
-            total_probability += float(row_data["probability"])
-            entropy = safe_entropy(float(row_data["probability"]))
+        for row_data in registry.values():
+            prob = float(row_data["probability"])
+            total_probability += prob
+            entropy = safe_entropy(prob)
             total_entropy += entropy
+
             rows.append(
                 [
-                    str(index),
+                    str(global_counter),  
                     str(row_data["condition"]),
                     str(row_data["action"]),
                     str(round(entropy, 3)),
                 ]
             )
+            global_counter += 1  
 
         section_entry["rows"] = rows
         section_entry.pop("registry", None)
