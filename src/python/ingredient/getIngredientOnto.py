@@ -1,4 +1,5 @@
 import json
+from math import log2
 import re
 import sys
 from pathlib import Path
@@ -104,7 +105,7 @@ def parse_attributes(raw_attributes: str) -> dict[str, str]:
     return attributes
 
 
-def build_table_from_ontology(content: str) -> dict[str, dict[str, object]]:
+def build_table_from_ontology(content: str):
     sections: dict[str, dict[str, object]] = {}
     section_groups: dict[str, list[str]] = {}
     production_attrs: dict[str, dict[str, str]] = {}
@@ -133,7 +134,10 @@ def build_table_from_ontology(content: str) -> dict[str, dict[str, object]]:
         production_attrs[production_name] = parse_attributes(match.group(2))
 
     prod_id = 1
-
+    total_entropy = 0.0
+    number_of_productions = 0
+    total_prob = 0.0
+    
     if section_groups:
         ordered_sections = [*sections, *[section for section in section_groups if section not in sections]]
         for section_name in ordered_sections:
@@ -142,15 +146,27 @@ def build_table_from_ontology(content: str) -> dict[str, dict[str, object]]:
                 if attrs is None:
                     continue
 
+                prob = float(attrs.get("probability", 0))
+                entropy = -(prob * log2(prob) + (1 - prob) * log2(1 - prob))
+                total_entropy += entropy
+                number_of_productions += 1
+                total_prob += prob
+
                 sections[section_name]["rows"].append([
                     str(prod_id),
                     attrs.get("condition", ""),
                     attrs.get("action", ""),
-                    attrs.get("strength", ""),
+                    entropy,
                 ])
                 prod_id += 1
-
-    return sections
+        sections["total"] = {
+            "title": "Total",
+            "rows": [
+                ["", "", "Entropy", round(total_entropy, 3)],
+                ["", "", "Probability", round(total_prob, 3)],
+            ],
+        }
+    return  number_of_productions, sections
 
 
 def getOntology(ingredient_name: str, ingredient_type: str):
@@ -159,20 +175,20 @@ def getOntology(ingredient_name: str, ingredient_type: str):
 
     if data_path.exists():
         content = data_path.read_text(encoding="utf-8")
-        table = build_table_from_ontology(content)
+        number_of_productions, table = build_table_from_ontology(content)
         characteristics, extra_data = split_triples_block(content)
         append_name_to_names_file(ingredient_name)
-        return content, characteristics, extra_data, table
+        return content, characteristics, extra_data, table, number_of_productions
 
     section_name = f"{ingredient_name}_specific_section"
     content = "\n".join([
         f"Ontology cognitive_model_{ingredient_name}",
         "",
-        "attributes { condition : string , action : string , strength : float , title : string }",
+        "attributes { condition : string , action : string , probability : float , title : string }",
         "",
         "concepts {",
         "    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,",
-        "    Production [ condition , action , strength ]",
+        "    Production [ condition , action , probability ]",
         "}",
         "",
         "relationships { has , groups }",
@@ -203,8 +219,9 @@ def getOntology(ingredient_name: str, ingredient_type: str):
     characteristics, extra_data = split_triples_block(content)
     data_path.write_text(content, encoding="utf-8")
     append_name_to_names_file(ingredient_name)
-    table = {section_name: {"title": "Production rules", "rows": []}}
-    return content, characteristics, extra_data, table
+    table = {section_name: {"title": "Production rules", "rows": []},
+             "Total": {"title": "Total", "rows": [["", "", "Entropy", 0.0], ["", "", "Probability", 0.0]]}}
+    return content, characteristics, extra_data, table, 0
 
 
 def main():
@@ -213,7 +230,7 @@ def main():
     ingredient_name = input_data["ingredient_name"]
     ingredient_type = input_data["ingredient_type"]
 
-    ingredient_data, characteristics, extra_data, table = getOntology(ingredient_name, ingredient_type)
+    ingredient_data, characteristics, extra_data, table, number_of_productions = getOntology(ingredient_name, ingredient_type)
 
     table_list = [
         {
@@ -229,6 +246,7 @@ def main():
         "updatedCharacteristics": characteristics,
         "updatedExtraData": extra_data,
         "table": table_list,
+        "number_of_productions": number_of_productions,
     }))
 
 

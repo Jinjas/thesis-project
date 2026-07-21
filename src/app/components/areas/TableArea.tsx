@@ -21,7 +21,7 @@ export default function SectionTable({ data }: Props) {
             <th className="w-[8%] px-2 py-1 text-center border-l">Num</th>
             <th className="w-[42%] px-2 py-1 text-center">Condition</th>
             <th className="w-[42%] px-2 py-1 text-center">Action</th>
-            <th className="w-[8%] px-1 py-1 text-center">C.S.</th>
+            <th className="w-[8%] px-1 py-1 text-center">Entr.</th>
           </tr>
         </thead>
 
@@ -44,7 +44,11 @@ export default function SectionTable({ data }: Props) {
                       key={k}
                       className={`px-2 py-1 border border-r-0  border-b-0 ${k == 0 || k == 3 ? "text-center" : "text-left"}`}
                     >
-                      {cell}
+                      {k === 3
+                        ? cell === "--" || cell === "NaN"
+                          ? cell
+                          : parseFloat(Number(cell).toFixed(3))
+                        : cell}
                     </td>
                   ))}
                 </tr>

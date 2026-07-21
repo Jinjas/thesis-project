@@ -12,7 +12,7 @@ import SectionTable from "./TableArea";
 import { Ingredient, TableDict } from "../../types";
 import { buildCocktailTable } from "../../context/utils/cocktailTable";
 import { ActionButton } from "../button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 type Props = {
@@ -42,7 +42,38 @@ export default function TableData({ type, selectedId }: Props) {
   const [extraDataHidden, setExtraDataHidden] = useState<{
     [key: string]: boolean;
   }>({});
+  const [cocktailTable, setCocktailTable] = useState<TableDict[] | undefined>();
   let data: TableDict[] | undefined = [];
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadTable() {
+      if (type !== 1 && type !== 3) {
+        setCocktailTable(undefined);
+        return;
+      }
+
+      const cocktail =
+        type === 1
+          ? cocktails.find((c) => c.id === id)
+          : cocktails.find((c) => c.id === selectedId);
+
+      if (!cocktail) {
+        setCocktailTable(undefined);
+        return;
+      }
+
+      const table = await buildCocktailTable(cocktail, ingredients);
+      if (!cancelled) setCocktailTable(table);
+    }
+
+    void loadTable();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [type, id, selectedId, cocktails, ingredients]);
 
   switch (type) {
     //individual detail pages
@@ -55,11 +86,7 @@ export default function TableData({ type, selectedId }: Props) {
     }
 
     case 1: {
-      const cocktail = cocktails.find((c) => c.id === id);
-      if (!cocktail) break;
-      data = buildCocktailTable(cocktail, ingredients);
-
-      if (data) return <SectionTable data={data} />;
+      if (cocktailTable) return <SectionTable data={cocktailTable} />;
       break;
     }
 
@@ -74,11 +101,7 @@ export default function TableData({ type, selectedId }: Props) {
     }
 
     case 3: {
-      const cocktail = cocktails.find((c) => c.id === selectedId);
-      if (!cocktail) break;
-      data = buildCocktailTable(cocktail, ingredients);
-
-      if (data) return <SectionTable data={data} />;
+      if (cocktailTable) return <SectionTable data={cocktailTable} />;
       break;
     }
 
@@ -106,17 +129,29 @@ export default function TableData({ type, selectedId }: Props) {
                     }));
                   }}
                   label={
-                    extraDataHidden[ing.id] ? (
-                      <div className="flex gap-1 justify-between">
-                        <h2 className="text-md font-bold">{ing.name}</h2>
-                        <ChevronUp size={16} className="mt-1" />
+                    <div className="grid grid-cols-[1.5fr_3fr_auto] gap-4 items-center w-full">
+                      <h2 className="text-md text-left font-bold truncate">
+                        {ing.name}
+                      </h2>
+
+                      <div className=" min-w-[60px] ">
+                        <h3 className="text-sm text-left text-gray-500">
+                          H=
+                          {
+                            ing.table.findLast((row) => row.title === "Total")
+                              ?.rows[0][3]
+                          }
+                        </h3>
                       </div>
-                    ) : (
-                      <div className="flex gap-1 justify-between">
-                        <h2 className="text-md font-bold">{ing.name}</h2>
-                        <ChevronDown size={16} className="mt-1" />
+
+                      <div className="justify-self-end">
+                        {extraDataHidden[ing.id] ? (
+                          <ChevronUp size={16} />
+                        ) : (
+                          <ChevronDown size={16} />
+                        )}
                       </div>
-                    )
+                    </div>
                   }
                   variant="expand2"
                 />
@@ -157,17 +192,29 @@ export default function TableData({ type, selectedId }: Props) {
                     }));
                   }}
                   label={
-                    extraDataHidden[ing.id] ? (
-                      <div className="flex gap-1 justify-between">
-                        <h2 className="text-md font-bold">{ing.name}</h2>
-                        <ChevronUp size={16} className="mt-1" />
+                    <div className="grid grid-cols-[1.5fr_3fr_auto] gap-4 items-center w-full">
+                      <h2 className="text-md text-left font-bold truncate">
+                        {ing.name}
+                      </h2>
+
+                      <div className=" min-w-[60px] ">
+                        <h3 className="text-sm text-left text-gray-500">
+                          H=
+                          {
+                            ing.table.findLast((row) => row.title === "Total")
+                              ?.rows[0][3]
+                          }
+                        </h3>
                       </div>
-                    ) : (
-                      <div className="flex gap-1 justify-between">
-                        <h2 className="text-md font-bold">{ing.name}</h2>
-                        <ChevronDown size={16} className="mt-1" />
+
+                      <div className="justify-self-end">
+                        {extraDataHidden[ing.id] ? (
+                          <ChevronUp size={16} />
+                        ) : (
+                          <ChevronDown size={16} />
+                        )}
                       </div>
-                    )
+                    </div>
                   }
                   variant="expand2"
                 />

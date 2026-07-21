@@ -3,6 +3,8 @@ import re
 import sys
 from pathlib import Path
 
+from math import log2
+
 
 base_dir = Path(__file__).resolve().parent
 data_dir = base_dir / "data"
@@ -173,7 +175,8 @@ def build_table_from_new_code(new_code: str) -> dict[str, dict[str, object]]:
         production_attrs[production_name] = parse_attributes(match.group(2))
 
     prod_id = 1
-
+    total_entropy = 0.0
+    total_prob = 0.0
     if section_groups:
         ordered_sections = [*table, *[section for section in section_groups if section not in table]]
         for section_name in ordered_sections:
@@ -182,14 +185,25 @@ def build_table_from_new_code(new_code: str) -> dict[str, dict[str, object]]:
                 if attrs is None:
                     continue
 
+                prob = float(attrs.get("probability", 0))
+                entropy = -(prob * log2(prob) + (1 - prob) * log2(1 - prob))
+                total_entropy += entropy
+                total_prob += prob
+
                 table[section_name]["rows"].append([
                     str(prod_id),
                     attrs.get("condition", ""),
                     attrs.get("action", ""),
-                    attrs.get("strength", ""),
+                    entropy,
                 ])
                 prod_id += 1
-
+        table["total"] = {
+            "title": "Total",
+            "rows": [
+                ["", "", "Entropy", round(total_entropy, 3)],
+                ["", "", "Probability", round(total_prob, 3)],
+            ],
+        }
     return table
 
 
@@ -203,7 +217,7 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
     table = build_table_from_new_code(normalized_triples_body)
     section_names = extract_section_names(normalized_triples_body, ingredient_name)
     production_names = extract_production_names(normalized_triples_body)
-
+    number_of_productions = len(production_names)
     individuals = unique_in_order([
         ingredient_name,
         f"{ingredient_name}_model",
@@ -223,11 +237,11 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
     lines = [
         f"Ontology cognitive_model_{ingredient_name}",
         "",
-        "attributes { condition : string , action : string , strength : float , title : string }",
+        "attributes { condition : string , action : string , probability : float , title : string }",
         "",
         "concepts {",
         "    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,",
-        "    Production [ condition , action , strength ]",
+        "    Production [ condition , action , probability ]",
         "}",
         "",
         "relationships { has , groups }",
@@ -261,7 +275,7 @@ def setOntology(ingredient_name: str, ingredient_type: str, newCode: str):
     newOnto = "\n".join(lines)
     data_path.write_text(newOnto, encoding="utf-8")
     append_name_to_names_file(ingredient_name)
-    return newOnto, extraData, table
+    return newOnto, extraData, table, number_of_productions
 
 
 def main():
@@ -271,7 +285,7 @@ def main():
     ingredient_type = input_data["ingredient_type"]
     newCode = input_data["newCode"]
 
-    newOnto, extraData, table = setOntology(ingredient_name, ingredient_type, newCode)
+    newOnto, extraData, table, number_of_productions = setOntology(ingredient_name, ingredient_type, newCode)
 
     table_list = [
         {
@@ -286,6 +300,7 @@ def main():
         "onto": newOnto,
         "extraData": extraData,
         "table": table_list,
+        "number_of_productions": number_of_productions,
     }))
 
 

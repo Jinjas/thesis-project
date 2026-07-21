@@ -1,10 +1,10 @@
 Ontology cognitive_model
 
-attributes { condition : string , action : string , strength : float , title : string }
+attributes { condition : string , action : string , probability : float , title : string }
 
 concepts {
 	Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-	Production [ condition , action , strength ]
+	Production [ condition , action , probability ]
 }
 
 relationships { has , groups }

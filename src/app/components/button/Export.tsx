@@ -38,7 +38,7 @@ function escapeDelimitedValue(value: string, delimiter: string) {
 }
 
 function tableToCsv(table: TableDict[]) {
-  const rows: string[][] = [["Num", "Condition", "Action", "C.S."]];
+  const rows: string[][] = [["Num", "Condition", "Action", "Entropy"]];
 
   for (const section of table) {
     const sectionLabel = section.title ?? section.section;
@@ -62,7 +62,7 @@ function tableToCsv(table: TableDict[]) {
 }
 
 function tableToExcel(table: TableDict[]) {
-  const rows: string[][] = [["Num", "Condition", "Action", "C.S."]];
+  const rows: string[][] = [["Num", "Condition", "Action", "Entropy"]];
 
   for (const section of table) {
     const sectionLabel = section.title ?? section.section;

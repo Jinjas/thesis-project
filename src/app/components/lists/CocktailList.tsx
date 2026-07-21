@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
-import { Cocktail, Ingredient } from "../../types";
+import { Cocktail, Ingredient, TableDict } from "../../types";
 import ConfirmationBox from "../popups/ConfirmationBox";
 import ExportButton from "../button/Export";
 import { buildCocktailTable } from "../../context/utils/cocktailTable";
@@ -36,17 +36,37 @@ export default function CocktailList({
 }: Props) {
   const [isRemovePopupOpen, setIsRemovePopupOpen] = useState(false);
   const [pendingCocktail, setPendingCocktail] = useState<Cocktail | null>(null);
-
-  const exportTables = useMemo(
-    () =>
-      Object.fromEntries(
-        cocktails.map((cocktail) => [
-          cocktail.id,
-          buildCocktailTable(cocktail, ingredients),
-        ]),
-      ),
-    [cocktails, ingredients],
+  const [exportTables, setExportTables] = useState<Record<string, TableDict[]>>(
+    {},
   );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadTables() {
+      if (cocktails.length === 0) {
+        setExportTables({});
+        return;
+      }
+
+      const entries = await Promise.all(
+        cocktails.map(async (cocktail) => {
+          const table = await buildCocktailTable(cocktail, ingredients);
+          return [cocktail.id, table] as const;
+        }),
+      );
+
+      if (!cancelled) {
+        setExportTables(Object.fromEntries(entries));
+      }
+    }
+
+    void loadTables();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [cocktails, ingredients]);
 
   useEffect(() => {
     if (!selectedId && cocktails.length > 0) {

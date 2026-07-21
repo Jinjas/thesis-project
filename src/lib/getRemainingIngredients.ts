@@ -12,6 +12,7 @@ type RemainingIngredient = {
     title?: string;
     rows: string[][];
   }[];
+  number_of_productions: number;
 };
 
 export async function getRemainingIngredients(

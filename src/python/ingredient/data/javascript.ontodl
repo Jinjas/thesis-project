@@ -1,10 +1,10 @@
 Ontology cognitive_model_JavaScript
 
-attributes { condition : string , action : string , strength : float , title : string }
+attributes { condition : string , action : string , probability : float , title : string }
 
 concepts {
     Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
-    Production [ condition , action , strength ]
+    Production [ condition , action , probability ]
 }
 
 relationships { has , groups }
@@ -45,17 +45,17 @@ triples {
     goal_p =iof=> Production[
         condition = "If all subgoals were met" ,
         action = "then the goal is met" ,
-        strength = 1.0
+        probability = 0.30
     ];
     subgoal_p =iof=> Production[
         condition = "If a subgoal is already written" ,
         action = "then the subgoal is met" ,
-        strength = 1.1
+        probability = 0.33
     ];
     source_p =iof=> Production[
         condition = "If new source text must be written" ,
         action = "then the grammar construct becomes a subgoal" ,
-        strength = 1.1
+        probability = 0.37
     ];
 }
 

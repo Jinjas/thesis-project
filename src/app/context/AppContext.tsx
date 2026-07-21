@@ -107,6 +107,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
               updatedCharacteristics: string;
               updatedExtraData: string;
               table: { section: string; title?: string; rows: string[][] }[];
+              number_of_productions: number;
             }) => ({
               id: createId("ingredient", ingredient.name),
               name: ingredient.name,
@@ -125,6 +126,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
               extraData: ingredient.updatedExtraData,
               code: ingredient.updatedCode,
               table: ingredient.table,
+              numberOfProductions: ingredient.number_of_productions,
             }),
           );
 
@@ -160,6 +162,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           extraData: data.updatedExtraData,
           code: data.updatedCode,
           table: data.table,
+          numberOfProductions: data.number_of_productions,
         },
       ]);
     } catch (err) {
@@ -189,6 +192,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 extraData: data.extraData,
                 code: data.onto,
                 table: data.table,
+                numberOfProductions: data.number_of_productions,
               }
             : ing,
         ),

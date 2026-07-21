@@ -59,6 +59,34 @@ export async function removeIngredient(data: any) {
   if (!res.ok) throw new Error("Removing ingredient failed");
 }
 
+const inFlightRequests = new Map<string, Promise<{ table: unknown[] }>>();
+
+export async function getCocktailTable(data: { ingredientNames: string[] }) {
+  const cacheKey = [...data.ingredientNames].sort().join("|");
+
+  const ongoingRequest = inFlightRequests.get(cacheKey);
+  if (ongoingRequest) return ongoingRequest;
+
+  const request = (async () => {
+    try {
+      const res = await fetch("/api/ingredientCode/getCocktailTable", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch cocktail table");
+      return await res.json();
+    } finally {
+      inFlightRequests.delete(cacheKey);
+    }
+  })();
+
+  inFlightRequests.set(cacheKey, request);
+
+  return request;
+}
+
 export async function createIngredientDefinition(
   name: string,
   input_type: string,

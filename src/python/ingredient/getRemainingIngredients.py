@@ -39,7 +39,7 @@ def get_remaining(existing_names: list[str]):
         if normalized in existing_lookup or normalized in seen:
             continue
 
-        updated_code, updated_characteristics, updated_extra_data, table = getOntology(
+        updated_code, updated_characteristics, updated_extra_data, table, number_of_productions = getOntology(
             ingredient_name,
             "UNDEFINED",
         )
@@ -60,6 +60,7 @@ def get_remaining(existing_names: list[str]):
                     }
                     for section, info in table.items()
                 ],
+                "number_of_productions": number_of_productions,
             }
         )
         seen.add(normalized)
