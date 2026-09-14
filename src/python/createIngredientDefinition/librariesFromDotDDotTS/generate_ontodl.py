@@ -72,6 +72,8 @@ def build_production_name(kind: str, name: str) -> str:
 def build_condition(kind: str, name: str) -> str:
     if kind == "function":
         return f"If there is a need for the feature {name}"
+    if kind == "interface":
+        return f"If an interface entity named {name} is needed"
     return f"If a {kind} entity named {name} is needed"
 
 
