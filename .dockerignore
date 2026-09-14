@@ -1,7 +1,10 @@
 node_modules
 .next
+.venv
 .git
 .gitignore
+backups
+ssl
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
