@@ -5,6 +5,8 @@ node_modules
 .gitignore
 backups
 ssl
+src/python/cocktail/data
+src/python/ingredient/data
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
