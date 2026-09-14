@@ -1,0 +1,173 @@
+stylesheet = { declaration } .
+
+declaration = compilation_unit .
+compilation_unit = [ package_declaration ] { import_declaration } { type_declaration } .
+type_declaration = class_declaration | interface_declaration | enum_declaration
+    | record_declaration | annotation_type_declaration | ";" .
+
+package_declaration = [ annotations ] "package" qualified_name [ ";" ] .
+import_declaration = "import" [ "static" ] qualified_name [ "." "*" ] [ ";" ] .
+qualified_name = ID { "." ID } .
+
+annotations = annotation { annotation } .
+annotation = "@" qualified_name [ "(" [ annotation_args ] ")" ] .
+annotation_args = annotation_arg { "," annotation_arg } .
+annotation_arg = [ ID "=" ] expression .
+
+type_declaration_modifier = annotation | "public" | "protected" | "private" | "abstract" | "static"
+    | "final" | "sealed" | "non-sealed" | "strictfp" .
+field_modifier = annotation | "public" | "protected" | "private" | "static" | "final"
+    | "transient" | "volatile" .
+method_modifier = annotation | "public" | "protected" | "private" | "abstract" | "static"
+    | "final" | "synchronized" | "native" | "strictfp" .
+constructor_modifier = annotation | "public" | "protected" | "private" .
+
+class_declaration = { type_declaration_modifier } "class" ID [ type_params ] [ "extends" type_expr ]
+    [ "implements" com_sep_type_exprs ] class_body .
+class_body = "{" { class_member_declaration | ";" } "}" .
+class_member_declaration = field_declaration | method_declaration | constructor_declaration
+    | class_declaration | interface_declaration | enum_declaration | record_declaration
+    | annotation_type_declaration | static_initializer | instance_initializer .
+static_initializer = "static" compound_statement .
+instance_initializer = compound_statement .
+field_declaration = { field_modifier } type_expr variable_declarators [ ";" ] .
+variable_declarators = variable_declarator { "," variable_declarator } .
+variable_declarator = ID { "[]" } [ "=" variable_initializer ] .
+variable_initializer = expression | array_initializer .
+array_initializer = "{" [ variable_initializer { "," variable_initializer } ] [ "," ] "}" .
+method_declaration = { method_modifier } [ type_params ] result ID formal_params
+    [ "throws" com_sep_type_exprs ] ( ";" | compound_statement ) .
+result = type_expr | "void" .
+constructor_declaration = { constructor_modifier } [ type_params ] ID formal_params
+    [ "throws" com_sep_type_exprs ] compound_statement .
+
+interface_declaration = { type_declaration_modifier } "interface" ID [ type_params ]
+    [ "extends" com_sep_type_exprs ] interface_body .
+interface_body = "{" { interface_member_declaration | ";" } "}" .
+interface_member_declaration = constant_declaration | interface_method_declaration
+    | class_declaration | interface_declaration | enum_declaration | record_declaration
+    | annotation_type_declaration .
+constant_declaration = { field_modifier } type_expr variable_declarators [ ";" ] .
+interface_method_declaration = { method_modifier | "default" } [ type_params ] result ID formal_params
+    [ "throws" com_sep_type_exprs ] ( ";" | compound_statement ) .
+
+enum_declaration = { type_declaration_modifier } "enum" ID [ "implements" com_sep_type_exprs ]
+    "{" [ com_sep_enum_constants ] [ "," ] [ ";" { class_member_declaration } ] "}" .
+com_sep_enum_constants = enum_constant { "," enum_constant } .
+enum_constant = { annotation } ID [ arguments ] [ class_body ] .
+
+record_declaration = { type_declaration_modifier } "record" ID [ type_params ] record_header
+    [ "implements" com_sep_type_exprs ] class_body .
+record_header = "(" [ com_sep_record_components ] ")" .
+com_sep_record_components = record_component { "," record_component } .
+record_component = { annotation } type_expr ID .
+
+annotation_type_declaration = { type_declaration_modifier } "@interface" ID
+    "{" { annotation_type_member_declaration | ";" } "}" .
+annotation_type_member_declaration = annotation_type_element_declaration | constant_declaration
+    | class_declaration | interface_declaration | enum_declaration | annotation_type_declaration .
+annotation_type_element_declaration = { method_modifier } type_expr ID "(" ")"
+    [ "default" element_value ] [ ";" ] .
+element_value = expression | annotation | array_initializer .
+
+compound_statement = "{" { statement } "}" .
+statement = compound_statement | if_statement | switch_statement | while_statement | do_while_statement
+    | for_statement | try_catch_finally_statement | synchronized_statement | assert_statement
+    | control_flow_statement | label_statement | local_variable_declaration_statement
+    | expression_statement | ";" .
+label_statement = ID ":" statement .
+local_variable_declaration_statement = local_variable_declaration [ ";" ] .
+local_variable_declaration = { annotation } [ "final" ] type_expr variable_declarators .
+expression_statement = statement_expression [ ";" ] .
+statement_expression = assignment_expr | pre_increment_expr | pre_decrement_expr
+    | post_increment_expr | post_decrement_expr | method_invocation | class_instance_creation_expr .
+assert_statement = "assert" expression [ ":" expression ] [ ";" ] .
+synchronized_statement = "synchronized" "(" expression ")" compound_statement .
+try_catch_finally_statement = "try" [ resource_specification ] compound_statement
+    { catch_clause } [ "finally" compound_statement ] .
+catch_clause = "catch" "(" catch_types ID ")" compound_statement .
+catch_types = type_expr { "|" type_expr } .
+resource_specification = "(" resource { ";" resource } [ ";" ] ")" .
+resource = { annotation } [ "final" ] type_expr ID "=" expression .
+control_flow_statement = "break" [ ID ] [ ";" ] | "continue" [ ID ] [ ";" ]
+    | "return" [ expression ] [ ";" ] | "throw" expression [ ";" ] .
+do_while_statement = "do" statement "while" "(" expression ")" [ ";" ] .
+while_statement = "while" "(" expression ")" statement .
+for_statement = "for" "(" ( basic_for_clause | enhanced_for_clause ) ")" statement .
+basic_for_clause = [ for_init ] ";" [ expression ] ";" [ for_update ] .
+for_init = local_variable_declaration | com_sep_statement_exprs .
+for_update = com_sep_statement_exprs .
+com_sep_statement_exprs = statement_expression { "," statement_expression } .
+enhanced_for_clause = { annotation } [ "final" ] type_expr ID ":" expression .
+switch_statement = "switch" "(" expression ")" "{" { switch_rule | switch_group } "}" .
+switch_rule = ( "case" case_labels | "default" ) "->" ( expression [ ";" ] | statement ) .
+switch_group = ( "case" case_labels | "default" ) ":" { statement } .
+case_labels = expression { "," expression } .
+if_statement = "if" "(" expression ")" statement [ "else" statement ] .
+
+expression = assignment_expr .
+assignment_expr = conditional_expr | left_hand_side ASSIGNMENT_SYMBOL assignment_expr .
+left_hand_side = qualified_name | field_access | array_access .
+conditional_expr = conditional_or_expr [ "?" expression ":" conditional_expr ] .
+conditional_or_expr = conditional_and_expr { "||" conditional_and_expr } .
+conditional_and_expr = inclusive_or_expr { "&&" inclusive_or_expr } .
+inclusive_or_expr = exclusive_or_expr { "|" exclusive_or_expr } .
+exclusive_or_expr = and_expr { "^" and_expr } .
+and_expr = equality_expr { "&" equality_expr } .
+equality_expr = relational_expr { ( "==" | "!=" ) relational_expr } .
+relational_expr = shift_expr { ( "<" | ">" | "<=" | ">=" ) shift_expr | "instanceof" type_expr } .
+shift_expr = additive_expr { ( "<<" | ">>" | ">>>" ) additive_expr } .
+additive_expr = multiplicative_expr { ( "+" | "-" ) multiplicative_expr } .
+multiplicative_expr = unary_expr { ( "*" | "/" | "%" ) unary_expr } .
+unary_expr = pre_increment_expr | pre_decrement_expr | "+" unary_expr | "-" unary_expr
+    | unary_expr_not_pm .
+unary_expr_not_pm = postfix_expr | "~" unary_expr | "!" unary_expr | cast_expr .
+cast_expr = "(" primitive_type ")" unary_expr | "(" reference_type ")" unary_expr_not_pm .
+postfix_expr = primary [ "++" | "--" ] .
+pre_increment_expr = "++" unary_expr .
+pre_decrement_expr = "--" unary_expr .
+post_increment_expr = postfix_expr "++" .
+post_decrement_expr = postfix_expr "--" .
+
+primary = lexical_literal | "this" | "super" | paren_enclosed_expr | class_instance_creation_expr
+    | array_creation_expr | method_invocation | field_access | array_access | method_reference
+    | lambda_expr | qualified_name .
+paren_enclosed_expr = "(" expression ")" .
+class_instance_creation_expr = "new" type_reference arguments [ class_body ] .
+array_creation_expr = "new" type_expr dim_exprs [ dims ] [ array_initializer ] .
+dim_exprs = dim_expr { dim_expr } .
+dim_expr = "[" expression "]" .
+dims = "[]" { "[]" } .
+arguments = "(" [ com_sep_exprs ] ")" .
+method_invocation = [ qualified_name "." ] ID arguments
+    | "this" "." ID arguments
+    | "super" "." ID arguments .
+field_access = primary "." ID | "super" "." ID .
+array_access = primary "[" expression "]" | qualified_name "[" expression "]" .
+method_reference = ( type_reference | primary | "super" ) "::" ID .
+lambda_expr = lambda_params "->" ( expression | compound_statement ) .
+lambda_params = ID | formal_params .
+com_sep_exprs = expression { "," expression } .
+
+type_expr = primitive_type { "[]" } | reference_type { "[]" } .
+reference_type = type_reference | type_variable .
+type_variable = ID .
+type_reference = qualified_name [ type_arguments ] .
+type_arguments = "<" com_sep_type_args ">" .
+com_sep_type_args = type_arg { "," type_arg } .
+type_arg = reference_type | wildcard_type .
+wildcard_type = "?" [ ( "extends" | "super" ) reference_type ] .
+primitive_type = "byte" | "short" | "int" | "long" | "float" | "double" | "char" | "boolean" .
+type_params = "<" com_sep_type_params ">" .
+com_sep_type_params = type_param { "," type_param } .
+type_param = ID [ "extends" type_bound ] .
+type_bound = type_expr { "&" type_expr } .
+com_sep_type_exprs = type_expr { "," type_expr } .
+
+formal_params = "(" [ formal_param_list ] ")" .
+formal_param_list = formal_param { "," formal_param } [ "," last_formal_param ]
+    | last_formal_param .
+formal_param = { annotation } [ "final" ] type_expr ID .
+last_formal_param = { annotation } [ "final" ] type_expr "..." ID .
+
+lexical_literal = ID | STR | NUM | "true" | "false" | "null" .

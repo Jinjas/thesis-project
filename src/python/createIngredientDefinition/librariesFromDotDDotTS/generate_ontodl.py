@@ -71,8 +71,8 @@ def build_production_name(kind: str, name: str) -> str:
 
 def build_condition(kind: str, name: str) -> str:
     if kind == "function":
-        return f"If there is a need for the React feature {name}"
-    return f"If a React {kind} entity named {name} is needed"
+        return f"If there is a need for the feature {name}"
+    return f"If a {kind} entity named {name} is needed"
 
 
 def build_action(kind: str, name: str) -> str:
