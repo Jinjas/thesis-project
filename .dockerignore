@@ -5,6 +5,8 @@ node_modules
 .gitignore
 backups
 ssl
+src/python/cocktail/data
+src/python/ingredient/data
 src/python/createIngredientDefinition/librariesDefs
 src/python/createIngredientDefinition/languageEBNFs
 npm-debug.log*
