@@ -1,0 +1,1813 @@
+Ontology cognitive_model_Java
+
+attributes { condition : string , action : string , probability : float , title : string }
+
+concepts {
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , probability ]
+}
+
+relationships { has , groups }
+
+individuals {
+    Java,
+    Java_model,
+    Java_sec1,
+    Java_sec2,
+    goal_p,
+    subgoal_p,
+    source_p,
+    stylesheet_p,
+    declaration_p,
+    compilation_unit_p,
+    type_declaration_class_declaration_p,
+    type_declaration_interface_declaration_p,
+    type_declaration_enum_declaration_p,
+    type_declaration_record_declaration_p,
+    type_declaration_annotation_type_declaration_p,
+    type_declaration_block6_p,
+    package_declaration_p,
+    import_declaration_p,
+    qualified_name_p,
+    annotations_p,
+    annotation_p,
+    annotation_args_p,
+    annotation_arg_p,
+    type_declaration_modifier_annotation_p,
+    type_declaration_modifier_public_p,
+    type_declaration_modifier_protected_p,
+    type_declaration_modifier_private_p,
+    type_declaration_modifier_abstract_p,
+    type_declaration_modifier_static_p,
+    type_declaration_modifier_final_p,
+    type_declaration_modifier_sealed_p,
+    type_declaration_modifier_non_sealed_p,
+    type_declaration_modifier_strictfp_p,
+    field_modifier_annotation_p,
+    field_modifier_public_p,
+    field_modifier_protected_p,
+    field_modifier_private_p,
+    field_modifier_static_p,
+    field_modifier_final_p,
+    field_modifier_transient_p,
+    field_modifier_volatile_p,
+    method_modifier_annotation_p,
+    method_modifier_public_p,
+    method_modifier_protected_p,
+    method_modifier_private_p,
+    method_modifier_abstract_p,
+    method_modifier_static_p,
+    method_modifier_final_p,
+    method_modifier_synchronized_p,
+    method_modifier_native_p,
+    method_modifier_strictfp_p,
+    constructor_modifier_annotation_p,
+    constructor_modifier_public_p,
+    constructor_modifier_protected_p,
+    constructor_modifier_private_p,
+    class_declaration_p,
+    class_body_p,
+    class_member_declaration_field_declaration_p,
+    class_member_declaration_method_declaration_p,
+    class_member_declaration_constructor_declaration_p,
+    class_member_declaration_class_declaration_p,
+    class_member_declaration_interface_declaration_p,
+    class_member_declaration_enum_declaration_p,
+    class_member_declaration_record_declaration_p,
+    class_member_declaration_annotation_type_declaration_p,
+    class_member_declaration_static_initializer_p,
+    class_member_declaration_instance_initializer_p,
+    static_initializer_p,
+    instance_initializer_p,
+    field_declaration_p,
+    variable_declarators_p,
+    variable_declarator_p,
+    variable_initializer_expression_p,
+    variable_initializer_array_initializer_p,
+    array_initializer_p,
+    method_declaration_p,
+    result_type_expr_p,
+    result_void_p,
+    constructor_declaration_p,
+    interface_declaration_p,
+    interface_body_p,
+    interface_member_declaration_constant_declaration_p,
+    interface_member_declaration_interface_method_declaration_p,
+    interface_member_declaration_class_declaration_p,
+    interface_member_declaration_interface_declaration_p,
+    interface_member_declaration_enum_declaration_p,
+    interface_member_declaration_record_declaration_p,
+    interface_member_declaration_annotation_type_declaration_p,
+    constant_declaration_p,
+    interface_method_declaration_p,
+    enum_declaration_p,
+    com_sep_enum_constants_p,
+    enum_constant_p,
+    record_declaration_p,
+    record_header_p,
+    com_sep_record_components_p,
+    record_component_p,
+    annotation_type_declaration_p,
+    annotation_type_member_declaration_annotation_type_element_declaration_p,
+    annotation_type_member_declaration_constant_declaration_p,
+    annotation_type_member_declaration_class_declaration_p,
+    annotation_type_member_declaration_interface_declaration_p,
+    annotation_type_member_declaration_enum_declaration_p,
+    annotation_type_member_declaration_annotation_type_declaration_p,
+    annotation_type_element_declaration_p,
+    element_value_expression_p,
+    element_value_annotation_p,
+    element_value_array_initializer_p,
+    compound_statement_p,
+    statement_compound_statement_p,
+    statement_if_statement_p,
+    statement_switch_statement_p,
+    statement_while_statement_p,
+    statement_do_while_statement_p,
+    statement_for_statement_p,
+    statement_try_catch_finally_statement_p,
+    statement_synchronized_statement_p,
+    statement_assert_statement_p,
+    statement_control_flow_statement_p,
+    statement_label_statement_p,
+    statement_local_variable_declaration_statement_p,
+    statement_expression_statement_p,
+    statement_block14_p,
+    label_statement_p,
+    local_variable_declaration_statement_p,
+    local_variable_declaration_p,
+    expression_statement_p,
+    statement_expression_assignment_expr_p,
+    statement_expression_pre_increment_expr_p,
+    statement_expression_pre_decrement_expr_p,
+    statement_expression_post_increment_expr_p,
+    statement_expression_post_decrement_expr_p,
+    statement_expression_method_invocation_p,
+    statement_expression_class_instance_creation_expr_p,
+    assert_statement_p,
+    synchronized_statement_p,
+    try_catch_finally_statement_p,
+    catch_clause_p,
+    catch_types_p,
+    resource_specification_p,
+    resource_p,
+    control_flow_statement_break_p,
+    control_flow_statement_continue_p,
+    control_flow_statement_expression_p,
+    do_while_statement_p,
+    while_statement_p,
+    for_statement_p,
+    basic_for_clause_p,
+    for_init_local_variable_declaration_p,
+    for_init_com_sep_statement_exprs_p,
+    for_update_p,
+    com_sep_statement_exprs_p,
+    enhanced_for_clause_p,
+    switch_statement_p,
+    switch_rule_p,
+    switch_group_p,
+    case_labels_p,
+    if_statement_p,
+    expression_p,
+    assignment_expr_conditional_expr_p,
+    assignment_expr_left_hand_side_assignment_expr_p,
+    left_hand_side_qualified_name_p,
+    left_hand_side_field_access_p,
+    left_hand_side_array_access_p,
+    conditional_expr_p,
+    conditional_or_expr_p,
+    conditional_and_expr_p,
+    inclusive_or_expr_p,
+    exclusive_or_expr_p,
+    and_expr_p,
+    equality_expr_p,
+    relational_expr_p,
+    shift_expr_p,
+    additive_expr_p,
+    multiplicative_expr_p,
+    unary_expr_pre_increment_expr_p,
+    unary_expr_pre_decrement_expr_p,
+    unary_expr_unary_expr_p,
+    unary_expr_unary_expr_not_pm_p,
+    unary_expr_not_pm_postfix_expr_p,
+    unary_expr_not_pm_unary_expr_p,
+    unary_expr_not_pm_cast_expr_p,
+    cast_expr_primitive_type_unary_expr_p,
+    cast_expr_reference_type_unary_expr_not_pm_p,
+    postfix_expr_p,
+    pre_increment_expr_p,
+    pre_decrement_expr_p,
+    post_increment_expr_p,
+    post_decrement_expr_p,
+    primary_lexical_literal_p,
+    primary_this_p,
+    primary_super_p,
+    primary_paren_enclosed_expr_p,
+    primary_class_instance_creation_expr_p,
+    primary_array_creation_expr_p,
+    primary_method_invocation_p,
+    primary_field_access_p,
+    primary_array_access_p,
+    primary_method_reference_p,
+    primary_lambda_expr_p,
+    primary_qualified_name_p,
+    paren_enclosed_expr_p,
+    class_instance_creation_expr_p,
+    array_creation_expr_p,
+    dim_exprs_p,
+    dim_expr_p,
+    dims_p,
+    arguments_p,
+    method_invocation_qualified_name_arguments_p,
+    method_invocation_arguments_p,
+    field_access_primary_p,
+    field_access_super_p,
+    array_access_primary_expression_p,
+    array_access_qualified_name_expression_p,
+    method_reference_p,
+    lambda_expr_p,
+    lambda_params_id_p,
+    lambda_params_formal_params_p,
+    com_sep_exprs_p,
+    type_expr_primitive_type_p,
+    type_expr_reference_type_p,
+    reference_type_type_reference_p,
+    reference_type_type_variable_p,
+    type_variable_p,
+    type_reference_p,
+    type_arguments_p,
+    com_sep_type_args_p,
+    type_arg_reference_type_p,
+    type_arg_wildcard_type_p,
+    wildcard_type_p,
+    primitive_type_byte_p,
+    primitive_type_short_p,
+    primitive_type_int_p,
+    primitive_type_long_p,
+    primitive_type_float_p,
+    primitive_type_double_p,
+    primitive_type_char_p,
+    primitive_type_boolean_p,
+    type_params_p,
+    com_sep_type_params_p,
+    type_param_p,
+    type_bound_p,
+    com_sep_type_exprs_p,
+    formal_params_p,
+    formal_param_list_formal_param_formal_param_p,
+    formal_param_list_last_formal_param_p,
+    formal_param_p,
+    last_formal_param_p,
+    lexical_literal_id_p,
+    lexical_literal_str_p,
+    lexical_literal_num_p,
+    lexical_literal_true_p,
+    lexical_literal_false_p,
+    lexical_literal_null_p
+}
+
+triples {
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+    Java =iof=> Language;
+    Java_model =iof=> Model;
+    Java =has=> Java_model;
+    Java_model =has=> Java_sec1, Java_sec2;
+
+    Java_sec1 =iof => Section [ title = "Goals and subgoals" ];
+    Java_sec2 =iof => Section [ title = "Production rules" ];
+    Java_sec1 =[ groups =>
+        goal_p,
+        subgoal_p,
+        source_p
+    ];
+    Java_sec2 =[ groups =>
+        stylesheet_p,
+        declaration_p,
+        compilation_unit_p,
+        type_declaration_class_declaration_p,
+        type_declaration_interface_declaration_p,
+        type_declaration_enum_declaration_p,
+        type_declaration_record_declaration_p,
+        type_declaration_annotation_type_declaration_p,
+        type_declaration_block6_p,
+        package_declaration_p,
+        import_declaration_p,
+        qualified_name_p,
+        annotations_p,
+        annotation_p,
+        annotation_args_p,
+        annotation_arg_p,
+        type_declaration_modifier_annotation_p,
+        type_declaration_modifier_public_p,
+        type_declaration_modifier_protected_p,
+        type_declaration_modifier_private_p,
+        type_declaration_modifier_abstract_p,
+        type_declaration_modifier_static_p,
+        type_declaration_modifier_final_p,
+        type_declaration_modifier_sealed_p,
+        type_declaration_modifier_non_sealed_p,
+        type_declaration_modifier_strictfp_p,
+        field_modifier_annotation_p,
+        field_modifier_public_p,
+        field_modifier_protected_p,
+        field_modifier_private_p,
+        field_modifier_static_p,
+        field_modifier_final_p,
+        field_modifier_transient_p,
+        field_modifier_volatile_p,
+        method_modifier_annotation_p,
+        method_modifier_public_p,
+        method_modifier_protected_p,
+        method_modifier_private_p,
+        method_modifier_abstract_p,
+        method_modifier_static_p,
+        method_modifier_final_p,
+        method_modifier_synchronized_p,
+        method_modifier_native_p,
+        method_modifier_strictfp_p,
+        constructor_modifier_annotation_p,
+        constructor_modifier_public_p,
+        constructor_modifier_protected_p,
+        constructor_modifier_private_p,
+        class_declaration_p,
+        class_body_p,
+        class_member_declaration_field_declaration_p,
+        class_member_declaration_method_declaration_p,
+        class_member_declaration_constructor_declaration_p,
+        class_member_declaration_class_declaration_p,
+        class_member_declaration_interface_declaration_p,
+        class_member_declaration_enum_declaration_p,
+        class_member_declaration_record_declaration_p,
+        class_member_declaration_annotation_type_declaration_p,
+        class_member_declaration_static_initializer_p,
+        class_member_declaration_instance_initializer_p,
+        static_initializer_p,
+        instance_initializer_p,
+        field_declaration_p,
+        variable_declarators_p,
+        variable_declarator_p,
+        variable_initializer_expression_p,
+        variable_initializer_array_initializer_p,
+        array_initializer_p,
+        method_declaration_p,
+        result_type_expr_p,
+        result_void_p,
+        constructor_declaration_p,
+        interface_declaration_p,
+        interface_body_p,
+        interface_member_declaration_constant_declaration_p,
+        interface_member_declaration_interface_method_declaration_p,
+        interface_member_declaration_class_declaration_p,
+        interface_member_declaration_interface_declaration_p,
+        interface_member_declaration_enum_declaration_p,
+        interface_member_declaration_record_declaration_p,
+        interface_member_declaration_annotation_type_declaration_p,
+        constant_declaration_p,
+        interface_method_declaration_p,
+        enum_declaration_p,
+        com_sep_enum_constants_p,
+        enum_constant_p,
+        record_declaration_p,
+        record_header_p,
+        com_sep_record_components_p,
+        record_component_p,
+        annotation_type_declaration_p,
+        annotation_type_member_declaration_annotation_type_element_declaration_p,
+        annotation_type_member_declaration_constant_declaration_p,
+        annotation_type_member_declaration_class_declaration_p,
+        annotation_type_member_declaration_interface_declaration_p,
+        annotation_type_member_declaration_enum_declaration_p,
+        annotation_type_member_declaration_annotation_type_declaration_p,
+        annotation_type_element_declaration_p,
+        element_value_expression_p,
+        element_value_annotation_p,
+        element_value_array_initializer_p,
+        compound_statement_p,
+        statement_compound_statement_p,
+        statement_if_statement_p,
+        statement_switch_statement_p,
+        statement_while_statement_p,
+        statement_do_while_statement_p,
+        statement_for_statement_p,
+        statement_try_catch_finally_statement_p,
+        statement_synchronized_statement_p,
+        statement_assert_statement_p,
+        statement_control_flow_statement_p,
+        statement_label_statement_p,
+        statement_local_variable_declaration_statement_p,
+        statement_expression_statement_p,
+        statement_block14_p,
+        label_statement_p,
+        local_variable_declaration_statement_p,
+        local_variable_declaration_p,
+        expression_statement_p,
+        statement_expression_assignment_expr_p,
+        statement_expression_pre_increment_expr_p,
+        statement_expression_pre_decrement_expr_p,
+        statement_expression_post_increment_expr_p,
+        statement_expression_post_decrement_expr_p,
+        statement_expression_method_invocation_p,
+        statement_expression_class_instance_creation_expr_p,
+        assert_statement_p,
+        synchronized_statement_p,
+        try_catch_finally_statement_p,
+        catch_clause_p,
+        catch_types_p,
+        resource_specification_p,
+        resource_p,
+        control_flow_statement_break_p,
+        control_flow_statement_continue_p,
+        control_flow_statement_expression_p,
+        control_flow_statement_expression_p,
+        do_while_statement_p,
+        while_statement_p,
+        for_statement_p,
+        basic_for_clause_p,
+        for_init_local_variable_declaration_p,
+        for_init_com_sep_statement_exprs_p,
+        for_update_p,
+        com_sep_statement_exprs_p,
+        enhanced_for_clause_p,
+        switch_statement_p,
+        switch_rule_p,
+        switch_group_p,
+        case_labels_p,
+        if_statement_p,
+        expression_p,
+        assignment_expr_conditional_expr_p,
+        assignment_expr_left_hand_side_assignment_expr_p,
+        left_hand_side_qualified_name_p,
+        left_hand_side_field_access_p,
+        left_hand_side_array_access_p,
+        conditional_expr_p,
+        conditional_or_expr_p,
+        conditional_and_expr_p,
+        inclusive_or_expr_p,
+        exclusive_or_expr_p,
+        and_expr_p,
+        equality_expr_p,
+        relational_expr_p,
+        shift_expr_p,
+        additive_expr_p,
+        multiplicative_expr_p,
+        unary_expr_pre_increment_expr_p,
+        unary_expr_pre_decrement_expr_p,
+        unary_expr_unary_expr_p,
+        unary_expr_unary_expr_p,
+        unary_expr_unary_expr_not_pm_p,
+        unary_expr_not_pm_postfix_expr_p,
+        unary_expr_not_pm_unary_expr_p,
+        unary_expr_not_pm_unary_expr_p,
+        unary_expr_not_pm_cast_expr_p,
+        cast_expr_primitive_type_unary_expr_p,
+        cast_expr_reference_type_unary_expr_not_pm_p,
+        postfix_expr_p,
+        pre_increment_expr_p,
+        pre_decrement_expr_p,
+        post_increment_expr_p,
+        post_decrement_expr_p,
+        primary_lexical_literal_p,
+        primary_this_p,
+        primary_super_p,
+        primary_paren_enclosed_expr_p,
+        primary_class_instance_creation_expr_p,
+        primary_array_creation_expr_p,
+        primary_method_invocation_p,
+        primary_field_access_p,
+        primary_array_access_p,
+        primary_method_reference_p,
+        primary_lambda_expr_p,
+        primary_qualified_name_p,
+        paren_enclosed_expr_p,
+        class_instance_creation_expr_p,
+        array_creation_expr_p,
+        dim_exprs_p,
+        dim_expr_p,
+        dims_p,
+        arguments_p,
+        method_invocation_qualified_name_arguments_p,
+        method_invocation_arguments_p,
+        method_invocation_arguments_p,
+        field_access_primary_p,
+        field_access_super_p,
+        array_access_primary_expression_p,
+        array_access_qualified_name_expression_p,
+        method_reference_p,
+        lambda_expr_p,
+        lambda_params_id_p,
+        lambda_params_formal_params_p,
+        com_sep_exprs_p,
+        type_expr_primitive_type_p,
+        type_expr_reference_type_p,
+        reference_type_type_reference_p,
+        reference_type_type_variable_p,
+        type_variable_p,
+        type_reference_p,
+        type_arguments_p,
+        com_sep_type_args_p,
+        type_arg_reference_type_p,
+        type_arg_wildcard_type_p,
+        wildcard_type_p,
+        primitive_type_byte_p,
+        primitive_type_short_p,
+        primitive_type_int_p,
+        primitive_type_long_p,
+        primitive_type_float_p,
+        primitive_type_double_p,
+        primitive_type_char_p,
+        primitive_type_boolean_p,
+        type_params_p,
+        com_sep_type_params_p,
+        type_param_p,
+        type_bound_p,
+        com_sep_type_exprs_p,
+        formal_params_p,
+        formal_param_list_formal_param_formal_param_p,
+        formal_param_list_last_formal_param_p,
+        formal_param_p,
+        last_formal_param_p,
+        lexical_literal_id_p,
+        lexical_literal_str_p,
+        lexical_literal_num_p,
+        lexical_literal_true_p,
+        lexical_literal_false_p,
+        lexical_literal_null_p
+    ];
+    goal_p =iof => Production[
+        condition = "If all subgoals were met" ,
+        action = "then the goal is met" ,
+        probability = 0.003937007874015748
+    ];
+    subgoal_p =iof => Production[
+        condition = "If a subgoal is already written" ,
+        action = "then the subgoal is met" ,
+        probability = 0.003937007874015748
+    ];
+    source_p =iof => Production[
+        condition = "If new source text must be written" ,
+        action = "then the grammar construct becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    stylesheet_p =iof => Production[
+        condition = "If stylesheet is a subgoal" ,
+        action = "then the stylesheet subgoal is met and declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    declaration_p =iof => Production[
+        condition = "If declaration is a subgoal" ,
+        action = "then the declaration subgoal is met and compilation_unit becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    compilation_unit_p =iof => Production[
+        condition = "If compilation_unit is a subgoal" ,
+        action = "then the compilation_unit subgoal is met and package_declaration, import_declaration and type_declaration become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_class_declaration_p =iof => Production[
+        condition = "If type_declaration is a subgoal and the block 'class_declaration' is needed" ,
+        action = "then the type_declaration subgoal is met and class_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_interface_declaration_p =iof => Production[
+        condition = "If type_declaration is a subgoal and the block 'interface_declaration' is needed" ,
+        action = "then the type_declaration subgoal is met and interface_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_enum_declaration_p =iof => Production[
+        condition = "If type_declaration is a subgoal and the block 'enum_declaration' is needed" ,
+        action = "then the type_declaration subgoal is met and enum_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_record_declaration_p =iof => Production[
+        condition = "If type_declaration is a subgoal and the block 'record_declaration' is needed" ,
+        action = "then the type_declaration subgoal is met and record_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_annotation_type_declaration_p =iof => Production[
+        condition = "If type_declaration is a subgoal and the block 'annotation_type_declaration' is needed" ,
+        action = "then the type_declaration subgoal is met and annotation_type_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_block6_p =iof => Production[
+        condition = "If type_declaration is a subgoal and the block '';'' is needed" ,
+        action = "then the type_declaration subgoal is met and ';' is written" ,
+        probability = 0.003937007874015748
+    ];
+    package_declaration_p =iof => Production[
+        condition = "If package_declaration is a subgoal" ,
+        action = "then the package_declaration subgoal is met and 'package', ';' is written and annotations and qualified_name become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    import_declaration_p =iof => Production[
+        condition = "If import_declaration is a subgoal" ,
+        action = "then the import_declaration subgoal is met and 'import', 'static', '.', '*', ';' is written and qualified_name becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    qualified_name_p =iof => Production[
+        condition = "If qualified_name is a subgoal" ,
+        action = "then the qualified_name subgoal is met and ID, '.' and ID are written" ,
+        probability = 0.003937007874015748
+    ];
+    annotations_p =iof => Production[
+        condition = "If annotations is a subgoal" ,
+        action = "then the annotations subgoal is met and annotation and annotation become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_p =iof => Production[
+        condition = "If annotation is a subgoal" ,
+        action = "then the annotation subgoal is met and '@', '(', ')' is written and qualified_name and annotation_args become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_args_p =iof => Production[
+        condition = "If annotation_args is a subgoal" ,
+        action = "then the annotation_args subgoal is met and ',' is written and annotation_arg and annotation_arg become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_arg_p =iof => Production[
+        condition = "If annotation_arg is a subgoal" ,
+        action = "then the annotation_arg subgoal is met and ID, '=' is written and expression becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_modifier_annotation_p =iof => Production[
+        condition = "If type_declaration_modifier is a subgoal and the block 'annotation' is needed" ,
+        action = "then the type_declaration_modifier subgoal is met and annotation becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_modifier_public_p =iof => Production[
+        condition = "If type_declaration_modifier is a subgoal and the block ''public'' is needed" ,
+        action = "then the type_declaration_modifier subgoal is met and 'public' is written" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_modifier_protected_p =iof => Production[
+        condition = "If type_declaration_modifier is a subgoal and the block ''protected'' is needed" ,
+        action = "then the type_declaration_modifier subgoal is met and 'protected' is written" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_modifier_private_p =iof => Production[
+        condition = "If type_declaration_modifier is a subgoal and the block ''private'' is needed" ,
+        action = "then the type_declaration_modifier subgoal is met and 'private' is written" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_modifier_abstract_p =iof => Production[
+        condition = "If type_declaration_modifier is a subgoal and the block ''abstract'' is needed" ,
+        action = "then the type_declaration_modifier subgoal is met and 'abstract' is written" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_modifier_static_p =iof => Production[
+        condition = "If type_declaration_modifier is a subgoal and the block ''static'' is needed" ,
+        action = "then the type_declaration_modifier subgoal is met and 'static' is written" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_modifier_final_p =iof => Production[
+        condition = "If type_declaration_modifier is a subgoal and the block ''final'' is needed" ,
+        action = "then the type_declaration_modifier subgoal is met and 'final' is written" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_modifier_sealed_p =iof => Production[
+        condition = "If type_declaration_modifier is a subgoal and the block ''sealed'' is needed" ,
+        action = "then the type_declaration_modifier subgoal is met and 'sealed' is written" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_modifier_non_sealed_p =iof => Production[
+        condition = "If type_declaration_modifier is a subgoal and the block ''non-sealed'' is needed" ,
+        action = "then the type_declaration_modifier subgoal is met and 'non-sealed' is written" ,
+        probability = 0.003937007874015748
+    ];
+    type_declaration_modifier_strictfp_p =iof => Production[
+        condition = "If type_declaration_modifier is a subgoal and the block ''strictfp'' is needed" ,
+        action = "then the type_declaration_modifier subgoal is met and 'strictfp' is written" ,
+        probability = 0.003937007874015748
+    ];
+    field_modifier_annotation_p =iof => Production[
+        condition = "If field_modifier is a subgoal and the block 'annotation' is needed" ,
+        action = "then the field_modifier subgoal is met and annotation becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    field_modifier_public_p =iof => Production[
+        condition = "If field_modifier is a subgoal and the block ''public'' is needed" ,
+        action = "then the field_modifier subgoal is met and 'public' is written" ,
+        probability = 0.003937007874015748
+    ];
+    field_modifier_protected_p =iof => Production[
+        condition = "If field_modifier is a subgoal and the block ''protected'' is needed" ,
+        action = "then the field_modifier subgoal is met and 'protected' is written" ,
+        probability = 0.003937007874015748
+    ];
+    field_modifier_private_p =iof => Production[
+        condition = "If field_modifier is a subgoal and the block ''private'' is needed" ,
+        action = "then the field_modifier subgoal is met and 'private' is written" ,
+        probability = 0.003937007874015748
+    ];
+    field_modifier_static_p =iof => Production[
+        condition = "If field_modifier is a subgoal and the block ''static'' is needed" ,
+        action = "then the field_modifier subgoal is met and 'static' is written" ,
+        probability = 0.003937007874015748
+    ];
+    field_modifier_final_p =iof => Production[
+        condition = "If field_modifier is a subgoal and the block ''final'' is needed" ,
+        action = "then the field_modifier subgoal is met and 'final' is written" ,
+        probability = 0.003937007874015748
+    ];
+    field_modifier_transient_p =iof => Production[
+        condition = "If field_modifier is a subgoal and the block ''transient'' is needed" ,
+        action = "then the field_modifier subgoal is met and 'transient' is written" ,
+        probability = 0.003937007874015748
+    ];
+    field_modifier_volatile_p =iof => Production[
+        condition = "If field_modifier is a subgoal and the block ''volatile'' is needed" ,
+        action = "then the field_modifier subgoal is met and 'volatile' is written" ,
+        probability = 0.003937007874015748
+    ];
+    method_modifier_annotation_p =iof => Production[
+        condition = "If method_modifier is a subgoal and the block 'annotation' is needed" ,
+        action = "then the method_modifier subgoal is met and annotation becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    method_modifier_public_p =iof => Production[
+        condition = "If method_modifier is a subgoal and the block ''public'' is needed" ,
+        action = "then the method_modifier subgoal is met and 'public' is written" ,
+        probability = 0.003937007874015748
+    ];
+    method_modifier_protected_p =iof => Production[
+        condition = "If method_modifier is a subgoal and the block ''protected'' is needed" ,
+        action = "then the method_modifier subgoal is met and 'protected' is written" ,
+        probability = 0.003937007874015748
+    ];
+    method_modifier_private_p =iof => Production[
+        condition = "If method_modifier is a subgoal and the block ''private'' is needed" ,
+        action = "then the method_modifier subgoal is met and 'private' is written" ,
+        probability = 0.003937007874015748
+    ];
+    method_modifier_abstract_p =iof => Production[
+        condition = "If method_modifier is a subgoal and the block ''abstract'' is needed" ,
+        action = "then the method_modifier subgoal is met and 'abstract' is written" ,
+        probability = 0.003937007874015748
+    ];
+    method_modifier_static_p =iof => Production[
+        condition = "If method_modifier is a subgoal and the block ''static'' is needed" ,
+        action = "then the method_modifier subgoal is met and 'static' is written" ,
+        probability = 0.003937007874015748
+    ];
+    method_modifier_final_p =iof => Production[
+        condition = "If method_modifier is a subgoal and the block ''final'' is needed" ,
+        action = "then the method_modifier subgoal is met and 'final' is written" ,
+        probability = 0.003937007874015748
+    ];
+    method_modifier_synchronized_p =iof => Production[
+        condition = "If method_modifier is a subgoal and the block ''synchronized'' is needed" ,
+        action = "then the method_modifier subgoal is met and 'synchronized' is written" ,
+        probability = 0.003937007874015748
+    ];
+    method_modifier_native_p =iof => Production[
+        condition = "If method_modifier is a subgoal and the block ''native'' is needed" ,
+        action = "then the method_modifier subgoal is met and 'native' is written" ,
+        probability = 0.003937007874015748
+    ];
+    method_modifier_strictfp_p =iof => Production[
+        condition = "If method_modifier is a subgoal and the block ''strictfp'' is needed" ,
+        action = "then the method_modifier subgoal is met and 'strictfp' is written" ,
+        probability = 0.003937007874015748
+    ];
+    constructor_modifier_annotation_p =iof => Production[
+        condition = "If constructor_modifier is a subgoal and the block 'annotation' is needed" ,
+        action = "then the constructor_modifier subgoal is met and annotation becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    constructor_modifier_public_p =iof => Production[
+        condition = "If constructor_modifier is a subgoal and the block ''public'' is needed" ,
+        action = "then the constructor_modifier subgoal is met and 'public' is written" ,
+        probability = 0.003937007874015748
+    ];
+    constructor_modifier_protected_p =iof => Production[
+        condition = "If constructor_modifier is a subgoal and the block ''protected'' is needed" ,
+        action = "then the constructor_modifier subgoal is met and 'protected' is written" ,
+        probability = 0.003937007874015748
+    ];
+    constructor_modifier_private_p =iof => Production[
+        condition = "If constructor_modifier is a subgoal and the block ''private'' is needed" ,
+        action = "then the constructor_modifier subgoal is met and 'private' is written" ,
+        probability = 0.003937007874015748
+    ];
+    class_declaration_p =iof => Production[
+        condition = "If class_declaration is a subgoal" ,
+        action = "then the class_declaration subgoal is met and 'class', ID, 'extends', 'implements' is written and type_declaration_modifier, type_params, type_expr, com_sep_type_exprs and class_body become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    class_body_p =iof => Production[
+        condition = "If class_body is a subgoal" ,
+        action = "then the class_body subgoal is met and '{', ';', '}' is written and class_member_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_member_declaration_field_declaration_p =iof => Production[
+        condition = "If class_member_declaration is a subgoal and the block 'field_declaration' is needed" ,
+        action = "then the class_member_declaration subgoal is met and field_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_member_declaration_method_declaration_p =iof => Production[
+        condition = "If class_member_declaration is a subgoal and the block 'method_declaration' is needed" ,
+        action = "then the class_member_declaration subgoal is met and method_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_member_declaration_constructor_declaration_p =iof => Production[
+        condition = "If class_member_declaration is a subgoal and the block 'constructor_declaration' is needed" ,
+        action = "then the class_member_declaration subgoal is met and constructor_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_member_declaration_class_declaration_p =iof => Production[
+        condition = "If class_member_declaration is a subgoal and the block 'class_declaration' is needed" ,
+        action = "then the class_member_declaration subgoal is met and class_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_member_declaration_interface_declaration_p =iof => Production[
+        condition = "If class_member_declaration is a subgoal and the block 'interface_declaration' is needed" ,
+        action = "then the class_member_declaration subgoal is met and interface_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_member_declaration_enum_declaration_p =iof => Production[
+        condition = "If class_member_declaration is a subgoal and the block 'enum_declaration' is needed" ,
+        action = "then the class_member_declaration subgoal is met and enum_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_member_declaration_record_declaration_p =iof => Production[
+        condition = "If class_member_declaration is a subgoal and the block 'record_declaration' is needed" ,
+        action = "then the class_member_declaration subgoal is met and record_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_member_declaration_annotation_type_declaration_p =iof => Production[
+        condition = "If class_member_declaration is a subgoal and the block 'annotation_type_declaration' is needed" ,
+        action = "then the class_member_declaration subgoal is met and annotation_type_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_member_declaration_static_initializer_p =iof => Production[
+        condition = "If class_member_declaration is a subgoal and the block 'static_initializer' is needed" ,
+        action = "then the class_member_declaration subgoal is met and static_initializer becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_member_declaration_instance_initializer_p =iof => Production[
+        condition = "If class_member_declaration is a subgoal and the block 'instance_initializer' is needed" ,
+        action = "then the class_member_declaration subgoal is met and instance_initializer becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    static_initializer_p =iof => Production[
+        condition = "If static_initializer is a subgoal" ,
+        action = "then the static_initializer subgoal is met and 'static' is written and compound_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    instance_initializer_p =iof => Production[
+        condition = "If instance_initializer is a subgoal" ,
+        action = "then the instance_initializer subgoal is met and compound_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    field_declaration_p =iof => Production[
+        condition = "If field_declaration is a subgoal" ,
+        action = "then the field_declaration subgoal is met and ';' is written and field_modifier, type_expr and variable_declarators become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    variable_declarators_p =iof => Production[
+        condition = "If variable_declarators is a subgoal" ,
+        action = "then the variable_declarators subgoal is met and ',' is written and variable_declarator and variable_declarator become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    variable_declarator_p =iof => Production[
+        condition = "If variable_declarator is a subgoal" ,
+        action = "then the variable_declarator subgoal is met and ID, '[]', '=' is written and variable_initializer becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    variable_initializer_expression_p =iof => Production[
+        condition = "If variable_initializer is a subgoal and the block 'expression' is needed" ,
+        action = "then the variable_initializer subgoal is met and expression becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    variable_initializer_array_initializer_p =iof => Production[
+        condition = "If variable_initializer is a subgoal and the block 'array_initializer' is needed" ,
+        action = "then the variable_initializer subgoal is met and array_initializer becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    array_initializer_p =iof => Production[
+        condition = "If array_initializer is a subgoal" ,
+        action = "then the array_initializer subgoal is met and '{', ',', ',', '}' is written and variable_initializer and variable_initializer become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    method_declaration_p =iof => Production[
+        condition = "If method_declaration is a subgoal" ,
+        action = "then the method_declaration subgoal is met and ID, 'throws', ';' is written and method_modifier, type_params, result, formal_params, com_sep_type_exprs and compound_statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    result_type_expr_p =iof => Production[
+        condition = "If result is a subgoal and the block 'type_expr' is needed" ,
+        action = "then the result subgoal is met and type_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    result_void_p =iof => Production[
+        condition = "If result is a subgoal and the block ''void'' is needed" ,
+        action = "then the result subgoal is met and 'void' is written" ,
+        probability = 0.003937007874015748
+    ];
+    constructor_declaration_p =iof => Production[
+        condition = "If constructor_declaration is a subgoal" ,
+        action = "then the constructor_declaration subgoal is met and ID, 'throws' is written and constructor_modifier, type_params, formal_params, com_sep_type_exprs and compound_statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    interface_declaration_p =iof => Production[
+        condition = "If interface_declaration is a subgoal" ,
+        action = "then the interface_declaration subgoal is met and 'interface', ID, 'extends' is written and type_declaration_modifier, type_params, com_sep_type_exprs and interface_body become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    interface_body_p =iof => Production[
+        condition = "If interface_body is a subgoal" ,
+        action = "then the interface_body subgoal is met and '{', ';', '}' is written and interface_member_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    interface_member_declaration_constant_declaration_p =iof => Production[
+        condition = "If interface_member_declaration is a subgoal and the block 'constant_declaration' is needed" ,
+        action = "then the interface_member_declaration subgoal is met and constant_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    interface_member_declaration_interface_method_declaration_p =iof => Production[
+        condition = "If interface_member_declaration is a subgoal and the block 'interface_method_declaration' is needed" ,
+        action = "then the interface_member_declaration subgoal is met and interface_method_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    interface_member_declaration_class_declaration_p =iof => Production[
+        condition = "If interface_member_declaration is a subgoal and the block 'class_declaration' is needed" ,
+        action = "then the interface_member_declaration subgoal is met and class_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    interface_member_declaration_interface_declaration_p =iof => Production[
+        condition = "If interface_member_declaration is a subgoal and the block 'interface_declaration' is needed" ,
+        action = "then the interface_member_declaration subgoal is met and interface_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    interface_member_declaration_enum_declaration_p =iof => Production[
+        condition = "If interface_member_declaration is a subgoal and the block 'enum_declaration' is needed" ,
+        action = "then the interface_member_declaration subgoal is met and enum_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    interface_member_declaration_record_declaration_p =iof => Production[
+        condition = "If interface_member_declaration is a subgoal and the block 'record_declaration' is needed" ,
+        action = "then the interface_member_declaration subgoal is met and record_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    interface_member_declaration_annotation_type_declaration_p =iof => Production[
+        condition = "If interface_member_declaration is a subgoal and the block 'annotation_type_declaration' is needed" ,
+        action = "then the interface_member_declaration subgoal is met and annotation_type_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    constant_declaration_p =iof => Production[
+        condition = "If constant_declaration is a subgoal" ,
+        action = "then the constant_declaration subgoal is met and ';' is written and field_modifier, type_expr and variable_declarators become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    interface_method_declaration_p =iof => Production[
+        condition = "If interface_method_declaration is a subgoal" ,
+        action = "then the interface_method_declaration subgoal is met and 'default', ID, 'throws', ';' is written and method_modifier, type_params, result, formal_params, com_sep_type_exprs and compound_statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    enum_declaration_p =iof => Production[
+        condition = "If enum_declaration is a subgoal" ,
+        action = "then the enum_declaration subgoal is met and 'enum', ID, 'implements', '{', ',', ';', '}' is written and type_declaration_modifier, com_sep_type_exprs, com_sep_enum_constants and class_member_declaration become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    com_sep_enum_constants_p =iof => Production[
+        condition = "If com_sep_enum_constants is a subgoal" ,
+        action = "then the com_sep_enum_constants subgoal is met and ',' is written and enum_constant and enum_constant become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    enum_constant_p =iof => Production[
+        condition = "If enum_constant is a subgoal" ,
+        action = "then the enum_constant subgoal is met and ID is written and annotation, arguments and class_body become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    record_declaration_p =iof => Production[
+        condition = "If record_declaration is a subgoal" ,
+        action = "then the record_declaration subgoal is met and 'record', ID, 'implements' is written and type_declaration_modifier, type_params, record_header, com_sep_type_exprs and class_body become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    record_header_p =iof => Production[
+        condition = "If record_header is a subgoal" ,
+        action = "then the record_header subgoal is met and '(', ')' is written and com_sep_record_components becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    com_sep_record_components_p =iof => Production[
+        condition = "If com_sep_record_components is a subgoal" ,
+        action = "then the com_sep_record_components subgoal is met and ',' is written and record_component and record_component become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    record_component_p =iof => Production[
+        condition = "If record_component is a subgoal" ,
+        action = "then the record_component subgoal is met and ID is written and annotation and type_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_type_declaration_p =iof => Production[
+        condition = "If annotation_type_declaration is a subgoal" ,
+        action = "then the annotation_type_declaration subgoal is met and '@interface', ID, '{', ';', '}' is written and type_declaration_modifier and annotation_type_member_declaration become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_type_member_declaration_annotation_type_element_declaration_p =iof => Production[
+        condition = "If annotation_type_member_declaration is a subgoal and the block 'annotation_type_element_declaration' is needed" ,
+        action = "then the annotation_type_member_declaration subgoal is met and annotation_type_element_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_type_member_declaration_constant_declaration_p =iof => Production[
+        condition = "If annotation_type_member_declaration is a subgoal and the block 'constant_declaration' is needed" ,
+        action = "then the annotation_type_member_declaration subgoal is met and constant_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_type_member_declaration_class_declaration_p =iof => Production[
+        condition = "If annotation_type_member_declaration is a subgoal and the block 'class_declaration' is needed" ,
+        action = "then the annotation_type_member_declaration subgoal is met and class_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_type_member_declaration_interface_declaration_p =iof => Production[
+        condition = "If annotation_type_member_declaration is a subgoal and the block 'interface_declaration' is needed" ,
+        action = "then the annotation_type_member_declaration subgoal is met and interface_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_type_member_declaration_enum_declaration_p =iof => Production[
+        condition = "If annotation_type_member_declaration is a subgoal and the block 'enum_declaration' is needed" ,
+        action = "then the annotation_type_member_declaration subgoal is met and enum_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_type_member_declaration_annotation_type_declaration_p =iof => Production[
+        condition = "If annotation_type_member_declaration is a subgoal and the block 'annotation_type_declaration' is needed" ,
+        action = "then the annotation_type_member_declaration subgoal is met and annotation_type_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    annotation_type_element_declaration_p =iof => Production[
+        condition = "If annotation_type_element_declaration is a subgoal" ,
+        action = "then the annotation_type_element_declaration subgoal is met and ID, '(', ')', 'default', ';' is written and method_modifier, type_expr and element_value become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    element_value_expression_p =iof => Production[
+        condition = "If element_value is a subgoal and the block 'expression' is needed" ,
+        action = "then the element_value subgoal is met and expression becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    element_value_annotation_p =iof => Production[
+        condition = "If element_value is a subgoal and the block 'annotation' is needed" ,
+        action = "then the element_value subgoal is met and annotation becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    element_value_array_initializer_p =iof => Production[
+        condition = "If element_value is a subgoal and the block 'array_initializer' is needed" ,
+        action = "then the element_value subgoal is met and array_initializer becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    compound_statement_p =iof => Production[
+        condition = "If compound_statement is a subgoal" ,
+        action = "then the compound_statement subgoal is met and '{', '}' is written and statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_compound_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'compound_statement' is needed" ,
+        action = "then the statement subgoal is met and compound_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_if_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'if_statement' is needed" ,
+        action = "then the statement subgoal is met and if_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_switch_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'switch_statement' is needed" ,
+        action = "then the statement subgoal is met and switch_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_while_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'while_statement' is needed" ,
+        action = "then the statement subgoal is met and while_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_do_while_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'do_while_statement' is needed" ,
+        action = "then the statement subgoal is met and do_while_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_for_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'for_statement' is needed" ,
+        action = "then the statement subgoal is met and for_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_try_catch_finally_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'try_catch_finally_statement' is needed" ,
+        action = "then the statement subgoal is met and try_catch_finally_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_synchronized_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'synchronized_statement' is needed" ,
+        action = "then the statement subgoal is met and synchronized_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_assert_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'assert_statement' is needed" ,
+        action = "then the statement subgoal is met and assert_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_control_flow_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'control_flow_statement' is needed" ,
+        action = "then the statement subgoal is met and control_flow_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_label_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'label_statement' is needed" ,
+        action = "then the statement subgoal is met and label_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_local_variable_declaration_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'local_variable_declaration_statement' is needed" ,
+        action = "then the statement subgoal is met and local_variable_declaration_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_expression_statement_p =iof => Production[
+        condition = "If statement is a subgoal and the block 'expression_statement' is needed" ,
+        action = "then the statement subgoal is met and expression_statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_block14_p =iof => Production[
+        condition = "If statement is a subgoal and the block '';'' is needed" ,
+        action = "then the statement subgoal is met and ';' is written" ,
+        probability = 0.003937007874015748
+    ];
+    label_statement_p =iof => Production[
+        condition = "If label_statement is a subgoal" ,
+        action = "then the label_statement subgoal is met and ID, ':' is written and statement becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    local_variable_declaration_statement_p =iof => Production[
+        condition = "If local_variable_declaration_statement is a subgoal" ,
+        action = "then the local_variable_declaration_statement subgoal is met and ';' is written and local_variable_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    local_variable_declaration_p =iof => Production[
+        condition = "If local_variable_declaration is a subgoal" ,
+        action = "then the local_variable_declaration subgoal is met and 'final' is written and annotation, type_expr and variable_declarators become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    expression_statement_p =iof => Production[
+        condition = "If expression_statement is a subgoal" ,
+        action = "then the expression_statement subgoal is met and ';' is written and statement_expression becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_expression_assignment_expr_p =iof => Production[
+        condition = "If statement_expression is a subgoal and the block 'assignment_expr' is needed" ,
+        action = "then the statement_expression subgoal is met and assignment_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_expression_pre_increment_expr_p =iof => Production[
+        condition = "If statement_expression is a subgoal and the block 'pre_increment_expr' is needed" ,
+        action = "then the statement_expression subgoal is met and pre_increment_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_expression_pre_decrement_expr_p =iof => Production[
+        condition = "If statement_expression is a subgoal and the block 'pre_decrement_expr' is needed" ,
+        action = "then the statement_expression subgoal is met and pre_decrement_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_expression_post_increment_expr_p =iof => Production[
+        condition = "If statement_expression is a subgoal and the block 'post_increment_expr' is needed" ,
+        action = "then the statement_expression subgoal is met and post_increment_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_expression_post_decrement_expr_p =iof => Production[
+        condition = "If statement_expression is a subgoal and the block 'post_decrement_expr' is needed" ,
+        action = "then the statement_expression subgoal is met and post_decrement_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_expression_method_invocation_p =iof => Production[
+        condition = "If statement_expression is a subgoal and the block 'method_invocation' is needed" ,
+        action = "then the statement_expression subgoal is met and method_invocation becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    statement_expression_class_instance_creation_expr_p =iof => Production[
+        condition = "If statement_expression is a subgoal and the block 'class_instance_creation_expr' is needed" ,
+        action = "then the statement_expression subgoal is met and class_instance_creation_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    assert_statement_p =iof => Production[
+        condition = "If assert_statement is a subgoal" ,
+        action = "then the assert_statement subgoal is met and 'assert', ':', ';' is written and expression and expression become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    synchronized_statement_p =iof => Production[
+        condition = "If synchronized_statement is a subgoal" ,
+        action = "then the synchronized_statement subgoal is met and 'synchronized', '(', ')' is written and expression and compound_statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    try_catch_finally_statement_p =iof => Production[
+        condition = "If try_catch_finally_statement is a subgoal" ,
+        action = "then the try_catch_finally_statement subgoal is met and 'try', 'finally' is written and resource_specification, compound_statement, catch_clause and compound_statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    catch_clause_p =iof => Production[
+        condition = "If catch_clause is a subgoal" ,
+        action = "then the catch_clause subgoal is met and 'catch', '(', ID, ')' is written and catch_types and compound_statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    catch_types_p =iof => Production[
+        condition = "If catch_types is a subgoal" ,
+        action = "then the catch_types subgoal is met and '|' is written and type_expr and type_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    resource_specification_p =iof => Production[
+        condition = "If resource_specification is a subgoal" ,
+        action = "then the resource_specification subgoal is met and '(', ';', ';', ')' is written and resource and resource become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    resource_p =iof => Production[
+        condition = "If resource is a subgoal" ,
+        action = "then the resource subgoal is met and 'final', ID, '=' is written and annotation, type_expr and expression become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    control_flow_statement_break_p =iof => Production[
+        condition = "If control_flow_statement is a subgoal and the block ''break' optional group [ID] optional group [';']' is needed" ,
+        action = "then the control_flow_statement subgoal is met and 'break', ID and ';' are written" ,
+        probability = 0.003937007874015748
+    ];
+    control_flow_statement_continue_p =iof => Production[
+        condition = "If control_flow_statement is a subgoal and the block ''continue' optional group [ID] optional group [';']' is needed" ,
+        action = "then the control_flow_statement subgoal is met and 'continue', ID and ';' are written" ,
+        probability = 0.003937007874015748
+    ];
+    control_flow_statement_expression_p =iof => Production[
+        condition = "If control_flow_statement is a subgoal and the block ''return' optional group [expression] optional group [';']' is needed" ,
+        action = "then the control_flow_statement subgoal is met and 'return', ';' is written and expression becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    control_flow_statement_expression_p =iof => Production[
+        condition = "If control_flow_statement is a subgoal and the block ''throw' expression optional group [';']' is needed" ,
+        action = "then the control_flow_statement subgoal is met and 'throw', ';' is written and expression becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    do_while_statement_p =iof => Production[
+        condition = "If do_while_statement is a subgoal" ,
+        action = "then the do_while_statement subgoal is met and 'do', 'while', '(', ')', ';' is written and statement and expression become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    while_statement_p =iof => Production[
+        condition = "If while_statement is a subgoal" ,
+        action = "then the while_statement subgoal is met and 'while', '(', ')' is written and expression and statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    for_statement_p =iof => Production[
+        condition = "If for_statement is a subgoal" ,
+        action = "then the for_statement subgoal is met and 'for', '(', ')' is written and basic_for_clause, enhanced_for_clause and statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    basic_for_clause_p =iof => Production[
+        condition = "If basic_for_clause is a subgoal" ,
+        action = "then the basic_for_clause subgoal is met and ';', ';' is written and for_init, expression and for_update become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    for_init_local_variable_declaration_p =iof => Production[
+        condition = "If for_init is a subgoal and the block 'local_variable_declaration' is needed" ,
+        action = "then the for_init subgoal is met and local_variable_declaration becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    for_init_com_sep_statement_exprs_p =iof => Production[
+        condition = "If for_init is a subgoal and the block 'com_sep_statement_exprs' is needed" ,
+        action = "then the for_init subgoal is met and com_sep_statement_exprs becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    for_update_p =iof => Production[
+        condition = "If for_update is a subgoal" ,
+        action = "then the for_update subgoal is met and com_sep_statement_exprs becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    com_sep_statement_exprs_p =iof => Production[
+        condition = "If com_sep_statement_exprs is a subgoal" ,
+        action = "then the com_sep_statement_exprs subgoal is met and ',' is written and statement_expression and statement_expression become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    enhanced_for_clause_p =iof => Production[
+        condition = "If enhanced_for_clause is a subgoal" ,
+        action = "then the enhanced_for_clause subgoal is met and 'final', ID, ':' is written and annotation, type_expr and expression become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    switch_statement_p =iof => Production[
+        condition = "If switch_statement is a subgoal" ,
+        action = "then the switch_statement subgoal is met and 'switch', '(', ')', '{', '}' is written and expression, switch_rule and switch_group become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    switch_rule_p =iof => Production[
+        condition = "If switch_rule is a subgoal" ,
+        action = "then the switch_rule subgoal is met and 'case', 'default', '->', ';' is written and case_labels, expression and statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    switch_group_p =iof => Production[
+        condition = "If switch_group is a subgoal" ,
+        action = "then the switch_group subgoal is met and 'case', 'default', ':' is written and case_labels and statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    case_labels_p =iof => Production[
+        condition = "If case_labels is a subgoal" ,
+        action = "then the case_labels subgoal is met and ',' is written and expression and expression become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    if_statement_p =iof => Production[
+        condition = "If if_statement is a subgoal" ,
+        action = "then the if_statement subgoal is met and 'if', '(', ')', 'else' is written and expression, statement and statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    expression_p =iof => Production[
+        condition = "If expression is a subgoal" ,
+        action = "then the expression subgoal is met and assignment_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    assignment_expr_conditional_expr_p =iof => Production[
+        condition = "If assignment_expr is a subgoal and the block 'conditional_expr' is needed" ,
+        action = "then the assignment_expr subgoal is met and conditional_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    assignment_expr_left_hand_side_assignment_expr_p =iof => Production[
+        condition = "If assignment_expr is a subgoal and the block 'left_hand_side ASSIGNMENT_SYMBOL assignment_expr' is needed" ,
+        action = "then the assignment_expr subgoal is met and ASSIGNMENT_SYMBOL is written and left_hand_side and assignment_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    left_hand_side_qualified_name_p =iof => Production[
+        condition = "If left_hand_side is a subgoal and the block 'qualified_name' is needed" ,
+        action = "then the left_hand_side subgoal is met and qualified_name becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    left_hand_side_field_access_p =iof => Production[
+        condition = "If left_hand_side is a subgoal and the block 'field_access' is needed" ,
+        action = "then the left_hand_side subgoal is met and field_access becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    left_hand_side_array_access_p =iof => Production[
+        condition = "If left_hand_side is a subgoal and the block 'array_access' is needed" ,
+        action = "then the left_hand_side subgoal is met and array_access becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    conditional_expr_p =iof => Production[
+        condition = "If conditional_expr is a subgoal" ,
+        action = "then the conditional_expr subgoal is met and '?', ':' is written and conditional_or_expr, expression and conditional_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    conditional_or_expr_p =iof => Production[
+        condition = "If conditional_or_expr is a subgoal" ,
+        action = "then the conditional_or_expr subgoal is met and '||' is written and conditional_and_expr and conditional_and_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    conditional_and_expr_p =iof => Production[
+        condition = "If conditional_and_expr is a subgoal" ,
+        action = "then the conditional_and_expr subgoal is met and '&&' is written and inclusive_or_expr and inclusive_or_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    inclusive_or_expr_p =iof => Production[
+        condition = "If inclusive_or_expr is a subgoal" ,
+        action = "then the inclusive_or_expr subgoal is met and '|' is written and exclusive_or_expr and exclusive_or_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    exclusive_or_expr_p =iof => Production[
+        condition = "If exclusive_or_expr is a subgoal" ,
+        action = "then the exclusive_or_expr subgoal is met and '^' is written and and_expr and and_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    and_expr_p =iof => Production[
+        condition = "If and_expr is a subgoal" ,
+        action = "then the and_expr subgoal is met and '&' is written and equality_expr and equality_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    equality_expr_p =iof => Production[
+        condition = "If equality_expr is a subgoal" ,
+        action = "then the equality_expr subgoal is met and '==', '!=' is written and relational_expr and relational_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    relational_expr_p =iof => Production[
+        condition = "If relational_expr is a subgoal" ,
+        action = "then the relational_expr subgoal is met and '<', '>', '<=', '>=', 'instanceof' is written and shift_expr, shift_expr and type_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    shift_expr_p =iof => Production[
+        condition = "If shift_expr is a subgoal" ,
+        action = "then the shift_expr subgoal is met and '<<', '>>', '>>>' is written and additive_expr and additive_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    additive_expr_p =iof => Production[
+        condition = "If additive_expr is a subgoal" ,
+        action = "then the additive_expr subgoal is met and '+', '-' is written and multiplicative_expr and multiplicative_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    multiplicative_expr_p =iof => Production[
+        condition = "If multiplicative_expr is a subgoal" ,
+        action = "then the multiplicative_expr subgoal is met and '*', '/', '%' is written and unary_expr and unary_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    unary_expr_pre_increment_expr_p =iof => Production[
+        condition = "If unary_expr is a subgoal and the block 'pre_increment_expr' is needed" ,
+        action = "then the unary_expr subgoal is met and pre_increment_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    unary_expr_pre_decrement_expr_p =iof => Production[
+        condition = "If unary_expr is a subgoal and the block 'pre_decrement_expr' is needed" ,
+        action = "then the unary_expr subgoal is met and pre_decrement_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    unary_expr_unary_expr_p =iof => Production[
+        condition = "If unary_expr is a subgoal and the block ''+' unary_expr' is needed" ,
+        action = "then the unary_expr subgoal is met and '+' is written and unary_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    unary_expr_unary_expr_p =iof => Production[
+        condition = "If unary_expr is a subgoal and the block ''-' unary_expr' is needed" ,
+        action = "then the unary_expr subgoal is met and '-' is written and unary_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    unary_expr_unary_expr_not_pm_p =iof => Production[
+        condition = "If unary_expr is a subgoal and the block 'unary_expr_not_pm' is needed" ,
+        action = "then the unary_expr subgoal is met and unary_expr_not_pm becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    unary_expr_not_pm_postfix_expr_p =iof => Production[
+        condition = "If unary_expr_not_pm is a subgoal and the block 'postfix_expr' is needed" ,
+        action = "then the unary_expr_not_pm subgoal is met and postfix_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    unary_expr_not_pm_unary_expr_p =iof => Production[
+        condition = "If unary_expr_not_pm is a subgoal and the block ''~' unary_expr' is needed" ,
+        action = "then the unary_expr_not_pm subgoal is met and '~' is written and unary_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    unary_expr_not_pm_unary_expr_p =iof => Production[
+        condition = "If unary_expr_not_pm is a subgoal and the block ''!' unary_expr' is needed" ,
+        action = "then the unary_expr_not_pm subgoal is met and '!' is written and unary_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    unary_expr_not_pm_cast_expr_p =iof => Production[
+        condition = "If unary_expr_not_pm is a subgoal and the block 'cast_expr' is needed" ,
+        action = "then the unary_expr_not_pm subgoal is met and cast_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    cast_expr_primitive_type_unary_expr_p =iof => Production[
+        condition = "If cast_expr is a subgoal and the block ''(' primitive_type ')' unary_expr' is needed" ,
+        action = "then the cast_expr subgoal is met and '(', ')' is written and primitive_type and unary_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    cast_expr_reference_type_unary_expr_not_pm_p =iof => Production[
+        condition = "If cast_expr is a subgoal and the block ''(' reference_type ')' unary_expr_not_pm' is needed" ,
+        action = "then the cast_expr subgoal is met and '(', ')' is written and reference_type and unary_expr_not_pm become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    postfix_expr_p =iof => Production[
+        condition = "If postfix_expr is a subgoal" ,
+        action = "then the postfix_expr subgoal is met and '++', '--' is written and primary becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    pre_increment_expr_p =iof => Production[
+        condition = "If pre_increment_expr is a subgoal" ,
+        action = "then the pre_increment_expr subgoal is met and '++' is written and unary_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    pre_decrement_expr_p =iof => Production[
+        condition = "If pre_decrement_expr is a subgoal" ,
+        action = "then the pre_decrement_expr subgoal is met and '--' is written and unary_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    post_increment_expr_p =iof => Production[
+        condition = "If post_increment_expr is a subgoal" ,
+        action = "then the post_increment_expr subgoal is met and '++' is written and postfix_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    post_decrement_expr_p =iof => Production[
+        condition = "If post_decrement_expr is a subgoal" ,
+        action = "then the post_decrement_expr subgoal is met and '--' is written and postfix_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primary_lexical_literal_p =iof => Production[
+        condition = "If primary is a subgoal and the block 'lexical_literal' is needed" ,
+        action = "then the primary subgoal is met and lexical_literal becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primary_this_p =iof => Production[
+        condition = "If primary is a subgoal and the block ''this'' is needed" ,
+        action = "then the primary subgoal is met and 'this' is written" ,
+        probability = 0.003937007874015748
+    ];
+    primary_super_p =iof => Production[
+        condition = "If primary is a subgoal and the block ''super'' is needed" ,
+        action = "then the primary subgoal is met and 'super' is written" ,
+        probability = 0.003937007874015748
+    ];
+    primary_paren_enclosed_expr_p =iof => Production[
+        condition = "If primary is a subgoal and the block 'paren_enclosed_expr' is needed" ,
+        action = "then the primary subgoal is met and paren_enclosed_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primary_class_instance_creation_expr_p =iof => Production[
+        condition = "If primary is a subgoal and the block 'class_instance_creation_expr' is needed" ,
+        action = "then the primary subgoal is met and class_instance_creation_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primary_array_creation_expr_p =iof => Production[
+        condition = "If primary is a subgoal and the block 'array_creation_expr' is needed" ,
+        action = "then the primary subgoal is met and array_creation_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primary_method_invocation_p =iof => Production[
+        condition = "If primary is a subgoal and the block 'method_invocation' is needed" ,
+        action = "then the primary subgoal is met and method_invocation becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primary_field_access_p =iof => Production[
+        condition = "If primary is a subgoal and the block 'field_access' is needed" ,
+        action = "then the primary subgoal is met and field_access becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primary_array_access_p =iof => Production[
+        condition = "If primary is a subgoal and the block 'array_access' is needed" ,
+        action = "then the primary subgoal is met and array_access becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primary_method_reference_p =iof => Production[
+        condition = "If primary is a subgoal and the block 'method_reference' is needed" ,
+        action = "then the primary subgoal is met and method_reference becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primary_lambda_expr_p =iof => Production[
+        condition = "If primary is a subgoal and the block 'lambda_expr' is needed" ,
+        action = "then the primary subgoal is met and lambda_expr becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primary_qualified_name_p =iof => Production[
+        condition = "If primary is a subgoal and the block 'qualified_name' is needed" ,
+        action = "then the primary subgoal is met and qualified_name becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    paren_enclosed_expr_p =iof => Production[
+        condition = "If paren_enclosed_expr is a subgoal" ,
+        action = "then the paren_enclosed_expr subgoal is met and '(', ')' is written and expression becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    class_instance_creation_expr_p =iof => Production[
+        condition = "If class_instance_creation_expr is a subgoal" ,
+        action = "then the class_instance_creation_expr subgoal is met and 'new' is written and type_reference, arguments and class_body become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    array_creation_expr_p =iof => Production[
+        condition = "If array_creation_expr is a subgoal" ,
+        action = "then the array_creation_expr subgoal is met and 'new' is written and type_expr, dim_exprs, dims and array_initializer become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    dim_exprs_p =iof => Production[
+        condition = "If dim_exprs is a subgoal" ,
+        action = "then the dim_exprs subgoal is met and dim_expr and dim_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    dim_expr_p =iof => Production[
+        condition = "If dim_expr is a subgoal" ,
+        action = "then the dim_expr subgoal is met and '[', ']' is written and expression becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    dims_p =iof => Production[
+        condition = "If dims is a subgoal" ,
+        action = "then the dims subgoal is met and '[]' and '[]' are written" ,
+        probability = 0.003937007874015748
+    ];
+    arguments_p =iof => Production[
+        condition = "If arguments is a subgoal" ,
+        action = "then the arguments subgoal is met and '(', ')' is written and com_sep_exprs becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    method_invocation_qualified_name_arguments_p =iof => Production[
+        condition = "If method_invocation is a subgoal and the block 'optional group [qualified_name '.'] ID arguments' is needed" ,
+        action = "then the method_invocation subgoal is met and '.', ID is written and qualified_name and arguments become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    method_invocation_arguments_p =iof => Production[
+        condition = "If method_invocation is a subgoal and the block ''this' '.' ID arguments' is needed" ,
+        action = "then the method_invocation subgoal is met and 'this', '.', ID is written and arguments becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    method_invocation_arguments_p =iof => Production[
+        condition = "If method_invocation is a subgoal and the block ''super' '.' ID arguments' is needed" ,
+        action = "then the method_invocation subgoal is met and 'super', '.', ID is written and arguments becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    field_access_primary_p =iof => Production[
+        condition = "If field_access is a subgoal and the block 'primary '.' ID' is needed" ,
+        action = "then the field_access subgoal is met and '.', ID is written and primary becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    field_access_super_p =iof => Production[
+        condition = "If field_access is a subgoal and the block ''super' '.' ID' is needed" ,
+        action = "then the field_access subgoal is met and 'super', '.' and ID are written" ,
+        probability = 0.003937007874015748
+    ];
+    array_access_primary_expression_p =iof => Production[
+        condition = "If array_access is a subgoal and the block 'primary '[' expression ']'' is needed" ,
+        action = "then the array_access subgoal is met and '[', ']' is written and primary and expression become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    array_access_qualified_name_expression_p =iof => Production[
+        condition = "If array_access is a subgoal and the block 'qualified_name '[' expression ']'' is needed" ,
+        action = "then the array_access subgoal is met and '[', ']' is written and qualified_name and expression become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    method_reference_p =iof => Production[
+        condition = "If method_reference is a subgoal" ,
+        action = "then the method_reference subgoal is met and 'super', '::', ID is written and type_reference and primary become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    lambda_expr_p =iof => Production[
+        condition = "If lambda_expr is a subgoal" ,
+        action = "then the lambda_expr subgoal is met and '->' is written and lambda_params, expression and compound_statement become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    lambda_params_id_p =iof => Production[
+        condition = "If lambda_params is a subgoal and the block 'ID' is needed" ,
+        action = "then the lambda_params subgoal is met and ID is written" ,
+        probability = 0.003937007874015748
+    ];
+    lambda_params_formal_params_p =iof => Production[
+        condition = "If lambda_params is a subgoal and the block 'formal_params' is needed" ,
+        action = "then the lambda_params subgoal is met and formal_params becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    com_sep_exprs_p =iof => Production[
+        condition = "If com_sep_exprs is a subgoal" ,
+        action = "then the com_sep_exprs subgoal is met and ',' is written and expression and expression become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    type_expr_primitive_type_p =iof => Production[
+        condition = "If type_expr is a subgoal and the block 'primitive_type repeated group {'[]'}' is needed" ,
+        action = "then the type_expr subgoal is met and '[]' is written and primitive_type becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_expr_reference_type_p =iof => Production[
+        condition = "If type_expr is a subgoal and the block 'reference_type repeated group {'[]'}' is needed" ,
+        action = "then the type_expr subgoal is met and '[]' is written and reference_type becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    reference_type_type_reference_p =iof => Production[
+        condition = "If reference_type is a subgoal and the block 'type_reference' is needed" ,
+        action = "then the reference_type subgoal is met and type_reference becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    reference_type_type_variable_p =iof => Production[
+        condition = "If reference_type is a subgoal and the block 'type_variable' is needed" ,
+        action = "then the reference_type subgoal is met and type_variable becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_variable_p =iof => Production[
+        condition = "If type_variable is a subgoal" ,
+        action = "then the type_variable subgoal is met and ID is written" ,
+        probability = 0.003937007874015748
+    ];
+    type_reference_p =iof => Production[
+        condition = "If type_reference is a subgoal" ,
+        action = "then the type_reference subgoal is met and qualified_name and type_arguments become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    type_arguments_p =iof => Production[
+        condition = "If type_arguments is a subgoal" ,
+        action = "then the type_arguments subgoal is met and '<', '>' is written and com_sep_type_args becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    com_sep_type_args_p =iof => Production[
+        condition = "If com_sep_type_args is a subgoal" ,
+        action = "then the com_sep_type_args subgoal is met and ',' is written and type_arg and type_arg become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    type_arg_reference_type_p =iof => Production[
+        condition = "If type_arg is a subgoal and the block 'reference_type' is needed" ,
+        action = "then the type_arg subgoal is met and reference_type becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_arg_wildcard_type_p =iof => Production[
+        condition = "If type_arg is a subgoal and the block 'wildcard_type' is needed" ,
+        action = "then the type_arg subgoal is met and wildcard_type becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    wildcard_type_p =iof => Production[
+        condition = "If wildcard_type is a subgoal" ,
+        action = "then the wildcard_type subgoal is met and '?', 'extends', 'super' is written and reference_type becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    primitive_type_byte_p =iof => Production[
+        condition = "If primitive_type is a subgoal and the block ''byte'' is needed" ,
+        action = "then the primitive_type subgoal is met and 'byte' is written" ,
+        probability = 0.003937007874015748
+    ];
+    primitive_type_short_p =iof => Production[
+        condition = "If primitive_type is a subgoal and the block ''short'' is needed" ,
+        action = "then the primitive_type subgoal is met and 'short' is written" ,
+        probability = 0.003937007874015748
+    ];
+    primitive_type_int_p =iof => Production[
+        condition = "If primitive_type is a subgoal and the block ''int'' is needed" ,
+        action = "then the primitive_type subgoal is met and 'int' is written" ,
+        probability = 0.003937007874015748
+    ];
+    primitive_type_long_p =iof => Production[
+        condition = "If primitive_type is a subgoal and the block ''long'' is needed" ,
+        action = "then the primitive_type subgoal is met and 'long' is written" ,
+        probability = 0.003937007874015748
+    ];
+    primitive_type_float_p =iof => Production[
+        condition = "If primitive_type is a subgoal and the block ''float'' is needed" ,
+        action = "then the primitive_type subgoal is met and 'float' is written" ,
+        probability = 0.003937007874015748
+    ];
+    primitive_type_double_p =iof => Production[
+        condition = "If primitive_type is a subgoal and the block ''double'' is needed" ,
+        action = "then the primitive_type subgoal is met and 'double' is written" ,
+        probability = 0.003937007874015748
+    ];
+    primitive_type_char_p =iof => Production[
+        condition = "If primitive_type is a subgoal and the block ''char'' is needed" ,
+        action = "then the primitive_type subgoal is met and 'char' is written" ,
+        probability = 0.003937007874015748
+    ];
+    primitive_type_boolean_p =iof => Production[
+        condition = "If primitive_type is a subgoal and the block ''boolean'' is needed" ,
+        action = "then the primitive_type subgoal is met and 'boolean' is written" ,
+        probability = 0.003937007874015748
+    ];
+    type_params_p =iof => Production[
+        condition = "If type_params is a subgoal" ,
+        action = "then the type_params subgoal is met and '<', '>' is written and com_sep_type_params becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    com_sep_type_params_p =iof => Production[
+        condition = "If com_sep_type_params is a subgoal" ,
+        action = "then the com_sep_type_params subgoal is met and ',' is written and type_param and type_param become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    type_param_p =iof => Production[
+        condition = "If type_param is a subgoal" ,
+        action = "then the type_param subgoal is met and ID, 'extends' is written and type_bound becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    type_bound_p =iof => Production[
+        condition = "If type_bound is a subgoal" ,
+        action = "then the type_bound subgoal is met and '&' is written and type_expr and type_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    com_sep_type_exprs_p =iof => Production[
+        condition = "If com_sep_type_exprs is a subgoal" ,
+        action = "then the com_sep_type_exprs subgoal is met and ',' is written and type_expr and type_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    formal_params_p =iof => Production[
+        condition = "If formal_params is a subgoal" ,
+        action = "then the formal_params subgoal is met and '(', ')' is written and formal_param_list becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    formal_param_list_formal_param_formal_param_p =iof => Production[
+        condition = "If formal_param_list is a subgoal and the block 'formal_param repeated group {',' formal_param} optional group [',' last_formal_param]' is needed" ,
+        action = "then the formal_param_list subgoal is met and ',', ',' is written and formal_param, formal_param and last_formal_param become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    formal_param_list_last_formal_param_p =iof => Production[
+        condition = "If formal_param_list is a subgoal and the block 'last_formal_param' is needed" ,
+        action = "then the formal_param_list subgoal is met and last_formal_param becomes a subgoal" ,
+        probability = 0.003937007874015748
+    ];
+    formal_param_p =iof => Production[
+        condition = "If formal_param is a subgoal" ,
+        action = "then the formal_param subgoal is met and 'final', ID is written and annotation and type_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    last_formal_param_p =iof => Production[
+        condition = "If last_formal_param is a subgoal" ,
+        action = "then the last_formal_param subgoal is met and 'final', '...', ID is written and annotation and type_expr become subgoals" ,
+        probability = 0.003937007874015748
+    ];
+    lexical_literal_id_p =iof => Production[
+        condition = "If lexical_literal is a subgoal and the block 'ID' is needed" ,
+        action = "then the lexical_literal subgoal is met and ID is written" ,
+        probability = 0.003937007874015748
+    ];
+    lexical_literal_str_p =iof => Production[
+        condition = "If lexical_literal is a subgoal and the block 'STR' is needed" ,
+        action = "then the lexical_literal subgoal is met and STR is written" ,
+        probability = 0.003937007874015748
+    ];
+    lexical_literal_num_p =iof => Production[
+        condition = "If lexical_literal is a subgoal and the block 'NUM' is needed" ,
+        action = "then the lexical_literal subgoal is met and NUM is written" ,
+        probability = 0.003937007874015748
+    ];
+    lexical_literal_true_p =iof => Production[
+        condition = "If lexical_literal is a subgoal and the block ''true'' is needed" ,
+        action = "then the lexical_literal subgoal is met and 'true' is written" ,
+        probability = 0.003937007874015748
+    ];
+    lexical_literal_false_p =iof => Production[
+        condition = "If lexical_literal is a subgoal and the block ''false'' is needed" ,
+        action = "then the lexical_literal subgoal is met and 'false' is written" ,
+        probability = 0.003937007874015748
+    ];
+    lexical_literal_null_p =iof => Production[
+        condition = "If lexical_literal is a subgoal and the block ''null'' is needed" ,
+        action = "then the lexical_literal subgoal is met and 'null' is written" ,
+        probability = 0.003937007874015748
+    ];
+}
+.
