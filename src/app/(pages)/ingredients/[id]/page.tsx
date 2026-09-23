@@ -81,6 +81,20 @@ export default function IngredientDetailPage() {
         return result;
       },
     },
+    {
+      value: "from_pyi_definition",
+      label: "From PYI Definition",
+      cond: ["Library", "Framework"],
+      process: async (content: string) => {
+        const result = await createIngredientDefinition(
+          name,
+          type,
+          "pyi",
+          content,
+        );
+        return result;
+      },
+    },
   ];
 
   async function handleFeatureImport(content: string, feature: string) {

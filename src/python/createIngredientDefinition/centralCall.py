@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from ebnf_definition.ebnf_interpreter import interpret_grammar
 from librariesFromDotDDotTS.generate_ontodl import interpret_library
+from librariesFromDotPYI.generate_ontodl import interpret_library as interpret_pyi_library
 
 
 def main():
@@ -32,6 +33,8 @@ def main():
     elif input_type == "Framework":
         if fileType in {"dts", "txt"}:
             ontodl = interpret_library(grammar_text, name, input_type)
+        elif fileType == "pyi":
+            ontodl = interpret_pyi_library(grammar_text, name, input_type)
         elif fileType == "json":
             raise ValueError(f"Not implemented file type: {fileType}")
         else:
@@ -39,6 +42,8 @@ def main():
     elif input_type == "Library":
         if fileType in {"dts", "txt"}:
             ontodl = interpret_library(grammar_text, name, input_type)
+        elif fileType == "pyi":
+            ontodl = interpret_pyi_library(grammar_text, name, input_type)
         else:
             raise ValueError(f"Unsupported file type: {fileType}")
     else:

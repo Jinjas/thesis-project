@@ -103,6 +103,7 @@ def build_ontodl(library_name: str, declarations: list[Declaration], input_type:
     feature_productions = [build_production_name(item.kind, item.name) for item in features]
     all_productions = entity_productions + feature_productions
     total_productions = len(all_productions)
+    probability = 1 / total_productions if total_productions else 1
     
     individuals = [
         library_name,
@@ -164,7 +165,7 @@ def build_ontodl(library_name: str, declarations: list[Declaration], input_type:
                 f"    {build_production_name(declaration.kind, declaration.name)} =iof => Production[",
                 f"        condition = \"{build_condition(declaration.kind, declaration.name)}\" ,",
                 f"        action = \"{build_action(declaration.kind, declaration.name)}\" ,",
-                f"        probability = {1/total_productions}",
+                f"        probability = {probability}",
                 "    ];",
             ]
         )
