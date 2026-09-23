@@ -1,0 +1,397 @@
+Ontology cognitive_model_NodeJS
+
+attributes { condition : string , action : string , probability : float , title : string }
+
+concepts {
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , probability ]
+}
+
+relationships { has , groups }
+
+individuals {
+    NodeJS,
+    NodeJS_model,
+    NodeJS_sec1,
+    NodeJS_sec2,
+    NodeJS_sec3,
+    goal_p,
+    subgoal_p,
+    source_p,
+    project_p,
+    project_runtime_p,
+    project_package_p,
+    runtime_p,
+    package_p,
+    package_dependency_p,
+    package_script_p,
+    module_p,
+    module_import_p,
+    module_export_p,
+    dependency_p,
+    script_p,
+    server_p,
+    server_request_p,
+    server_response_p,
+    request_p,
+    response_p,
+    stream_p,
+    stream_read_p,
+    stream_write_p,
+    event_p,
+    event_listen_p,
+    event_emit_p,
+    environment_p,
+    environment_configure_p,
+    test_p,
+    test_run_p,
+    create_project_p,
+    initialize_package_p,
+    install_dependency_p,
+    remove_dependency_p,
+    update_dependency_p,
+    configure_script_p,
+    import_module_p,
+    export_module_p,
+    create_server_p,
+    handle_request_p,
+    send_response_p,
+    read_stream_p,
+    write_stream_p,
+    listen_event_p,
+    emit_event_p,
+    configure_environment_p,
+    run_development_script_p,
+    run_tests_p,
+    inspect_error_p,
+    build_application_p,
+    package_application_p
+}
+
+triples {
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+
+    NodeJS =iof=> Tool;
+    NodeJS_model =iof=> Model;
+    NodeJS =has=> NodeJS_model;
+    NodeJS_model =has=> NodeJS_sec1, NodeJS_sec2, NodeJS_sec3;
+
+    NodeJS_sec1 =iof => Section [ title = "Goals and subgoals" ];
+    NodeJS_sec2 =iof => Section [ title = "Development structure" ];
+    NodeJS_sec1 =[ groups =>
+        goal_p,
+        subgoal_p,
+        source_p
+    ];
+    NodeJS_sec2 =[ groups =>
+        project_p,
+        project_runtime_p,
+        project_package_p,
+        runtime_p,
+        package_p,
+        package_dependency_p,
+        package_script_p,
+        module_p,
+        module_import_p,
+        module_export_p,
+        dependency_p,
+        script_p,
+        server_p,
+        server_request_p,
+        server_response_p,
+        request_p,
+        response_p,
+        stream_p,
+        stream_read_p,
+        stream_write_p,
+        event_p,
+        event_listen_p,
+        event_emit_p,
+        environment_p,
+        environment_configure_p,
+        test_p
+    ];
+    NodeJS_sec3 =iof => Section [ title = "Development actions" ];
+    NodeJS_sec3 =[ groups =>
+        create_project_p,
+        initialize_package_p,
+        install_dependency_p,
+        remove_dependency_p,
+        update_dependency_p,
+        configure_script_p,
+        import_module_p,
+        export_module_p,
+        create_server_p,
+        handle_request_p,
+        send_response_p,
+        read_stream_p,
+        write_stream_p,
+        listen_event_p,
+        emit_event_p,
+        configure_environment_p,
+        run_development_script_p,
+        run_tests_p,
+        inspect_error_p,
+        build_application_p,
+        package_application_p
+    ];
+
+    goal_p =iof => Production[
+        condition = "If all subgoals were met" ,
+        action = "then the goal is met" ,
+        probability = 0.026
+    ];
+    subgoal_p =iof => Production[
+        condition = "If a subgoal is already written" ,
+        action = "then the subgoal is met" ,
+        probability = 0.027
+    ];
+    source_p =iof => Production[
+        condition = "If new source text must be written" ,
+        action = "then the grammar construct becomes a subgoal" ,
+        probability = 0.027
+    ];
+    project_p =iof=> Production[
+        condition = "If project is a subgoal" ,
+        action = "then the project subgoal is met and project_blocks become subgoals" ,
+        probability = 0.027
+    ];
+    project_runtime_p =iof=> Production[
+        condition = "If project_blocks is a subgoal and the block 'runtime' is needed" ,
+        action = "then the project_blocks subgoal is met and runtime becomes a subgoal" ,
+        probability = 0.027
+    ];
+    project_package_p =iof=> Production[
+        condition = "If project_blocks is a subgoal and the block 'package' is needed" ,
+        action = "then the project_blocks subgoal is met and package blocks become subgoals" ,
+        probability = 0.027
+    ];
+    runtime_p =iof=> Production[
+        condition = "If runtime is a subgoal" ,
+        action = "then the runtime subgoal is met and create_project becomes a subgoal" ,
+        probability = 0.027
+    ];
+    package_dependency_p =iof=> Production[
+        condition = "If package is a subgoal and the block 'dependency' is needed" ,
+        action = "then the package subgoal is met and dependency becomes a subgoal" ,
+        probability = 0.027
+    ];
+    package_script_p =iof=> Production[
+        condition = "If package is a subgoal and the block 'script' is needed" ,
+        action = "then the package subgoal is met and script becomes a subgoal" ,
+        probability = 0.027
+    ];
+    module_p =iof=> Production[
+        condition = "If module is a subgoal" ,
+        action = "then the module subgoal is met and module_blocks become subgoals" ,
+        probability = 0.027
+    ];
+    module_import_p =iof=> Production[
+        condition = "If module_blocks is a subgoal and the block 'import' is needed" ,
+        action = "then the module_blocks subgoal is met and import_module becomes a subgoal" ,
+        probability = 0.027
+    ];
+    module_export_p =iof=> Production[
+        condition = "If module_blocks is a subgoal and the block 'export' is needed" ,
+        action = "then the module_blocks subgoal is met and export_module becomes a subgoal" ,
+        probability = 0.027
+    ];
+    dependency_p =iof=> Production[
+        condition = "If external functionality is needed" ,
+        action = "then the dependency subgoal is met and install_dependency becomes a subgoal" ,
+        probability = 0.027
+    ];
+    script_p =iof=> Production[
+        condition = "If a repeatable NodeJS command is needed" ,
+        action = "then the script subgoal is met and configure_script becomes a subgoal" ,
+        probability = 0.027
+    ];
+    server_p =iof=> Production[
+        condition = "If server is a subgoal" ,
+        action = "then the server subgoal is met and server_blocks become subgoals" ,
+        probability = 0.027
+    ];
+    server_request_p =iof=> Production[
+        condition = "If server_blocks is a subgoal and the block 'request' is needed" ,
+        action = "then the server_blocks subgoal is met and request becomes a subgoal" ,
+        probability = 0.017
+    ];
+    server_response_p =iof=> Production[
+        condition = "If server_blocks is a subgoal and the block 'response' is needed" ,
+        action = "then the server_blocks subgoal is met and response becomes a subgoal" ,
+        probability = 0.017
+    ];
+    request_p =iof=> Production[
+        condition = "If incoming client data must be processed" ,
+        action = "then the request subgoal is met and handle_request becomes a subgoal" ,
+        probability = 0.017
+    ];
+    response_p =iof=> Production[
+        condition = "If a client response must be produced" ,
+        action = "then the response subgoal is met and send_response becomes a subgoal" ,
+        probability = 0.017
+    ];
+    stream_p =iof=> Production[
+        condition = "If stream is a subgoal" ,
+        action = "then the stream subgoal is met and stream_blocks become subgoals" ,
+        probability = 0.017
+    ];
+    stream_read_p =iof=> Production[
+        condition = "If stream_blocks is a subgoal and the block 'read' is needed" ,
+        action = "then the stream_blocks subgoal is met and read_stream becomes a subgoal" ,
+        probability = 0.017
+    ];
+    stream_write_p =iof=> Production[
+        condition = "If stream_blocks is a subgoal and the block 'write' is needed" ,
+        action = "then the stream_blocks subgoal is met and write_stream becomes a subgoal" ,
+        probability = 0.017
+    ];
+    event_p =iof=> Production[
+        condition = "If event is a subgoal" ,
+        action = "then the event subgoal is met and event_blocks become subgoals" ,
+        probability = 0.017
+    ];
+    event_listen_p =iof=> Production[
+        condition = "If event_blocks is a subgoal and the block 'listen' is needed" ,
+        action = "then the event_blocks subgoal is met and listen_event becomes a subgoal" ,
+        probability = 0.017
+    ];
+    event_emit_p =iof=> Production[
+        condition = "If event_blocks is a subgoal and the block 'emit' is needed" ,
+        action = "then the event_blocks subgoal is met and emit_event becomes a subgoal" ,
+        probability = 0.017
+    ];
+    environment_p =iof=> Production[
+        condition = "If environment is a subgoal" ,
+        action = "then the environment subgoal is met and environment_blocks become subgoals" ,
+        probability = 0.017
+    ];
+    environment_configure_p =iof=> Production[
+        condition = "If environment_blocks is a subgoal and the block 'configure' is needed" ,
+        action = "then the environment_blocks subgoal is met and configure_environment becomes a subgoal" ,
+        probability = 0.017
+    ];
+    test_p =iof=> Production[
+        condition = "If test is a subgoal" ,
+        action = "then the test subgoal is met and test blocks become subgoals" ,
+        probability = 0.017
+    ];
+    test_run_p =iof=> Production[
+        condition = "If test is a subgoal and the block 'run' is needed" ,
+        action = "then the test subgoal is met and run_tests becomes a subgoal" ,
+        probability = 0.017
+    ];
+
+    create_project_p =iof=> Production[
+        condition = "If create_project is a subgoal" ,
+        action = "then a NodeJS project is created and initialize_package becomes a subgoal" ,
+        probability = 0.017
+    ];
+    initialize_package_p =iof=> Production[
+        condition = "If initialize_package is a subgoal" ,
+        action = "then package.json is created and configure_script becomes a subgoal" ,
+        probability = 0.017
+    ];
+    install_dependency_p =iof=> Production[
+        condition = "If install_dependency is a subgoal" ,
+        action = "then the dependency is installed and import_module becomes a subgoal" ,
+        probability = 0.017
+    ];
+    remove_dependency_p =iof=> Production[
+        condition = "If an unused dependency must be removed" ,
+        action = "then the dependency is removed and run_tests becomes a subgoal" ,
+        probability = 0.016
+    ];
+    update_dependency_p =iof=> Production[
+        condition = "If a dependency requires a newer version" ,
+        action = "then the dependency is updated and inspect_error becomes a subgoal" ,
+        probability = 0.016
+    ];
+    configure_script_p =iof=> Production[
+        condition = "If configure_script is a subgoal" ,
+        action = "then a package script is configured and run_development_script becomes a subgoal" ,
+        probability = 0.017
+    ];
+    import_module_p =iof=> Production[
+        condition = "If import_module is a subgoal" ,
+        action = "then a module is imported and module becomes a subgoal" ,
+        probability = 0.017
+    ];
+    export_module_p =iof=> Production[
+        condition = "If export_module is a subgoal" ,
+        action = "then a module API is exported and handle_request becomes a subgoal" ,
+        probability = 0.017
+    ];
+    create_server_p =iof=> Production[
+        condition = "If create_server is a subgoal" ,
+        action = "then a NodeJS server is created and listen_event becomes a subgoal" ,
+        probability = 0.017
+    ];
+    handle_request_p =iof=> Production[
+        condition = "If handle_request is a subgoal" ,
+        action = "then the request is processed and send_response becomes a subgoal" ,
+        probability = 0.017
+    ];
+    send_response_p =iof=> Production[
+        condition = "If send_response is a subgoal" ,
+        action = "then the response is sent and the request subgoal is met" ,
+        probability = 0.027
+    ];
+    read_stream_p =iof=> Production[
+        condition = "If read_stream is a subgoal" ,
+        action = "then stream data is read and handle_request becomes a subgoal" ,
+        probability = 0.027
+    ];
+    write_stream_p =iof=> Production[
+        condition = "If write_stream is a subgoal" ,
+        action = "then stream data is written and send_response becomes a subgoal" ,
+        probability = 0.017
+    ];
+    listen_event_p =iof=> Production[
+        condition = "If listen_event is a subgoal" ,
+        action = "then an event listener is registered and handle_request becomes a subgoal" ,
+        probability = 0.017
+    ];
+    emit_event_p =iof=> Production[
+        condition = "If emit_event is a subgoal" ,
+        action = "then an event is emitted and the registered listener becomes a subgoal" ,
+        probability = 0.017
+    ];
+    configure_environment_p =iof=> Production[
+        condition = "If configure_environment is a subgoal" ,
+        action = "then environment values are configured and run_development_script becomes a subgoal" ,
+        probability = 0.017
+    ];
+    run_development_script_p =iof=> Production[
+        condition = "If run_development_script is a subgoal" ,
+        action = "then the NodeJS development script is run and inspect_error becomes a subgoal" ,
+        probability = 0.017
+    ];
+    run_tests_p =iof=> Production[
+        condition = "If run_tests is a subgoal" ,
+        action = "then the tests are run and inspect_error becomes a subgoal" ,
+        probability = 0.017
+    ];
+    inspect_error_p =iof=> Production[
+        condition = "If inspect_error is a subgoal" ,
+        action = "then runtime or test errors are inspected and module becomes a subgoal when correction is needed" ,
+        probability = 0.017
+    ];
+    build_application_p =iof=> Production[
+        condition = "If the NodeJS application must be prepared for deployment" ,
+        action = "then the application is built and inspect_error becomes a subgoal" ,
+        probability = 0.017
+    ];
+    package_application_p =iof=> Production[
+        condition = "If the built application must be delivered" ,
+        action = "then the application is packaged and the project subgoal is met" ,
+        probability = 0.017
+    ];
+}
+.

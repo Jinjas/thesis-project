@@ -1,0 +1,314 @@
+Ontology cognitive_model_VisualStudioCode
+
+attributes { condition : string , action : string , probability : float , title : string }
+
+concepts {
+    Ingredient , Language , Library , Framework , Tool , Model , Section [ title ] ,
+    Production [ condition , action , probability ]
+}
+
+relationships { has , groups }
+
+individuals {
+    VisualStudioCode,
+    VisualStudioCode_model,
+    VisualStudioCode_sec1,
+    VisualStudioCode_sec2,
+    VisualStudioCode_sec3,
+    goal_p,
+    subgoal_p,
+    source_p,
+    workspace_p,
+    workspace_project_p,
+    workspace_settings_p,
+    workspace_debug_p,
+    workspace_test_p,
+    workspace_source_control_p,
+    project_p,
+    project_file_p,
+    project_extension_p,
+    file_p,
+    extension_p,
+    terminal_p,
+    settings_p,
+    debug_p,
+    test_p,
+    source_control_p,
+    edit_file_p,
+    create_file_p,
+    open_workspace_p,
+    install_extension_p,
+    run_command_p,
+    configure_settings_p,
+    create_task_p,
+    start_debug_p,
+    set_breakpoint_p,
+    inspect_variable_p,
+    search_workspace_p,
+    rename_symbol_p,
+    format_document_p,
+    run_linter_p,
+    run_tests_p,
+    inspect_diagnostics_p,
+    inspect_changes_p,
+    stage_changes_p,
+    commit_changes_p,
+    resolve_conflict_p
+}
+
+triples {
+    Language =isa=> Ingredient;
+    Library =isa=> Ingredient;
+    Framework =isa=> Ingredient;
+    Tool =isa=> Ingredient;
+    Ingredient =has=> Model;
+    Model =has=> Production;
+    Section =groups=> Production;
+
+    VisualStudioCode =iof=> Tool;
+    VisualStudioCode_model =iof=> Model;
+    VisualStudioCode =has=> VisualStudioCode_model;
+    VisualStudioCode_model =has=> VisualStudioCode_sec1, VisualStudioCode_sec2, VisualStudioCode_sec3;
+
+    VisualStudioCode_sec1 =iof => Section [ title = "Goals and subgoals" ];
+    VisualStudioCode_sec1 =[ groups =>
+        goal_p,
+        subgoal_p,
+        source_p
+    ];
+    VisualStudioCode_sec2 =iof => Section [ title = "Development workspace" ];
+    VisualStudioCode_sec3 =iof => Section [ title = "Development actions" ];
+    VisualStudioCode_sec2 =[ groups =>
+        workspace_p,
+        workspace_project_p,
+        workspace_settings_p,
+        workspace_debug_p,
+        workspace_test_p,
+        workspace_source_control_p,
+        project_p,
+        project_file_p,
+        project_extension_p,
+        file_p,
+        extension_p,
+        terminal_p,
+        settings_p,
+        debug_p,
+        test_p,
+        source_control_p
+    ];
+    VisualStudioCode_sec3 =[ groups =>
+        edit_file_p,
+        create_file_p,
+        open_workspace_p,
+        install_extension_p,
+        run_command_p,
+        configure_settings_p,
+        create_task_p,
+        start_debug_p,
+        set_breakpoint_p,
+        inspect_variable_p,
+        search_workspace_p,
+        rename_symbol_p,
+        format_document_p,
+        run_linter_p,
+        run_tests_p,
+        inspect_diagnostics_p,
+        inspect_changes_p,
+        stage_changes_p,
+        commit_changes_p,
+        resolve_conflict_p
+    ];
+
+    goal_p =iof => Production[
+        condition = "If all subgoals were met" ,
+        action = "then the goal is met" ,
+        probability = 0.026
+    ];
+    subgoal_p =iof => Production[
+        condition = "If a subgoal is already written" ,
+        action = "then the subgoal is met" ,
+        probability = 0.026
+    ];
+    source_p =iof => Production[
+        condition = "If new source text must be written" ,
+        action = "then the grammar construct becomes a subgoal" ,
+        probability = 0.026
+    ];
+    stylesheet_p =iof=> Production[
+        condition = "If stylesheet is a subgoal" ,
+        action = "then the stylesheet subgoal is met and workspace blocks become subgoals" ,
+        probability = 0.025
+    ];
+    workspace_project_p =iof=> Production[
+        condition = "If workspace is a subgoal and the block 'project' is needed" ,
+        action = "then the workspace subgoal is met and project blocks become subgoals" ,
+        probability = 0.045
+    ];
+    workspace_settings_p =iof=> Production[
+        condition = "If workspace is a subgoal and the block 'settings' is needed" ,
+        action = "then the workspace subgoal is met and settings becomes a subgoal" ,
+        probability = 0.045
+    ];
+    workspace_debug_p =iof=> Production[
+        condition = "If workspace is a subgoal and the block 'debug' is needed" ,
+        action = "then the workspace subgoal is met and debug becomes a subgoal" ,
+        probability = 0.035
+    ];
+    workspace_test_p =iof=> Production[
+        condition = "If workspace is a subgoal and the block 'test' is needed" ,
+        action = "then the workspace subgoal is met and test becomes a subgoal" ,
+        probability = 0.025
+    ];
+    workspace_source_control_p =iof=> Production[
+        condition = "If workspace is a subgoal and the block 'source_control' is needed" ,
+        action = "then the workspace subgoal is met and source_control becomes a subgoal" ,
+        probability = 0.025
+    ];
+    project_file_p =iof=> Production[
+        condition = "If project is a subgoal and the block 'file' is needed" ,
+        action = "then the project subgoal is met and file becomes a subgoal" ,
+        probability = 0.025
+    ];
+    project_extension_p =iof=> Production[
+        condition = "If project is a subgoal and the block 'extension' is needed" ,
+        action = "then the project subgoal is met and extension becomes a subgoal" ,
+        probability = 0.037
+    ];
+    file_p =iof=> Production[
+        condition = "If file is a subgoal" ,
+        action = "then the file subgoal is met and edit_file becomes a subgoal" ,
+        probability = 0.025
+    ];
+    extension_p =iof=> Production[
+        condition = "If extension is a subgoal" ,
+        action = "then the extension subgoal is met and terminal becomes a subgoal" ,
+        probability = 0.035
+    ];
+    terminal_p =iof=> Production[
+        condition = "If terminal is a subgoal" ,
+        action = "then the terminal subgoal is met and run_command becomes a subgoal" ,
+        probability = 0.025
+    ];
+    settings_p =iof=> Production[
+        condition = "If settings is a subgoal" ,
+        action = "then the settings subgoal is met and configure_settings becomes a subgoal" ,
+        probability = 0.025
+    ];
+    debug_p =iof=> Production[
+        condition = "If debug is a subgoal" ,
+        action = "then the debug subgoal is met and start_debug becomes a subgoal" ,
+        probability = 0.025
+    ];
+    test_p =iof=> Production[
+        condition = "If test is a subgoal" ,
+        action = "then the test subgoal is met and run_tests becomes a subgoal" ,
+        probability = 0.025
+    ];
+    source_control_p =iof=> Production[
+        condition = "If source_control is a subgoal" ,
+        action = "then the source_control subgoal is met and inspect_changes becomes a subgoal" ,
+        probability = 0.025
+    ];
+
+    edit_file_p =iof=> Production[
+        condition = "If edit_file is a subgoal" ,
+        action = "then the edit_file subgoal is met and inspect_diagnostics becomes a subgoal" ,
+        probability = 0.025
+    ];
+    create_file_p =iof=> Production[
+        condition = "If create_file is a subgoal" ,
+        action = "then the create_file subgoal is met and edit_file becomes a subgoal" ,
+        probability = 0.025
+    ];
+    open_workspace_p =iof=> Production[
+        condition = "If open_workspace is a subgoal" ,
+        action = "then the open_workspace subgoal is met and project becomes a subgoal" ,
+        probability = 0.025
+    ];
+    install_extension_p =iof=> Production[
+        condition = "If install_extension is a subgoal" ,
+        action = "then the install_extension subgoal is met and run_command becomes a subgoal" ,
+        probability = 0.025
+    ];
+    run_command_p =iof=> Production[
+        condition = "If run_command is a subgoal" ,
+        action = "then the run_command subgoal is met and inspect_diagnostics becomes a subgoal" ,
+        probability = 0.025
+    ];
+    configure_settings_p =iof=> Production[
+        condition = "If configure_settings is a subgoal" ,
+        action = "then the configure_settings subgoal is met and run_command becomes a subgoal" ,
+        probability = 0.025
+    ];
+    create_task_p =iof=> Production[
+        condition = "If create_task is a subgoal" ,
+        action = "then the create_task subgoal is met and run_command becomes a subgoal" ,
+        probability = 0.025
+    ];
+    start_debug_p =iof=> Production[
+        condition = "If start_debug is a subgoal" ,
+        action = "then the start_debug subgoal is met and set_breakpoint becomes a subgoal" ,
+        probability = 0.025
+    ];
+    set_breakpoint_p =iof=> Production[
+        condition = "If set_breakpoint is a subgoal" ,
+        action = "then the set_breakpoint subgoal is met and inspect_variable becomes a subgoal" ,
+        probability = 0.025
+    ];
+    inspect_variable_p =iof=> Production[
+        condition = "If inspect_variable is a subgoal" ,
+        action = "then the inspect_variable subgoal is met and debug becomes a subgoal" ,
+        probability = 0.025
+    ];
+    search_workspace_p =iof=> Production[
+        condition = "If search_workspace is a subgoal" ,
+        action = "then the search_workspace subgoal is met and edit_file becomes a subgoal" ,
+        probability = 0.025
+    ];
+    rename_symbol_p =iof=> Production[
+        condition = "If rename_symbol is a subgoal" ,
+        action = "then the rename_symbol subgoal is met and inspect_diagnostics becomes a subgoal" ,
+        probability = 0.025
+    ];
+    format_document_p =iof=> Production[
+        condition = "If format_document is a subgoal" ,
+        action = "then the format_document subgoal is met and inspect_diagnostics becomes a subgoal" ,
+        probability = 0.025
+    ];
+    run_linter_p =iof=> Production[
+        condition = "If run_linter is a subgoal" ,
+        action = "then the run_linter subgoal is met and inspect_diagnostics becomes a subgoal" ,
+        probability = 0.025
+    ];
+    run_tests_p =iof=> Production[
+        condition = "If run_tests is a subgoal" ,
+        action = "then the run_tests subgoal is met and inspect_diagnostics becomes a subgoal" ,
+        probability = 0.025
+    ];
+    inspect_diagnostics_p =iof=> Production[
+        condition = "If inspect_diagnostics is a subgoal" ,
+        action = "then the inspect_diagnostics subgoal is met and edit_file becomes a subgoal when correction is needed" ,
+        probability = 0.025
+    ];
+    inspect_changes_p =iof=> Production[
+        condition = "If inspect_changes is a subgoal" ,
+        action = "then the inspect_changes subgoal is met and stage_changes becomes a subgoal" ,
+        probability = 0.025
+    ];
+    stage_changes_p =iof=> Production[
+        condition = "If stage_changes is a subgoal" ,
+        action = "then the stage_changes subgoal is met and commit_changes becomes a subgoal" ,
+        probability = 0.025
+    ];
+    commit_changes_p =iof=> Production[
+        condition = "If commit_changes is a subgoal" ,
+        action = "then the commit_changes subgoal is met and source_control becomes a subgoal" ,
+        probability = 0.025
+    ];
+    resolve_conflict_p =iof=> Production[
+        condition = "If resolve_conflict is a subgoal" ,
+        action = "then the resolve_conflict subgoal is met and inspect_diagnostics becomes a subgoal" ,
+        probability = 0.025
+    ];
+}
+.
