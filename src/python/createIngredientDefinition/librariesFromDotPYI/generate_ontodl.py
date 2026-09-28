@@ -50,12 +50,18 @@ def extract_declarations(source_text: str) -> list[Declaration]:
             seen.add(key)
             declarations.append(declaration)
 
+    def visit_class(node: ast.ClassDef, owner: str | None = None) -> None:
+        add("interface" if is_interface(node) else "class", node.name, owner)
+        qualified_name = f"{owner}.{node.name}" if owner else node.name
+        for member in node.body:
+            if isinstance(member, ast.ClassDef):
+                visit_class(member, qualified_name)
+            elif isinstance(member, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                add("function", member.name, qualified_name)
+
     for node in tree.body:
         if isinstance(node, ast.ClassDef):
-            add("interface" if is_interface(node) else "class", node.name)
-            for member in node.body:
-                if isinstance(member, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                    add("function", member.name, node.name)
+            visit_class(node)
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             add("function", node.name)
         elif isinstance(node, ast.TypeAlias) if hasattr(ast, "TypeAlias") else False:
@@ -83,6 +89,8 @@ def build_condition(declaration: Declaration) -> str:
         if declaration.owner:
             return f"If there is a need for the feature {declaration.name} of {declaration.owner}"
         return f"If there is a need for the feature {declaration.name}"
+    if declaration.owner:
+        return f"If a {declaration.kind} entity named {declaration.name} of {declaration.owner} is needed"
     if declaration.kind == "interface":
         return f"If an interface entity named {declaration.name} is needed"
     return f"If a {declaration.kind} entity named {declaration.name} is needed"
@@ -93,6 +101,8 @@ def build_action(declaration: Declaration) -> str:
         if declaration.owner:
             return f"then function {declaration.name} of {declaration.owner} is written and the need for {declaration.name} is met"
         return f"then function {declaration.name} is written and the need for {declaration.name} is met"
+    if declaration.owner:
+        return f"then {declaration.kind} {declaration.name} of {declaration.owner} is written and the need for {declaration.name} is met"
     return f"then {declaration.kind} {declaration.name} is written and the need for {declaration.name} is met"
 
 
