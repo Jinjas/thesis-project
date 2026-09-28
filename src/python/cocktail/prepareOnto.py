@@ -30,7 +30,10 @@ def extract_ingredients_from_ontology(onto_text: str, types:set) -> dict:
     ingredient_types = {}
     for line in lines:
         stripped_line = line.lstrip()
-        pattern = re.compile(r"^(%?)\s*(\w+)\s*=\s*iof\s*=>\s*(\w+)\s*;")
+        pattern = re.compile(
+            r"^(%?)\s*([A-Za-z_@][A-Za-z0-9_@-]*)\s*=\s*iof\s*=>\s*"
+            r"([A-Za-z_@][A-Za-z0-9_@-]*)\s*;"
+        )
         match = pattern.search(stripped_line)
         if match:
             is_commented = match.group(1) == "%"

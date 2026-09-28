@@ -1,6 +1,8 @@
 %import common (WS, ESCAPED_STRING, SIGNED_NUMBER, CNAME)
 %ignore WS
 
+%override CNAME: /[A-Za-z_@][A-Za-z0-9_@-]*/
+
 _list{item}: item ("," item)*
 
 COMMENT: /%.*/
