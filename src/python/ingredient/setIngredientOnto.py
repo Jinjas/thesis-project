@@ -12,30 +12,30 @@ data_dir.mkdir(exist_ok=True)
 
 SAFE_FILE_TOKEN = re.compile(r"[^a-z0-9_-]")
 SECTION_DEF_RE = re.compile(
-    r"^\s*(\w+)\s*=\s*iof\s*=>\s*Section(?:\s*\[\s*title\s*=\s*(?:'([^']*)'|\"([^\"]*)\")\s*\])?\s*;$",
+    r"^\s*([\w-]+)\s*=\s*iof\s*=>\s*Section(?:\s*\[\s*title\s*=\s*(?:'([^']*)'|\"([^\"]*)\")\s*\])?\s*;$",
     re.MULTILINE,
 )
 SECTION_GROUP_RE = re.compile(
-    r"^\s*(\w+)\s*=\s*\[\s*groups\s*=>\s*(.*?)\s*\]\s*;$",
+    r"^\s*([\w-]+)\s*=\s*\[\s*groups\s*=>\s*(.*?)\s*\]\s*;$",
     re.MULTILINE | re.DOTALL,
 )
 PRODUCTION_DEF_RE = re.compile(
-    r"^\s*(\w+)\s*=\s*iof\s*=>\s*Production\s*\[(.*?)\]\s*;$",
+    r"^\s*([\w-]+)\s*=\s*iof\s*=>\s*Production\s*\[(.*?)\]\s*;$",
     re.MULTILINE | re.DOTALL,
 )
-MODEL_HAS_RE = re.compile(r"^\s*(\w+)_model\s*=has=>\s*(.*?)\s*;$", re.MULTILINE)
+MODEL_HAS_RE = re.compile(r"^\s*([\w-]+)_model\s*=has=>\s*(.*?)\s*;$", re.MULTILINE)
 TRIPLES_BLOCK_RE = re.compile(r"triples\s*\{(.*)\}\s*\.?\s*$", re.DOTALL | re.IGNORECASE)
 BASE_TRIPLE_PATTERNS = [
     re.compile(r"^\s*Language\s*=isa=>\s*Ingredient\s*;\s*$"),
     re.compile(r"^\s*Ingredient\s*=has=>\s*Model\s*;\s*$"),
     re.compile(r"^\s*Model\s*=has=>\s*Production\s*;\s*$"),
     re.compile(r"^\s*Section\s*=groups=>\s*Production\s*;\s*$"),
-    re.compile(r"^\s*\w+\s*=iof=>\s*\w+\s*;\s*$"),
-    re.compile(r"^\s*\w+_model\s*=iof=>\s*Model\s*;\s*$"),
-    re.compile(r"^\s*\w+\s*=has=>\s*\w+_model\s*;\s*$"),
-    re.compile(r"^\s*\w+_model\s*=has=>\s*.*;\s*$"),
+    re.compile(r"^\s*[\w-]+\s*=iof=>\s*[\w-]+\s*;\s*$"),
+    re.compile(r"^\s*[\w-]+_model\s*=iof=>\s*Model\s*;\s*$"),
+    re.compile(r"^\s*[\w-]+\s*=has=>\s*[\w-]+_model\s*;\s*$"),
+    re.compile(r"^\s*[\w-]+_model\s*=has=>\s*.*;\s*$"),
 ]
-ATTR_RE = re.compile(r"(\w+)\s*=\s*(?:'([^']*)'|\"([^\"]*)\"|([\d.]+))")
+ATTR_RE = re.compile(r"([\w-]+)\s*=\s*(?:'([^']*)'|\"([^\"]*)\"|([\d.]+))")
 
 
 def to_safe_filename(value: str) -> str:

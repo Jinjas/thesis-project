@@ -54,7 +54,7 @@ def main():
     ontodl_text = ontodl or ""
     lines = ontodl_text.splitlines(keepends=True)
     split_idx = None
-    pattern = re.compile(r"^\s*" + re.escape(name) + r"_model\s*=has=>.*;\s*$")
+    pattern = re.compile(r"^\s*[\w-]+_model\s*=has=>.*;\s*$")
     for idx, line in enumerate(lines):
         if pattern.match(line):
             split_idx = idx
