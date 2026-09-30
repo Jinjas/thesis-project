@@ -11,19 +11,19 @@ data_dir.mkdir(exist_ok=True)
 
 SAFE_FILE_TOKEN = re.compile(r"[^a-z0-9_-]")
 SECTION_DEF_RE = re.compile(
-    r"^\s*(\w+)\s*=\s*iof\s*=>\s*Section(?:\s*\[\s*title\s*=\s*(?:'([^']*)'|\"([^\"]*)\")\s*\])?\s*;$",
+    r"^\s*(\w-+)\s*=\s*iof\s*=>\s*Section(?:\s*\[\s*title\s*=\s*(?:'([^']*)'|\"([^\"]*)\")\s*\])?\s*;$",
     re.MULTILINE,
 )
 SECTION_GROUP_RE = re.compile(
-    r"^\s*(\w+)\s*=\s*\[\s*groups\s*=>\s*(.*?)\s*\]\s*;$",
+    r"^\s*(\w-+)\s*=\s*\[\s*groups\s*=>\s*(.*?)\s*\]\s*;$",
     re.MULTILINE | re.DOTALL,
 )
 PRODUCTION_DEF_RE = re.compile(
-    r"^\s*(\w+)\s*=\s*iof\s*=>\s*Production\s*\[(.*?)\]\s*;$",
+    r"^\s*(\w-+)\s*=\s*iof\s*=>\s*Production\s*\[(.*?)\]\s*;$",
     re.MULTILINE | re.DOTALL,
 )
-ATTR_RE = re.compile(r"(\w+)\s*=\s*(?:'([^']*)'|\"([^\"]*)\"|([\d.]+))")
-MODEL_HAS_LINE_RE = re.compile(r"^\s*\w+_model\s*=has=>\s*.*;\s*$")
+ATTR_RE = re.compile(r"(\w-+)\s*=\s*(?:'([^']*)'|\"([^\"]*)\"|([\d.]+))")
+MODEL_HAS_LINE_RE = re.compile(r"^\s*[\w-]+_model\s*=has=>\s*.*;\s*$")
 
 
 def to_safe_filename(value: str) -> str:
