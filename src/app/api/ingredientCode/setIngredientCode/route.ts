@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     const { ingredientName, ingredientType, newCode } = parsedBody.data;
     const validatedIngredientName = validateName(ingredientName);
     const validatedIngredientType = validateIngredientType(ingredientType);
-    const validatedNewCode = validateTextField(newCode, 120_000);
+    const validatedNewCode = validateTextField(newCode, 500_000);
 
     if (
       !validatedIngredientName ||
