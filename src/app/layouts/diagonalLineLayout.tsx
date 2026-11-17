@@ -13,11 +13,11 @@ export default function DiagonalLineLayout({
     <main className="relative h-screen w-full overflow-hidden">
       <section className="absolute inset-0 z-0 bg-gray-200" />
 
-      <section className="absolute inset-y-0 left-0 z-20 w-5/8">
+      <section className="absolute inset-y-0 left-0 z-20 h-screen w-1/2">
         {leftContent}
       </section>
 
-      <section className="absolute inset-y-0 right-0 z-20 w-3/8">
+      <section className="absolute inset-y-0 right-0 z-20 h-screen w-[37.5%] text-black">
         {rightContent}
       </section>
 
