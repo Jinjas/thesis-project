@@ -17,7 +17,7 @@ export default function DiagonalLineLayout({
         {leftContent}
       </section>
 
-      <section className="absolute inset-y-0 right-0 z-20 h-screen w-[37.5%] text-black">
+      <section className="absolute inset-y-0 right-0 z-20 h-screen w-1/2 text-black">
         {rightContent}
       </section>
 
