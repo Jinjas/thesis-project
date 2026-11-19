@@ -56,7 +56,7 @@ export default function Home() {
           </div>
 
           <div className="absolute bottom-12 left-2 pr-15">
-            <h2 className="text-2xl font-bold">The Thesis Project</h2>
+            <h2 className="text-2xl font-bold">COSMO Project</h2>
             <p className="pt-2 text-md text-justify">
               This program is part of the Master's thesis of Rodrigo Casal Novo
               at the University of Minho with the title "Construction of
